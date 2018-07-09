@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+io.github.xinyangpan.wechat4j.WechatExtAutoConfiguration,\
+io.github.xinyangpan.wechat4j.controller.ControllerAutoConfiguration
