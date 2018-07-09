@@ -1,4 +1,4 @@
-package io.github.xinyangpan.crypto4j.binance.dto;
+package io.github.xinyangpan.crypto4j.exchange.binance.dto;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
