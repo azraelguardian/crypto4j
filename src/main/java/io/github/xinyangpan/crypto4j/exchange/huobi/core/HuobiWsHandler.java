@@ -1,8 +1,13 @@
 package io.github.xinyangpan.crypto4j.exchange.huobi.core;
 
+import static io.github.xinyangpan.crypto4j.exchange.huobi.util.HuobiUtils.objectMapper;
+
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Consumer;
 import java.util.zip.GZIPInputStream;
 
 import org.apache.commons.io.IOUtils;
@@ -11,7 +16,6 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.util.ByteBufferBackedInputStream;
 
 import io.github.xinyangpan.crypto4j.core.WebSocketHandler;
@@ -21,9 +25,10 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class HuobiWsHandler extends WebSocketHandler {
-	// 
-	private ObjectMapper objectMapper = new ObjectMapper();
-
+	private Map<String, Consumer<Object>> listeners = new HashMap<>();
+	//
+	private Consumer<MarketDepthData> marketDepthListener;
+	
 	@Override
 	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
 		throw new UnsupportedOperationException();
@@ -32,23 +37,24 @@ public class HuobiWsHandler extends WebSocketHandler {
 	@Override
 	protected void handleBinaryMessage(WebSocketSession session, BinaryMessage message) throws Exception {
 		String jsonMessage = getTextMessage(message.getPayload());
-		JsonNode rootNode = objectMapper.readTree(jsonMessage);
+		log.info("handling message: {}", jsonMessage);
+		JsonNode rootNode = objectMapper().readTree(jsonMessage);
 		// ping message
-		JsonNode evalNode = rootNode.findPath("ping");
+		JsonNode evalNode = rootNode.at("/ping");
 		if (!evalNode.isMissingNode()) {
 			onPingMessage(evalNode.asLong());
 			return;
 		}
 		// ack message
-		evalNode = rootNode.findPath("subbed");
+		evalNode = rootNode.at("/subbed");
 		if (!evalNode.isMissingNode()) {
-			onAcknowledge(objectMapper.readValue(jsonMessage, HuobiWsAck.class));
+			onAcknowledge(objectMapper().readValue(jsonMessage, HuobiWsAck.class));
 			return;
 		}
 		// market depth message
-		evalNode = rootNode.findPath("tick");
+		evalNode = rootNode.at("/tick/bids");
 		if (!evalNode.isMissingNode()) {
-			onMarketDepthData(objectMapper.readValue(jsonMessage, MarketDepthData.class));
+			onMarketDepthData(objectMapper().readValue(jsonMessage, MarketDepthData.class));
 			return;
 		}
 		
@@ -65,14 +71,14 @@ public class HuobiWsHandler extends WebSocketHandler {
 		session.sendMessage(new TextMessage(String.format("{'pong': %s}", pingTs)));
 	}
 
-	private void onAcknowledge(HuobiWsAck readValue) {
-		// TODO Auto-generated method stub
-		
+	private void onAcknowledge(HuobiWsAck huobiWsAck) {
+		log.info("onAcknowledge: {}", huobiWsAck);
 	}
 
-	private void onMarketDepthData(MarketDepthData readValue) {
-		// TODO Auto-generated method stub
-		
+	private void onMarketDepthData(MarketDepthData marketDepthData) {
+		log.info("onMarketDepthData: {}", marketDepthData.getCh());
+		Consumer<Object> listener = listeners.get(marketDepthData.getCh());
+		listener.accept(marketDepthData);
 	}
 
 }

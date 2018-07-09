@@ -8,12 +8,13 @@ public class HuobiWsConnector {
 
 	private WebSocketConnectionManager manager;
 
-	public void connect(HuobiWsHandler wsHandler) {
+	public HuobiWsSubscriber connect(HuobiWsHandler wsHandler) {
 		// 
 		StandardWebSocketClient client = new StandardWebSocketClient();
 		manager = new WebSocketConnectionManager(client, wsHandler, HUOBI_PRO_WS);
 		manager.start();
-
+		wsHandler.waitUtilConnectionEstablished();
+		return new HuobiWsSubscriber(wsHandler);
 	}
 
 	public void disconnect() {
