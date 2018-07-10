@@ -2,12 +2,13 @@ package io.github.xinyangpan.crypto4j.exchange.okex;
 
 import java.util.function.Consumer;
 
+import io.github.xinyangpan.crypto4j.core.WsSubscriber;
 import io.github.xinyangpan.crypto4j.exchange.okex.dto.common.DepthData;
 import io.github.xinyangpan.crypto4j.exchange.okex.dto.common.OkexWsResponse;
 import io.github.xinyangpan.crypto4j.exchange.okex.dto.common.TickerData;
 
-public interface OkexWsSubscriber {
-	
+public interface OkexWsSubscriber extends WsSubscriber {
+
 	/**
 	 * @param symbol required 交易对 btcusdt, ethusdt, ltcusdt, etcusdt, bchusdt, ethbtc, ltcbtc, etcbtc, bchbtc...
 	 * @param depth required. step0, step1, step2, step3, step4, step5（合并深度0-5）；step0时，不合并深度
@@ -21,5 +22,5 @@ public interface OkexWsSubscriber {
 	 * @param listener listener
 	 */
 	void ticker(String symbol, Consumer<OkexWsResponse<TickerData>> listener);
-	
+
 }

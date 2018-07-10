@@ -2,10 +2,11 @@ package io.github.xinyangpan.crypto4j.exchange.huobi;
 
 import java.util.function.Consumer;
 
+import io.github.xinyangpan.crypto4j.core.WsSubscriber;
 import io.github.xinyangpan.crypto4j.exchange.huobi.dto.depth.DepthData;
 import io.github.xinyangpan.crypto4j.exchange.huobi.dto.kline.KlineData;
 
-public interface HuobiWsSubscriber {
+public interface HuobiWsSubscriber extends WsSubscriber {
 	
 	/**
 	 * @param symbol required 交易对 btcusdt, ethusdt, ltcusdt, etcusdt, bchusdt, ethbtc, ltcbtc, etcbtc, bchbtc...
