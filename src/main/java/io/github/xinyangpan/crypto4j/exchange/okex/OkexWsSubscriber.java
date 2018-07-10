@@ -23,4 +23,7 @@ public interface OkexWsSubscriber extends WsSubscriber {
 	 */
 	void ticker(String symbol, Consumer<OkexWsResponse<TickerData>> listener);
 
+
+	void tickers(Consumer<OkexWsResponse<TickerData>> listener, String ... symbols);
+	
 }

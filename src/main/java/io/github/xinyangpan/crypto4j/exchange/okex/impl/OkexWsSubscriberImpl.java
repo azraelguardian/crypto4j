@@ -2,7 +2,10 @@ package io.github.xinyangpan.crypto4j.exchange.okex.impl;
 
 import static io.github.xinyangpan.crypto4j.exchange.ExchangeUtils.objectMapper;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import org.springframework.util.Assert;
 import org.springframework.web.socket.TextMessage;
@@ -37,7 +40,7 @@ public class OkexWsSubscriberImpl implements OkexWsSubscriber {
 		okexWsHandler.getDepthListenerMap().put(channel, listener);
 		this.send(OkexWsRequest.addChannel(channel));
 	}
-	
+
 	@Override
 	public void ticker(String symbol, Consumer<OkexWsResponse<TickerData>> listener) {
 		// 
@@ -45,9 +48,30 @@ public class OkexWsSubscriberImpl implements OkexWsSubscriber {
 		Preconditions.checkNotNull(listener);
 		// 
 		log.info("Subscribing ticker. symbol={}, type={}.", symbol);
-		String channel = String.format("ok_sub_spot_%s_ticker", symbol);
+		String channel = this.getChannel(symbol);
 		okexWsHandler.getTickerListenerMap().put(channel, listener);
 		this.send(OkexWsRequest.addChannel(channel));
+	}
+
+	@Override
+	public void tickers(Consumer<OkexWsResponse<TickerData>> listener, String... symbols) {
+		// 
+		Preconditions.checkNotNull(symbols);
+		Preconditions.checkArgument(symbols.length > 0);
+		// 
+		List<OkexWsRequest> requests = Arrays.stream(symbols)//
+			.map(this::getChannel)// symbol to channel
+			.map(channel -> {
+				okexWsHandler.getTickerListenerMap().put(channel, listener);
+				return channel;
+			})// put map: channel -> listener
+			.map(OkexWsRequest::addChannel)// channel -> OkexWsRequest
+			.collect(Collectors.toList());
+		this.send(requests);
+	}
+
+	private String getChannel(String symbol) {
+		return String.format("ok_sub_spot_%s_ticker", symbol);
 	}
 
 	private void send(Object message) {
