@@ -1,6 +1,6 @@
 package io.github.xinyangpan.crypto4j.exchange.okex.impl;
 
-import static io.github.xinyangpan.crypto4j.exchange.common.HuobiUtils.objectMapper;
+import static io.github.xinyangpan.crypto4j.exchange.ExchangeUtils.objectMapper;
 
 import java.util.function.Consumer;
 

@@ -1,6 +1,6 @@
 package io.github.xinyangpan.crypto4j.exchange.huobi.impl;
 
-import static io.github.xinyangpan.crypto4j.exchange.common.HuobiUtils.objectMapper;
+import static io.github.xinyangpan.crypto4j.exchange.ExchangeUtils.objectMapper;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
