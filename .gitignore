@@ -17,4 +17,3 @@ out/
 .metadata/
 .factorypath
 .springBeans
-/src/test/resources/application-test.properties
