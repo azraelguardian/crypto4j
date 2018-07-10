@@ -12,8 +12,8 @@ import com.google.common.base.Preconditions;
 
 import io.github.xinyangpan.crypto4j.exchange.huobi.HuobiWsSubscriber;
 import io.github.xinyangpan.crypto4j.exchange.huobi.dto.common.HuobiWsRequest;
+import io.github.xinyangpan.crypto4j.exchange.huobi.dto.depth.DepthData;
 import io.github.xinyangpan.crypto4j.exchange.huobi.dto.kline.KlineData;
-import io.github.xinyangpan.crypto4j.exchange.huobi.dto.marketdepth.MarketDepthData;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -25,7 +25,7 @@ public class HuobiWsSubscriberImpl implements HuobiWsSubscriber {
 	}
 
 	@Override
-	public void marketDepth(String symbol, String type, Consumer<MarketDepthData> listener) {
+	public void marketDepth(String symbol, String type, Consumer<DepthData> listener) {
 		// 
 		Preconditions.checkNotNull(symbol);
 		Preconditions.checkNotNull(type);

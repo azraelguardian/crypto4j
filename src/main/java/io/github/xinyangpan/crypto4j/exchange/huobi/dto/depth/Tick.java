@@ -1,4 +1,4 @@
-package io.github.xinyangpan.crypto4j.exchange.huobi.dto.marketdepth;
+package io.github.xinyangpan.crypto4j.exchange.huobi.dto.depth;
 
 import java.util.List;
 

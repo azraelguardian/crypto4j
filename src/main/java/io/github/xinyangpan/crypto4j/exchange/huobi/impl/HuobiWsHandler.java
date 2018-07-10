@@ -20,8 +20,8 @@ import com.google.common.collect.Maps;
 
 import io.github.xinyangpan.crypto4j.core.WebSocketHandler;
 import io.github.xinyangpan.crypto4j.exchange.huobi.dto.common.HuobiWsAck;
+import io.github.xinyangpan.crypto4j.exchange.huobi.dto.depth.DepthData;
 import io.github.xinyangpan.crypto4j.exchange.huobi.dto.kline.KlineData;
-import io.github.xinyangpan.crypto4j.exchange.huobi.dto.marketdepth.MarketDepthData;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 @Getter(AccessLevel.PACKAGE)
 public class HuobiWsHandler extends WebSocketHandler {
 	// ch -> listener
-	private final Map<String, Consumer<MarketDepthData>> marketDepthListenerMap = Maps.newHashMap();
+	private final Map<String, Consumer<DepthData>> marketDepthListenerMap = Maps.newHashMap();
 	private final Map<String, Consumer<KlineData>> klineListenerMap = Maps.newHashMap();
 
 	@Override
@@ -58,7 +58,7 @@ public class HuobiWsHandler extends WebSocketHandler {
 		// market depth message
 		evalNode = rootNode.at("/tick/bids");
 		if (!evalNode.isMissingNode()) {
-			onMarketDepthData(objectMapper().readValue(jsonMessage, MarketDepthData.class));
+			onMarketDepthData(objectMapper().readValue(jsonMessage, DepthData.class));
 			return;
 		}
 		// kline message
@@ -85,10 +85,10 @@ public class HuobiWsHandler extends WebSocketHandler {
 		log.info("onAcknowledge: {}", huobiWsAck);
 	}
 
-	private void onMarketDepthData(MarketDepthData marketDepthData) {
-		log.debug("onMarketDepthData: {}", marketDepthData.getCh());
-		Consumer<MarketDepthData> listener = marketDepthListenerMap.get(marketDepthData.getCh());
-		listener.accept(marketDepthData);
+	private void onMarketDepthData(DepthData depthData) {
+		log.debug("onMarketDepthData: {}", depthData.getCh());
+		Consumer<DepthData> listener = marketDepthListenerMap.get(depthData.getCh());
+		listener.accept(depthData);
 	}
 
 	private void onKlineData(KlineData klineData) {
