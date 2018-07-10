@@ -14,7 +14,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.google.common.collect.Maps;
 
 import io.github.xinyangpan.crypto4j.core.BaseWsHandler;
-import io.github.xinyangpan.crypto4j.core.heartbeat.Heartbeat;
 import io.github.xinyangpan.crypto4j.exchange.okex.dto.common.DepthData;
 import io.github.xinyangpan.crypto4j.exchange.okex.dto.common.OkexWsResponse;
 import io.github.xinyangpan.crypto4j.exchange.okex.dto.common.ResultData;
@@ -33,9 +32,9 @@ public class OkexWsHandler extends BaseWsHandler {
 	public OkexWsHandler() {
 		super("okex");
 	}
-
-	public void setHeartbeatHandler(OkexWsHeartbeatHandler okexWsHeartbeatHandler) {
-		this.heartbeat = new Heartbeat(okexWsHeartbeatHandler);
+	
+	public void setOkexWsHeartbeatHandler(OkexWsHeartbeatHandler okexWsHeartbeatHandler) {
+		this.setHeartbeatHandler(okexWsHeartbeatHandler);
 	}
 
 	@Override

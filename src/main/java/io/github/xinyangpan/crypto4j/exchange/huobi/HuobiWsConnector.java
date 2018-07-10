@@ -9,6 +9,7 @@ public class HuobiWsConnector extends BaseWsConnector<HuobiWsSubscriber, HuobiWs
 
 	public HuobiWsConnector() {
 		super(DEFAULT_URL, new HuobiWsHandler());
+		this.wsHandler.setStandardPingHeartbeatHandler(this::reconnect);
 	}
 
 	@Override

@@ -6,6 +6,8 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.AbstractWebSocketHandler;
 
 import io.github.xinyangpan.crypto4j.core.heartbeat.Heartbeat;
+import io.github.xinyangpan.crypto4j.core.heartbeat.HeartbeatHandler;
+import io.github.xinyangpan.crypto4j.core.heartbeat.StandardPingHeartbeatHandler;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -57,5 +59,13 @@ public class BaseWsHandler extends AbstractWebSocketHandler {
 			Assert.notNull(session, "Interrupted whiling waiting and session is still null.");
 		}
 	}
-
+	
+	public void setHeartbeatHandler(HeartbeatHandler heartbeatHandler) {
+		this.heartbeat = new Heartbeat(heartbeatHandler);
+	}
+	
+	public void setStandardPingHeartbeatHandler(StandardPingHeartbeatHandler heartbeatHandler) {
+		this.setHeartbeatHandler(heartbeatHandler);
+	}
+	
 }
