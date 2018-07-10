@@ -1,4 +1,4 @@
-package io.github.xinyangpan.crypto4j.exchange.okex;
+package io.github.xinyangpan.crypto4j.exchange.okex.impl;
 
 import java.util.function.Consumer;
 

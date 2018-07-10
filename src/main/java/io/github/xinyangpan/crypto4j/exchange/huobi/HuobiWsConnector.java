@@ -2,6 +2,7 @@ package io.github.xinyangpan.crypto4j.exchange.huobi;
 
 import io.github.xinyangpan.crypto4j.core.BaseWsConnector;
 import io.github.xinyangpan.crypto4j.exchange.huobi.impl.HuobiWsHandler;
+import io.github.xinyangpan.crypto4j.exchange.huobi.impl.HuobiWsSubscriber;
 import io.github.xinyangpan.crypto4j.exchange.huobi.impl.HuobiWsSubscriberImpl;
 
 public class HuobiWsConnector extends BaseWsConnector<HuobiWsSubscriber, HuobiWsHandler> {

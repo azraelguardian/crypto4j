@@ -1,7 +1,7 @@
 package io.github.xinyangpan.crypto4j.exchange.example;
 
 import io.github.xinyangpan.crypto4j.exchange.okex.OkexWsConnector;
-import io.github.xinyangpan.crypto4j.exchange.okex.OkexWsSubscriber;
+import io.github.xinyangpan.crypto4j.exchange.okex.impl.OkexWsSubscriber;
 
 public class OkexConnectExample {
 	

@@ -2,6 +2,7 @@ package io.github.xinyangpan.crypto4j.exchange.okex;
 
 import io.github.xinyangpan.crypto4j.core.BaseWsConnector;
 import io.github.xinyangpan.crypto4j.exchange.okex.impl.OkexWsHandler;
+import io.github.xinyangpan.crypto4j.exchange.okex.impl.OkexWsSubscriber;
 import io.github.xinyangpan.crypto4j.exchange.okex.impl.OkexWsSubscriberImpl;
 
 public class OkexWsConnector extends BaseWsConnector<OkexWsSubscriber, OkexWsHandler> {

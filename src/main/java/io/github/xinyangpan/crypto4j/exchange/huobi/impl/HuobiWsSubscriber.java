@@ -1,4 +1,4 @@
-package io.github.xinyangpan.crypto4j.exchange.huobi;
+package io.github.xinyangpan.crypto4j.exchange.huobi.impl;
 
 import java.util.function.Consumer;
 

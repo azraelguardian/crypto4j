@@ -10,7 +10,6 @@ import org.springframework.web.socket.WebSocketSession;
 
 import com.google.common.base.Preconditions;
 
-import io.github.xinyangpan.crypto4j.exchange.huobi.HuobiWsSubscriber;
 import io.github.xinyangpan.crypto4j.exchange.huobi.dto.common.HuobiWsRequest;
 import io.github.xinyangpan.crypto4j.exchange.huobi.dto.depth.DepthData;
 import io.github.xinyangpan.crypto4j.exchange.huobi.dto.kline.KlineData;
