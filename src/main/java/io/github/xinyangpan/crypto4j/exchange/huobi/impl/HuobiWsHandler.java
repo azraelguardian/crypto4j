@@ -1,4 +1,4 @@
-package io.github.xinyangpan.crypto4j.exchange.huobi.core;
+package io.github.xinyangpan.crypto4j.exchange.huobi.impl;
 
 import static io.github.xinyangpan.crypto4j.exchange.huobi.util.HuobiUtils.objectMapper;
 

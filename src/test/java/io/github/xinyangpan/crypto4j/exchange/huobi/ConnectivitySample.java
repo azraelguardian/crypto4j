@@ -1,7 +1,5 @@
 package io.github.xinyangpan.crypto4j.exchange.huobi;
 
-import io.github.xinyangpan.crypto4j.exchange.huobi.core.HuobiWsConnector;
-
 public class ConnectivitySample {
 	
 	public static void main(String[] args) throws InterruptedException {
