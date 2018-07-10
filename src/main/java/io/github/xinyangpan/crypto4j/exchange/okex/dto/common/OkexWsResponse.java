@@ -4,7 +4,8 @@ import lombok.Data;
 
 @Data
 public class OkexWsResponse<T> {
-
+	
+	private Integer binary;
 	private String channel;
 	private T data;
 

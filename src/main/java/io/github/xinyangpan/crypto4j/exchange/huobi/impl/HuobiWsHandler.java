@@ -32,7 +32,11 @@ public class HuobiWsHandler extends WebSocketHandler {
 	// ch -> listener
 	private final Map<String, Consumer<DepthData>> depthListenerMap = Maps.newHashMap();
 	private final Map<String, Consumer<KlineData>> klineListenerMap = Maps.newHashMap();
-
+	
+	public HuobiWsHandler() {
+		super("huobi");
+	}
+	
 	@Override
 	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
 		throw new UnsupportedOperationException();
@@ -41,7 +45,7 @@ public class HuobiWsHandler extends WebSocketHandler {
 	@Override
 	protected void handleBinaryMessage(WebSocketSession session, BinaryMessage message) throws Exception {
 		String jsonMessage = getTextMessage(message.getPayload());
-		log.info("handling message: {}", jsonMessage);
+		log.debug("handling message: {}", jsonMessage);
 		JsonNode rootNode = objectMapper().readTree(jsonMessage);
 		// ping message
 		JsonNode evalNode = rootNode.at("/ping");
@@ -86,13 +90,11 @@ public class HuobiWsHandler extends WebSocketHandler {
 	}
 
 	private void onDepthData(DepthData depthData) {
-		log.debug("onDepthData: {}", depthData.getCh());
 		Consumer<DepthData> listener = depthListenerMap.get(depthData.getCh());
 		listener.accept(depthData);
 	}
 
 	private void onKlineData(KlineData klineData) {
-		log.debug("onMarketDepthData: {}", klineData.getCh());
 		Consumer<KlineData> listener = klineListenerMap.get(klineData.getCh());
 		listener.accept(klineData);
 	}

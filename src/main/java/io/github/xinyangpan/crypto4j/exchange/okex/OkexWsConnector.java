@@ -3,8 +3,8 @@ package io.github.xinyangpan.crypto4j.exchange.okex;
 import org.springframework.web.socket.client.WebSocketConnectionManager;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 
-import io.github.xinyangpan.crypto4j.exchange.huobi.impl.HuobiWsHandler;
-import io.github.xinyangpan.crypto4j.exchange.huobi.impl.HuobiWsSubscriberImpl;
+import io.github.xinyangpan.crypto4j.exchange.okex.impl.OkexWsHandler;
+import io.github.xinyangpan.crypto4j.exchange.okex.impl.OkexWsSubscriberImpl;
 
 public class OkexWsConnector {
 	private String url = "wss://real.okex.com:10441/websocket";
@@ -17,17 +17,17 @@ public class OkexWsConnector {
 		this.url = url;
 	}
 
-	public HuobiWsSubscriberImpl connect(HuobiWsHandler wsHandler) {
+	public OkexWsSubscriberImpl connect(OkexWsHandler wsHandler) {
 		// 
 		StandardWebSocketClient client = new StandardWebSocketClient();
 		manager = new WebSocketConnectionManager(client, wsHandler, url);
 		manager.start();
 		wsHandler.waitUtilConnectionEstablished();
-		return new HuobiWsSubscriberImpl(wsHandler);
+		return new OkexWsSubscriberImpl(wsHandler);
 	}
 
-	public HuobiWsSubscriberImpl connect() {
-		return this.connect(new HuobiWsHandler());
+	public OkexWsSubscriberImpl connect() {
+		return this.connect(new OkexWsHandler());
 	}
 
 	public void disconnect() {

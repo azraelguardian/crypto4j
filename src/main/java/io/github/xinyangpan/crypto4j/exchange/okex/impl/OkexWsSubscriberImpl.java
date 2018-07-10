@@ -26,7 +26,7 @@ public class OkexWsSubscriberImpl implements OkexWsSubscriber {
 	}
 
 	@Override
-	public void depth(String symbol, int depth, Consumer<DepthData> listener) {
+	public void depth(String symbol, int depth, Consumer<OkexWsResponse<DepthData>> listener) {
 		// 
 		Preconditions.checkNotNull(symbol);
 		Preconditions.checkArgument(depth >= 0);
@@ -34,6 +34,7 @@ public class OkexWsSubscriberImpl implements OkexWsSubscriber {
 		// 
 		log.info("Subscribing marketDepth. symbol={}, type={}.", symbol, depth);
 		String channel = String.format("ok_sub_spot_%s_depth_%s", symbol, depth);
+		okexWsHandler.getDepthListenerMap().put(channel, listener);
 		this.send(OkexWsRequest.addChannel(channel));
 	}
 	
@@ -45,6 +46,7 @@ public class OkexWsSubscriberImpl implements OkexWsSubscriber {
 		// 
 		log.info("Subscribing ticker. symbol={}, type={}.", symbol);
 		String channel = String.format("ok_sub_spot_%s_ticker", symbol);
+		okexWsHandler.getTickerListenerMap().put(channel, listener);
 		this.send(OkexWsRequest.addChannel(channel));
 	}
 

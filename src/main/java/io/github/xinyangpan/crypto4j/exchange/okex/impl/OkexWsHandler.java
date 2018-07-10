@@ -13,9 +13,7 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.google.common.collect.Maps;
 
 import io.github.xinyangpan.crypto4j.core.WebSocketHandler;
-import io.github.xinyangpan.crypto4j.exchange.huobi.dto.common.HuobiWsAck;
-import io.github.xinyangpan.crypto4j.exchange.huobi.dto.depth.DepthData;
-import io.github.xinyangpan.crypto4j.exchange.huobi.dto.kline.KlineData;
+import io.github.xinyangpan.crypto4j.exchange.okex.dto.common.DepthData;
 import io.github.xinyangpan.crypto4j.exchange.okex.dto.common.OkexWsResponse;
 import io.github.xinyangpan.crypto4j.exchange.okex.dto.common.TickerData;
 import lombok.AccessLevel;
@@ -26,9 +24,13 @@ import lombok.extern.slf4j.Slf4j;
 @Getter(AccessLevel.PACKAGE)
 public class OkexWsHandler extends WebSocketHandler {
 	// ch -> listener
-	private final Map<String, Consumer<DepthData>> depthListenerMap = Maps.newHashMap();
-	private final Map<String, Consumer<KlineData>> klineListenerMap = Maps.newHashMap();
+	private final Map<String, Consumer<OkexWsResponse<DepthData>>> depthListenerMap = Maps.newHashMap();
+	private final Map<String, Consumer<OkexWsResponse<TickerData>>> tickerListenerMap = Maps.newHashMap();
 
+	public OkexWsHandler() {
+		super("okex");
+	}
+	
 	@Override
 	protected void handleBinaryMessage(WebSocketSession session, BinaryMessage message) throws Exception {
 		throw new UnsupportedOperationException();
@@ -37,49 +39,41 @@ public class OkexWsHandler extends WebSocketHandler {
 	@Override
 	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
 		String payload = message.getPayload();
+		log.debug("handling message: {}", payload);
 		String channel = objectMapper().readTree(payload).findValue("channel").asText();
 		if (channel.contains("ticker")) {
-			JavaType type = objectMapper().getTypeFactory().constructParametricType(OkexWsResponse.class, TickerData.class);
-			onTickerData(objectMapper().readValue(payload, type));
+			JavaType type = getType(TickerData.class);
+			OkexWsResponse<TickerData>[] responses = objectMapper().readValue(payload, type);
+			for (OkexWsResponse<TickerData> response : responses) {
+				onTickerData(response);
+			}
 			return;
 		} else if (channel.contains("depth")) {
-			JavaType type = objectMapper().getTypeFactory().constructParametricType(OkexWsResponse.class, DepthData.class);
-			onDepthData(objectMapper().readValue(payload, type));
+			JavaType type = getType(DepthData.class);
+			OkexWsResponse<DepthData>[] responses = objectMapper().readValue(payload, type);
+			for (OkexWsResponse<DepthData> response : responses) {
+				onDepthData(response);
+			}
 			return;
 		}
 		// 
 		log.warn("Unhandled message: {}", payload);
 	}
 
-
-	private void onTickerData(OkexWsResponse<TickerData> readValue) {
-		// TODO Auto-generated method stub
-		
+	private <T> JavaType getType(Class<T> clazz) {
+		JavaType type = objectMapper().getTypeFactory().constructParametricType(OkexWsResponse.class, clazz);
+		return objectMapper().getTypeFactory().constructArrayType(type);
 	}
 
-	private void onDepthData(OkexWsResponse<DepthData> readValue) {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	private void onPingMessage(long pingTs) throws Exception {
-		session.sendMessage(new TextMessage(String.format("{'pong': %s}", pingTs)));
+
+	private void onTickerData(OkexWsResponse<TickerData> response) {
+		Consumer<OkexWsResponse<TickerData>> listener = tickerListenerMap.get(response.getChannel());
+		listener.accept(response);
 	}
 
-	private void onAcknowledge(HuobiWsAck huobiWsAck) {
-		log.info("onAcknowledge: {}", huobiWsAck);
-	}
-
-	private void onMarketDepthData(DepthData depthData) {
-		log.debug("onMarketDepthData: {}", depthData.getCh());
-		Consumer<DepthData> listener = depthListenerMap.get(depthData.getCh());
-		listener.accept(depthData);
-	}
-
-	private void onKlineData(KlineData klineData) {
-		log.debug("onMarketDepthData: {}", klineData.getCh());
-		Consumer<KlineData> listener = klineListenerMap.get(klineData.getCh());
-		listener.accept(klineData);
+	private void onDepthData(OkexWsResponse<DepthData> response) {
+		Consumer<OkexWsResponse<DepthData>> listener = depthListenerMap.get(response.getChannel());
+		listener.accept(response);
 	}
 
 }
