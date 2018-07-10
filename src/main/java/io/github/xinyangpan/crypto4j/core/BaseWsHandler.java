@@ -10,14 +10,14 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class WebSocketHandler extends AbstractWebSocketHandler {
+public class BaseWsHandler extends AbstractWebSocketHandler {
 	protected @Getter @Setter String name;
 	protected @Getter WebSocketSession session;
 	
-	public WebSocketHandler() {
+	public BaseWsHandler() {
 	}
 
-	public WebSocketHandler(String name) {
+	public BaseWsHandler(String name) {
 		this.name = name;
 	}
 

@@ -12,7 +12,7 @@ import org.springframework.web.socket.WebSocketSession;
 import com.fasterxml.jackson.databind.JavaType;
 import com.google.common.collect.Maps;
 
-import io.github.xinyangpan.crypto4j.core.WebSocketHandler;
+import io.github.xinyangpan.crypto4j.core.BaseWsHandler;
 import io.github.xinyangpan.crypto4j.exchange.okex.dto.common.DepthData;
 import io.github.xinyangpan.crypto4j.exchange.okex.dto.common.OkexWsResponse;
 import io.github.xinyangpan.crypto4j.exchange.okex.dto.common.TickerData;
@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Getter(AccessLevel.PACKAGE)
-public class OkexWsHandler extends WebSocketHandler {
+public class OkexWsHandler extends BaseWsHandler {
 	// ch -> listener
 	private final Map<String, Consumer<OkexWsResponse<DepthData>>> depthListenerMap = Maps.newHashMap();
 	private final Map<String, Consumer<OkexWsResponse<TickerData>>> tickerListenerMap = Maps.newHashMap();

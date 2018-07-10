@@ -18,7 +18,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.util.ByteBufferBackedInputStream;
 import com.google.common.collect.Maps;
 
-import io.github.xinyangpan.crypto4j.core.WebSocketHandler;
+import io.github.xinyangpan.crypto4j.core.BaseWsHandler;
 import io.github.xinyangpan.crypto4j.exchange.huobi.dto.common.HuobiWsAck;
 import io.github.xinyangpan.crypto4j.exchange.huobi.dto.depth.DepthData;
 import io.github.xinyangpan.crypto4j.exchange.huobi.dto.kline.KlineData;
@@ -28,7 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Getter(AccessLevel.PACKAGE)
-public class HuobiWsHandler extends WebSocketHandler {
+public class HuobiWsHandler extends BaseWsHandler {
 	// ch -> listener
 	private final Map<String, Consumer<DepthData>> depthListenerMap = Maps.newHashMap();
 	private final Map<String, Consumer<KlineData>> klineListenerMap = Maps.newHashMap();
