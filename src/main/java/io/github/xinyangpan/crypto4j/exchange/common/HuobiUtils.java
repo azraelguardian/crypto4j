@@ -1,4 +1,4 @@
-package io.github.xinyangpan.crypto4j.exchange.huobi.util;
+package io.github.xinyangpan.crypto4j.exchange.common;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 

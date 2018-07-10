@@ -1,6 +1,6 @@
 package io.github.xinyangpan.crypto4j.exchange.huobi.impl;
 
-import static io.github.xinyangpan.crypto4j.exchange.huobi.util.HuobiUtils.objectMapper;
+import static io.github.xinyangpan.crypto4j.exchange.common.HuobiUtils.objectMapper;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -58,7 +58,7 @@ public class HuobiWsHandler extends WebSocketHandler {
 		// market depth message
 		evalNode = rootNode.at("/tick/bids");
 		if (!evalNode.isMissingNode()) {
-			onMarketDepthData(objectMapper().readValue(jsonMessage, DepthData.class));
+			onDepthData(objectMapper().readValue(jsonMessage, DepthData.class));
 			return;
 		}
 		// kline message
@@ -67,8 +67,8 @@ public class HuobiWsHandler extends WebSocketHandler {
 			onKlineData(objectMapper().readValue(jsonMessage, KlineData.class));
 			return;
 		}
-
-		log.warn("Unhandled message", jsonMessage);
+		// 
+		log.warn("Unhandled message: {}", jsonMessage);
 	}
 
 	private String getTextMessage(ByteBuffer payload) throws IOException {
@@ -85,8 +85,8 @@ public class HuobiWsHandler extends WebSocketHandler {
 		log.info("onAcknowledge: {}", huobiWsAck);
 	}
 
-	private void onMarketDepthData(DepthData depthData) {
-		log.debug("onMarketDepthData: {}", depthData.getCh());
+	private void onDepthData(DepthData depthData) {
+		log.debug("onDepthData: {}", depthData.getCh());
 		Consumer<DepthData> listener = depthListenerMap.get(depthData.getCh());
 		listener.accept(depthData);
 	}

@@ -1,6 +1,6 @@
 package io.github.xinyangpan.crypto4j.exchange.huobi.impl;
 
-import static io.github.xinyangpan.crypto4j.exchange.huobi.util.HuobiUtils.objectMapper;
+import static io.github.xinyangpan.crypto4j.exchange.common.HuobiUtils.objectMapper;
 
 import java.util.function.Consumer;
 
@@ -31,7 +31,7 @@ public class HuobiWsSubscriberImpl implements HuobiWsSubscriber {
 		Preconditions.checkNotNull(type);
 		Preconditions.checkNotNull(listener);
 		// 
-		log.info("Subscribing marketDepth. symbol=%s, type=%s.", symbol, type);
+		log.info("Subscribing marketDepth. symbol={}, type={}.", symbol, type);
 		String sub = String.format("market.%s.depth.%s", symbol, type);
 		String id = sub;
 		this.huobiWsHandler.getDepthListenerMap().put(sub, listener);
@@ -45,7 +45,7 @@ public class HuobiWsSubscriberImpl implements HuobiWsSubscriber {
 		Preconditions.checkNotNull(period);
 		Preconditions.checkNotNull(listener);
 		// 
-		log.info("Subscribing kline. symbol=%s, type=%s.", symbol, period);
+		log.info("Subscribing kline. symbol={}, type={}.", symbol, period);
 		String sub = String.format("market.%s.kline.%s", symbol, period);
 		String id = sub;
 		this.huobiWsHandler.getKlineListenerMap().put(sub, listener);
