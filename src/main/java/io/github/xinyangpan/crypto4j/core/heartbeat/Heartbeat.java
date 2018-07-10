@@ -48,7 +48,7 @@ public class Heartbeat {
 				Long ts = this.queue.poll(timeout, TimeUnit.SECONDS);
 				if (ts != null) {
 					log.debug("Ping responded in {} ms", ts - start);
-					Thread.sleep(interval);
+					Thread.sleep(interval * 1000);
 				} else {
 					log.error("Ping timeout {}", System.currentTimeMillis() - start);
 					heartbeatHandler.pingTimeout();
