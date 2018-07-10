@@ -10,8 +10,6 @@ public class ConnectivitySample {
 		subscriber.marketDepth("btcusdt", "step0", System.out::println);
 		subscriber.kline("btcusdt", "1day", System.out::println);
 		// 
-		Thread.sleep(5*1000);
-		connector.disconnect();
 		Thread.sleep(Long.MAX_VALUE);
 	}
 	
