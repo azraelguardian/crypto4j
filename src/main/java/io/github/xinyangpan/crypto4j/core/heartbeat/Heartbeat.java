@@ -14,12 +14,12 @@ public class Heartbeat {
 	// 
 	private final HeartbeatHandler heartbeatHandler;
 	private WebSocketSession session;
+	private Thread thread;
 	// 
 	private long interval = 30; // s
 	private long timeout = 3; // s
 	// 
-	private LinkedBlockingQueue<Long> queue = new LinkedBlockingQueue<>();
-	private Thread thread;
+	private final LinkedBlockingQueue<Long> queue = new LinkedBlockingQueue<>();
 
 	public Heartbeat(HeartbeatHandler heartbeatHandler) {
 		this.heartbeatHandler = heartbeatHandler;
@@ -35,8 +35,9 @@ public class Heartbeat {
 	}
 
 	public void stop() {
-		this.session = null;
 		this.thread.interrupt();
+		this.session = null;
+		this.thread = null;
 	}
 
 	private void run() {
