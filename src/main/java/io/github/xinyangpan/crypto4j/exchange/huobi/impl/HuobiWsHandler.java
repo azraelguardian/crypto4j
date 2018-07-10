@@ -30,7 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 @Getter(AccessLevel.PACKAGE)
 public class HuobiWsHandler extends WebSocketHandler {
 	// ch -> listener
-	private final Map<String, Consumer<DepthData>> marketDepthListenerMap = Maps.newHashMap();
+	private final Map<String, Consumer<DepthData>> depthListenerMap = Maps.newHashMap();
 	private final Map<String, Consumer<KlineData>> klineListenerMap = Maps.newHashMap();
 
 	@Override
@@ -87,7 +87,7 @@ public class HuobiWsHandler extends WebSocketHandler {
 
 	private void onMarketDepthData(DepthData depthData) {
 		log.debug("onMarketDepthData: {}", depthData.getCh());
-		Consumer<DepthData> listener = marketDepthListenerMap.get(depthData.getCh());
+		Consumer<DepthData> listener = depthListenerMap.get(depthData.getCh());
 		listener.accept(depthData);
 	}
 

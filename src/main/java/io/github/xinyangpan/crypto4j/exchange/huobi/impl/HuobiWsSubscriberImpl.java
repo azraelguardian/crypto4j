@@ -34,7 +34,7 @@ public class HuobiWsSubscriberImpl implements HuobiWsSubscriber {
 		log.info("Subscribing marketDepth. symbol=%s, type=%s.", symbol, type);
 		String sub = String.format("market.%s.depth.%s", symbol, type);
 		String id = sub;
-		this.huobiWsHandler.getMarketDepthListenerMap().put(sub, listener);
+		this.huobiWsHandler.getDepthListenerMap().put(sub, listener);
 		this.send(new HuobiWsRequest(id, sub));
 	}
 
