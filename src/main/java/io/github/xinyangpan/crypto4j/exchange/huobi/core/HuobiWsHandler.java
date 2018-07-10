@@ -16,6 +16,7 @@ import org.springframework.web.socket.WebSocketSession;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.util.ByteBufferBackedInputStream;
+import com.google.common.collect.Maps;
 
 import io.github.xinyangpan.crypto4j.core.WebSocketHandler;
 import io.github.xinyangpan.crypto4j.exchange.huobi.dto.common.HuobiWsAck;
@@ -29,9 +30,9 @@ import lombok.extern.slf4j.Slf4j;
 @Getter(AccessLevel.PACKAGE)
 public class HuobiWsHandler extends WebSocketHandler {
 	// ch -> listener
-	private Map<String, Consumer<MarketDepthData>> marketDepthListenerMap;
-	private Map<String, Consumer<KlineData>> klineListenerMap;
-	
+	private final Map<String, Consumer<MarketDepthData>> marketDepthListenerMap = Maps.newHashMap();
+	private final Map<String, Consumer<KlineData>> klineListenerMap = Maps.newHashMap();
+
 	@Override
 	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
 		throw new UnsupportedOperationException();
@@ -66,7 +67,7 @@ public class HuobiWsHandler extends WebSocketHandler {
 			onKlineData(objectMapper().readValue(jsonMessage, KlineData.class));
 			return;
 		}
-		
+
 		log.warn("Unhandled message", jsonMessage);
 	}
 
@@ -85,14 +86,15 @@ public class HuobiWsHandler extends WebSocketHandler {
 	}
 
 	private void onMarketDepthData(MarketDepthData marketDepthData) {
-		log.info("onMarketDepthData: {}", marketDepthData.getCh());
+		log.debug("onMarketDepthData: {}", marketDepthData.getCh());
 		Consumer<MarketDepthData> listener = marketDepthListenerMap.get(marketDepthData.getCh());
 		listener.accept(marketDepthData);
 	}
 
-	private void onKlineData(KlineData readValue) {
-		// TODO Auto-generated method stub
-		
+	private void onKlineData(KlineData klineData) {
+		log.debug("onMarketDepthData: {}", klineData.getCh());
+		Consumer<KlineData> listener = klineListenerMap.get(klineData.getCh());
+		listener.accept(klineData);
 	}
 
 }

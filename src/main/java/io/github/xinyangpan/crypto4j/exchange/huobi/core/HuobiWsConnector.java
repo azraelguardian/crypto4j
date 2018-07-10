@@ -23,6 +23,10 @@ public class HuobiWsConnector {
 		return new HuobiWsSubscriberImpl(wsHandler);
 	}
 
+	public HuobiWsSubscriberImpl connect() {
+		return this.connect(new HuobiWsHandler());
+	}
+
 	public void disconnect() {
 		manager.stop();
 	}

@@ -8,6 +8,8 @@ import org.springframework.util.Assert;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
+import com.google.common.base.Preconditions;
+
 import io.github.xinyangpan.crypto4j.exchange.huobi.HuobiWsSubscriber;
 import io.github.xinyangpan.crypto4j.exchange.huobi.dto.common.HuobiWsRequest;
 import io.github.xinyangpan.crypto4j.exchange.huobi.dto.kline.KlineData;
@@ -24,17 +26,29 @@ public class HuobiWsSubscriberImpl implements HuobiWsSubscriber {
 
 	@Override
 	public void marketDepth(String symbol, String type, Consumer<MarketDepthData> listener) {
+		// 
+		Preconditions.checkNotNull(symbol);
+		Preconditions.checkNotNull(type);
+		Preconditions.checkNotNull(listener);
+		// 
 		log.info("Subscribing marketDepth. symbol=%s, type=%s.", symbol, type);
 		String sub = String.format("market.%s.depth.%s", symbol, type);
 		String id = sub;
+		this.huobiWsHandler.getMarketDepthListenerMap().put(sub, listener);
 		this.send(new HuobiWsRequest(id, sub));
 	}
 
 	@Override
 	public void kline(String symbol, String period, Consumer<KlineData> listener) {
+		// 
+		Preconditions.checkNotNull(symbol);
+		Preconditions.checkNotNull(period);
+		Preconditions.checkNotNull(listener);
+		// 
 		log.info("Subscribing kline. symbol=%s, type=%s.", symbol, period);
 		String sub = String.format("market.%s.kline.%s", symbol, period);
 		String id = sub;
+		this.huobiWsHandler.getKlineListenerMap().put(sub, listener);
 		this.send(new HuobiWsRequest(id, sub));
 	}
 
