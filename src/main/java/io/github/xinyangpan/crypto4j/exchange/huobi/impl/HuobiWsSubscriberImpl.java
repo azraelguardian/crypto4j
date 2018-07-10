@@ -25,7 +25,7 @@ public class HuobiWsSubscriberImpl implements HuobiWsSubscriber {
 	}
 
 	@Override
-	public void marketDepth(String symbol, String type, Consumer<DepthData> listener) {
+	public void depth(String symbol, String type, Consumer<DepthData> listener) {
 		// 
 		Preconditions.checkNotNull(symbol);
 		Preconditions.checkNotNull(type);
