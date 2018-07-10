@@ -14,8 +14,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.google.common.collect.Maps;
 
 import io.github.xinyangpan.crypto4j.core.BaseWsHandler;
+import io.github.xinyangpan.crypto4j.core.heartbeat.Heartbeat;
 import io.github.xinyangpan.crypto4j.exchange.okex.dto.common.DepthData;
 import io.github.xinyangpan.crypto4j.exchange.okex.dto.common.OkexWsResponse;
+import io.github.xinyangpan.crypto4j.exchange.okex.dto.common.ResultData;
 import io.github.xinyangpan.crypto4j.exchange.okex.dto.common.TickerData;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -30,6 +32,10 @@ public class OkexWsHandler extends BaseWsHandler {
 
 	public OkexWsHandler() {
 		super("okex");
+	}
+
+	public void setHeartbeatHandler(OkexWsHeartbeatHandler okexWsHeartbeatHandler) {
+		this.heartbeat = new Heartbeat(okexWsHeartbeatHandler);
 	}
 
 	@Override
@@ -51,22 +57,31 @@ public class OkexWsHandler extends BaseWsHandler {
 		// channel message
 		String channel = root.findValue("channel").asText();
 		if (channel.contains("ticker")) {
-			JavaType type = getType(TickerData.class);
-			OkexWsResponse<TickerData>[] responses = objectMapper().readValue(payload, type);
+			OkexWsResponse<TickerData>[] responses = this.parse(payload, TickerData.class);
 			for (OkexWsResponse<TickerData> response : responses) {
 				onTickerData(response);
 			}
 			return;
 		} else if (channel.contains("depth")) {
-			JavaType type = getType(DepthData.class);
-			OkexWsResponse<DepthData>[] responses = objectMapper().readValue(payload, type);
+			OkexWsResponse<DepthData>[] responses = this.parse(payload, DepthData.class);
 			for (OkexWsResponse<DepthData> response : responses) {
 				onDepthData(response);
+			}
+			return;
+		} else if (channel.contains("addChannel")) {
+			OkexWsResponse<ResultData>[] responses = this.parse(payload, ResultData.class);
+			for (OkexWsResponse<ResultData> response : responses) {
+				onResultData(response);
 			}
 			return;
 		}
 		// 
 		log.warn("Unhandled message: {}", payload);
+	}
+
+	private <T> OkexWsResponse<T>[] parse(String payload, Class<T> clazz) throws Exception {
+		JavaType type = getType(clazz);
+		return objectMapper().readValue(payload, type);
 	}
 
 	private <T> JavaType getType(Class<T> clazz) {
@@ -77,6 +92,10 @@ public class OkexWsHandler extends BaseWsHandler {
 	private void onPong() {
 		log.debug("Pond recieved.");
 		heartbeat.onPong();
+	}
+
+	private void onResultData(OkexWsResponse<ResultData> response) {
+		log.info("Result: {}", response);
 	}
 
 	private void onTickerData(OkexWsResponse<TickerData> response) {

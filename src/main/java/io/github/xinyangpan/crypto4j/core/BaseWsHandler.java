@@ -7,14 +7,13 @@ import org.springframework.web.socket.handler.AbstractWebSocketHandler;
 
 import io.github.xinyangpan.crypto4j.core.heartbeat.Heartbeat;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class BaseWsHandler extends AbstractWebSocketHandler {
 	protected String name;
 	protected @Getter WebSocketSession session;
-	protected @Getter @Setter Heartbeat heartbeat;
+	protected Heartbeat heartbeat;
 
 	public BaseWsHandler() {
 	}

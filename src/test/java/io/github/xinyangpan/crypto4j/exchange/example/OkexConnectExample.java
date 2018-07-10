@@ -11,6 +11,11 @@ public class OkexConnectExample {
 //		subscriber.depth("bch_btc", 20, System.out::println);
 		subscriber.ticker("bch_btc", System.out::println);
 		// 
+		Thread.sleep(5* 1000);
+		// 
+		connector.reconnect();
+		subscriber.ticker("bch_btc", System.out::println);
+		// 
 		Thread.sleep(Long.MAX_VALUE);
 	}
 	
