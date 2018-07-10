@@ -10,6 +10,7 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
 import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.google.common.collect.Maps;
 
 import io.github.xinyangpan.crypto4j.core.BaseWsHandler;
@@ -30,17 +31,25 @@ public class OkexWsHandler extends BaseWsHandler {
 	public OkexWsHandler() {
 		super("okex");
 	}
-	
+
 	@Override
 	protected void handleBinaryMessage(WebSocketSession session, BinaryMessage message) throws Exception {
 		throw new UnsupportedOperationException();
 	}
-	
+
 	@Override
 	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
 		String payload = message.getPayload();
 		log.debug("handling message: {}", payload);
-		String channel = objectMapper().readTree(payload).findValue("channel").asText();
+		JsonNode root = objectMapper().readTree(payload);
+		// pong
+		JsonNode eventNode = root.findValue("event");
+		if (eventNode != null && "pong".equals(eventNode.asText())) {
+			onPong();
+			return;
+		}
+		// channel message
+		String channel = root.findValue("channel").asText();
 		if (channel.contains("ticker")) {
 			JavaType type = getType(TickerData.class);
 			OkexWsResponse<TickerData>[] responses = objectMapper().readValue(payload, type);
@@ -65,6 +74,10 @@ public class OkexWsHandler extends BaseWsHandler {
 		return objectMapper().getTypeFactory().constructArrayType(type);
 	}
 
+	private void onPong() {
+		log.debug("Pond recieved.");
+		heartbeat.onPong();
+	}
 
 	private void onTickerData(OkexWsResponse<TickerData> response) {
 		Consumer<OkexWsResponse<TickerData>> listener = tickerListenerMap.get(response.getChannel());

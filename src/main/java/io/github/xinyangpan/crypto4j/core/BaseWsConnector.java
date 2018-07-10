@@ -5,7 +5,7 @@ import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 
 public abstract class BaseWsConnector<S extends WsSubscriber, H extends BaseWsHandler> {
 	private final String url;
-	private final H wsHandler;
+	protected final H wsHandler;
 	private final S wsSubscriber;
 	private WebSocketConnectionManager manager;
 
@@ -14,8 +14,6 @@ public abstract class BaseWsConnector<S extends WsSubscriber, H extends BaseWsHa
 		this.wsHandler = wsHandler;
 		this.wsSubscriber = this.createSubscriber(wsHandler);
 	}
-
-	protected abstract S createSubscriber(H wsHandler);
 
 	public S connect() {
 		// 
@@ -32,5 +30,12 @@ public abstract class BaseWsConnector<S extends WsSubscriber, H extends BaseWsHa
 		}
 		manager.stop();
 	}
+
+	public S reconnect() {
+		this.disconnect();
+		return this.connect();
+	}
+
+	protected abstract S createSubscriber(H wsHandler);
 
 }
