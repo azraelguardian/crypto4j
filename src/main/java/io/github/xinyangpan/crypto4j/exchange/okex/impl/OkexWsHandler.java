@@ -14,10 +14,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.google.common.collect.Maps;
 
 import io.github.xinyangpan.crypto4j.core.BaseWsHandler;
-import io.github.xinyangpan.crypto4j.exchange.okex.dto.common.DepthData;
-import io.github.xinyangpan.crypto4j.exchange.okex.dto.common.OkexWsResponse;
-import io.github.xinyangpan.crypto4j.exchange.okex.dto.common.ResultData;
-import io.github.xinyangpan.crypto4j.exchange.okex.dto.common.TickerData;
+import io.github.xinyangpan.crypto4j.exchange.okex.dto.DepthData;
+import io.github.xinyangpan.crypto4j.exchange.okex.dto.OkexWsResponse;
+import io.github.xinyangpan.crypto4j.exchange.okex.dto.ResultData;
+import io.github.xinyangpan.crypto4j.exchange.okex.dto.TickerData;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;

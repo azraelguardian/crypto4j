@@ -11,10 +11,10 @@ import org.springframework.web.socket.WebSocketSession;
 import com.google.common.base.Preconditions;
 
 import io.github.xinyangpan.crypto4j.exchange.okex.OkexWsSubscriber;
-import io.github.xinyangpan.crypto4j.exchange.okex.dto.common.DepthData;
-import io.github.xinyangpan.crypto4j.exchange.okex.dto.common.OkexWsRequest;
-import io.github.xinyangpan.crypto4j.exchange.okex.dto.common.OkexWsResponse;
-import io.github.xinyangpan.crypto4j.exchange.okex.dto.common.TickerData;
+import io.github.xinyangpan.crypto4j.exchange.okex.dto.DepthData;
+import io.github.xinyangpan.crypto4j.exchange.okex.dto.OkexWsRequest;
+import io.github.xinyangpan.crypto4j.exchange.okex.dto.OkexWsResponse;
+import io.github.xinyangpan.crypto4j.exchange.okex.dto.TickerData;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

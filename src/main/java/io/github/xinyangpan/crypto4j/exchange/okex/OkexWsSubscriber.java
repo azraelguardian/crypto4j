@@ -3,9 +3,9 @@ package io.github.xinyangpan.crypto4j.exchange.okex;
 import java.util.function.Consumer;
 
 import io.github.xinyangpan.crypto4j.core.WsSubscriber;
-import io.github.xinyangpan.crypto4j.exchange.okex.dto.common.DepthData;
-import io.github.xinyangpan.crypto4j.exchange.okex.dto.common.OkexWsResponse;
-import io.github.xinyangpan.crypto4j.exchange.okex.dto.common.TickerData;
+import io.github.xinyangpan.crypto4j.exchange.okex.dto.DepthData;
+import io.github.xinyangpan.crypto4j.exchange.okex.dto.OkexWsResponse;
+import io.github.xinyangpan.crypto4j.exchange.okex.dto.TickerData;
 
 public interface OkexWsSubscriber extends WsSubscriber {
 
