@@ -1,9 +1,9 @@
-package io.github.xinyangpan.crypto4j.exchange.huobi;
+package io.github.xinyangpan.crypto4j.exchange.example;
 
 import io.github.xinyangpan.crypto4j.exchange.okex.OkexWsConnector;
 import io.github.xinyangpan.crypto4j.exchange.okex.OkexWsSubscriber;
 
-public class OkexConnectSample {
+public class OkexConnectExample {
 	
 	public static void main(String[] args) throws InterruptedException {
 		OkexWsConnector connector = new OkexWsConnector();

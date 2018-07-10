@@ -1,6 +1,9 @@
-package io.github.xinyangpan.crypto4j.exchange.huobi;
+package io.github.xinyangpan.crypto4j.exchange.example;
 
-public class HuobiConnectSample {
+import io.github.xinyangpan.crypto4j.exchange.huobi.HuobiWsConnector;
+import io.github.xinyangpan.crypto4j.exchange.huobi.HuobiWsSubscriber;
+
+public class HuobiConnectExample {
 	
 	public static void main(String[] args) throws InterruptedException {
 		HuobiWsConnector connector = new HuobiWsConnector();
