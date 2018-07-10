@@ -2,10 +2,10 @@ package io.github.xinyangpan.crypto4j.exchange.huobi;
 
 import java.util.function.Consumer;
 
+import io.github.xinyangpan.crypto4j.exchange.huobi.dto.kline.KlineData;
 import io.github.xinyangpan.crypto4j.exchange.huobi.dto.marketdepth.MarketDepthData;
-import io.github.xinyangpan.crypto4j.exchange.huobi.dto.tradedetail.TradeDetailData;
 
-public interface HuobiWsEndpoint {
+public interface HuobiWsSubscriber {
 	
 	/**
 	 * @param symbol required 交易对 btcusdt, ethusdt, ltcusdt, etcusdt, bchusdt, ethbtc, ltcbtc, etcbtc, bchbtc...
@@ -16,8 +16,9 @@ public interface HuobiWsEndpoint {
 
 	/**
 	 * @param symbol required 交易对 btcusdt, ethusdt, ltcusdt, etcusdt, bchusdt, ethbtc, ltcbtc, etcbtc, bchbtc...
+	 * @param 1min, 5min, 15min, 30min, 60min, 1day, 1mon, 1week, 1year
 	 * @param listener listener
 	 */
-	void tradeDetail(String symbol, Consumer<TradeDetailData> listener);
+	void kline(String symbol, String period, Consumer<KlineData> listener);
 	
 }

@@ -5,7 +5,6 @@ import static io.github.xinyangpan.crypto4j.exchange.huobi.util.HuobiUtils.objec
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.zip.GZIPInputStream;
@@ -20,14 +19,18 @@ import com.fasterxml.jackson.databind.util.ByteBufferBackedInputStream;
 
 import io.github.xinyangpan.crypto4j.core.WebSocketHandler;
 import io.github.xinyangpan.crypto4j.exchange.huobi.dto.common.HuobiWsAck;
+import io.github.xinyangpan.crypto4j.exchange.huobi.dto.kline.KlineData;
 import io.github.xinyangpan.crypto4j.exchange.huobi.dto.marketdepth.MarketDepthData;
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@Getter(AccessLevel.PACKAGE)
 public class HuobiWsHandler extends WebSocketHandler {
-	private Map<String, Consumer<Object>> listeners = new HashMap<>();
-	//
-	private Consumer<MarketDepthData> marketDepthListener;
+	// ch -> listener
+	private Map<String, Consumer<MarketDepthData>> marketDepthListenerMap;
+	private Map<String, Consumer<KlineData>> klineListenerMap;
 	
 	@Override
 	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
@@ -57,6 +60,12 @@ public class HuobiWsHandler extends WebSocketHandler {
 			onMarketDepthData(objectMapper().readValue(jsonMessage, MarketDepthData.class));
 			return;
 		}
+		// kline message
+		evalNode = rootNode.at("/tick/open");
+		if (!evalNode.isMissingNode()) {
+			onKlineData(objectMapper().readValue(jsonMessage, KlineData.class));
+			return;
+		}
 		
 		log.warn("Unhandled message", jsonMessage);
 	}
@@ -77,8 +86,13 @@ public class HuobiWsHandler extends WebSocketHandler {
 
 	private void onMarketDepthData(MarketDepthData marketDepthData) {
 		log.info("onMarketDepthData: {}", marketDepthData.getCh());
-		Consumer<Object> listener = listeners.get(marketDepthData.getCh());
+		Consumer<MarketDepthData> listener = marketDepthListenerMap.get(marketDepthData.getCh());
 		listener.accept(marketDepthData);
+	}
+
+	private void onKlineData(KlineData readValue) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
