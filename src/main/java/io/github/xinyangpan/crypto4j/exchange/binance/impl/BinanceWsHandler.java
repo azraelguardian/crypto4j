@@ -2,8 +2,6 @@ package io.github.xinyangpan.crypto4j.exchange.binance.impl;
 
 import static io.github.xinyangpan.crypto4j.exchange.ExchangeUtils.objectMapper;
 
-import java.util.function.Consumer;
-
 import org.springframework.web.socket.BinaryMessage;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -23,13 +21,11 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Getter(AccessLevel.PACKAGE)
 public class BinanceWsHandler extends BaseWsHandler {
-	private Consumer<StreamData<Depth>> depthListener;
-	private Consumer<StreamData<Ticker>> tickerListener;
+	private BinanceSubscription binanceSubscription;
 
 	public BinanceWsHandler(BinanceSubscription binanceSubscription) {
 		super("binance");
-		this.depthListener = binanceSubscription.getDepthListener();
-		this.tickerListener = binanceSubscription.getTickerListener();
+		this.binanceSubscription = binanceSubscription;
 	}
 
 	@Override
@@ -62,11 +58,11 @@ public class BinanceWsHandler extends BaseWsHandler {
 	}
 
 	private void onTicker(StreamData<Ticker> data) {
-		tickerListener.accept(data);
+		binanceSubscription.getTickerListener().accept(data);
 	}
 
 	private void onDepth(StreamData<Depth> data) {
-		depthListener.accept(data);
+		binanceSubscription.getDepthListener().accept(data);
 	}
 
 }
