@@ -1,4 +1,4 @@
-package io.github.xinyangpan.crypto4j.exchange.binance.json;
+package io.github.xinyangpan.crypto4j.exchange.binance.jackson;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -10,7 +10,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 import io.github.xinyangpan.crypto4j.exchange.binance.dto.depth.DepthEntry;
 
-public class OrderBookEntryDeserializer extends JsonDeserializer<DepthEntry> {
+public class DepthEntryDeserializer extends JsonDeserializer<DepthEntry> {
 
 	@Override
 	public DepthEntry deserialize(JsonParser jp, DeserializationContext ctx) throws IOException {
