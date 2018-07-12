@@ -8,6 +8,7 @@ import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
 
 import io.github.xinyangpan.crypto4j.core.subscriber.BaseWsSubscriber;
+import io.github.xinyangpan.crypto4j.exchange.ExchangeUtils;
 import io.github.xinyangpan.crypto4j.exchange.binance.dto.Ticker;
 import io.github.xinyangpan.crypto4j.exchange.binance.dto.common.StreamData;
 import io.github.xinyangpan.crypto4j.exchange.binance.dto.depth.Depth;
@@ -18,8 +19,8 @@ import lombok.Setter;
 @Setter
 public class BinanceSubscriber extends BaseWsSubscriber {
 	private final List<String> streamNames = new ArrayList<>();
-	private Consumer<StreamData<Depth>> depthListener;
-	private Consumer<StreamData<Ticker>> tickerListener;
+	private Consumer<StreamData<Depth>> depthListener = ExchangeUtils.noOpConsumer();
+	private Consumer<StreamData<Ticker>> tickerListener = ExchangeUtils.noOpConsumer();
 
 	public BinanceSubscriber depthListener(Consumer<StreamData<Depth>> depthListener) {
 		this.depthListener = depthListener;
@@ -30,7 +31,7 @@ public class BinanceSubscriber extends BaseWsSubscriber {
 		this.tickerListener = tickerListener;
 		return this;
 	}
-	
+
 	public BinanceSubscriber depthAndTicker(int level, String... symbols) {
 		Preconditions.checkNotNull(symbols);
 		// 
@@ -68,5 +69,5 @@ public class BinanceSubscriber extends BaseWsSubscriber {
 	public void onDepth(StreamData<Depth> data) {
 		depthListener.accept(data);
 	}
-	
+
 }

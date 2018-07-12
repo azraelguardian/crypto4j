@@ -26,11 +26,11 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Getter(AccessLevel.PACKAGE)
 public class HuobiWsHandler extends BaseWsHandler<HuobiSubscriber> {
-	
+
 	public HuobiWsHandler(HuobiSubscriber huobiSubscriber) {
 		super("huobi", huobiSubscriber);
 	}
-	
+
 	@Override
 	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
 		throw new UnsupportedOperationException();
@@ -56,13 +56,13 @@ public class HuobiWsHandler extends BaseWsHandler<HuobiSubscriber> {
 		// market depth message
 		evalNode = rootNode.at("/tick/bids");
 		if (!evalNode.isMissingNode()) {
-			onDepthData(objectMapper().readValue(jsonMessage, DepthData.class));
+			wsSubscriber.onDepthData(objectMapper().readValue(jsonMessage, DepthData.class));
 			return;
 		}
 		// kline message
 		evalNode = rootNode.at("/tick/open");
 		if (!evalNode.isMissingNode()) {
-			onKlineData(objectMapper().readValue(jsonMessage, KlineData.class));
+			wsSubscriber.onKlineData(objectMapper().readValue(jsonMessage, KlineData.class));
 			return;
 		}
 		// 
@@ -81,14 +81,6 @@ public class HuobiWsHandler extends BaseWsHandler<HuobiSubscriber> {
 
 	private void onAcknowledge(HuobiWsAck huobiWsAck) {
 		log.info("onAcknowledge: {}", huobiWsAck);
-	}
-
-	private void onDepthData(DepthData depthData) {
-		wsSubscriber.getDepthListener().accept(depthData);
-	}
-
-	private void onKlineData(KlineData klineData) {
-		wsSubscriber.getKlineListener().accept(klineData);
 	}
 
 }

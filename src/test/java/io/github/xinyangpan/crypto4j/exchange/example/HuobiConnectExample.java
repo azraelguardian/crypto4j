@@ -8,6 +8,7 @@ public class HuobiConnectExample {
 	public static void main(String[] args) throws InterruptedException {
 		HuobiSubscriber huobiSubscriber = new HuobiSubscriber();
 		huobiSubscriber.setDepthListener(System.out::println);
+		huobiSubscriber.setKlineListener(System.out::println);
 		// 
 		HuobiWsConnector connector = new HuobiWsConnector(huobiSubscriber);
 		connector.connect();

@@ -5,6 +5,7 @@ import java.util.function.Consumer;
 import com.google.common.base.Preconditions;
 
 import io.github.xinyangpan.crypto4j.core.subscriber.BaseDynamicWsSubscriber;
+import io.github.xinyangpan.crypto4j.exchange.ExchangeUtils;
 import io.github.xinyangpan.crypto4j.exchange.huobi.dto.common.HuobiWsRequest;
 import io.github.xinyangpan.crypto4j.exchange.huobi.dto.depth.DepthData;
 import io.github.xinyangpan.crypto4j.exchange.huobi.dto.kline.KlineData;
@@ -16,8 +17,8 @@ import lombok.extern.slf4j.Slf4j;
 @Setter
 @Slf4j
 public class HuobiSubscriber extends BaseDynamicWsSubscriber {
-	private Consumer<DepthData> depthListener;
-	private Consumer<KlineData> klineListener;
+	private Consumer<DepthData> depthListener = ExchangeUtils.noOpConsumer();
+	private Consumer<KlineData> klineListener = ExchangeUtils.noOpConsumer();
 
 	public void depth(String symbol, String type) {
 		// 
@@ -39,6 +40,14 @@ public class HuobiSubscriber extends BaseDynamicWsSubscriber {
 		String sub = String.format("market.%s.kline.%s", symbol, period);
 		String id = sub;
 		this.sendTextMessage(new HuobiWsRequest(id, sub));
+	}
+
+	public void onDepthData(DepthData depthData) {
+		depthListener.accept(depthData);
+	}
+
+	public void onKlineData(KlineData klineData) {
+		klineListener.accept(klineData);
 	}
 
 }

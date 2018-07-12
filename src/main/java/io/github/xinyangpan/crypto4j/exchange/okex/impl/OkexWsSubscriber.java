@@ -5,6 +5,7 @@ import java.util.function.Consumer;
 import com.google.common.base.Preconditions;
 
 import io.github.xinyangpan.crypto4j.core.subscriber.BaseDynamicWsSubscriber;
+import io.github.xinyangpan.crypto4j.exchange.ExchangeUtils;
 import io.github.xinyangpan.crypto4j.exchange.okex.dto.DepthData;
 import io.github.xinyangpan.crypto4j.exchange.okex.dto.OkexWsRequest;
 import io.github.xinyangpan.crypto4j.exchange.okex.dto.OkexWsResponse;
@@ -17,8 +18,8 @@ import lombok.extern.slf4j.Slf4j;
 @Setter
 @Slf4j
 public class OkexWsSubscriber extends BaseDynamicWsSubscriber {
-	private Consumer<OkexWsResponse<DepthData>> depthListener;
-	private Consumer<OkexWsResponse<TickerData>> tickerListener;
+	private Consumer<OkexWsResponse<DepthData>> depthListener = ExchangeUtils.noOpConsumer();
+	private Consumer<OkexWsResponse<TickerData>> tickerListener = ExchangeUtils.noOpConsumer();
 
 	public void depth(String symbol, int depth) {
 		// 
