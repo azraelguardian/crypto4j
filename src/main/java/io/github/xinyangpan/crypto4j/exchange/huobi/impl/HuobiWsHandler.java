@@ -76,6 +76,7 @@ public class HuobiWsHandler extends BaseWsHandler<HuobiSubscriber> {
 	}
 
 	private void onPingMessage(long pingTs) throws Exception {
+		log.debug("responding ping message: {}", pingTs);
 		session.sendMessage(new TextMessage(String.format("{'pong': %s}", pingTs)));
 	}
 

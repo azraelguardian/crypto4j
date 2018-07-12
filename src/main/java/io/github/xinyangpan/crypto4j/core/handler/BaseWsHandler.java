@@ -65,7 +65,7 @@ public class BaseWsHandler<T extends WsSubscriber> extends AbstractWebSocketHand
 	}
 
 	public final WebSocketSession getSessionUtilReady() {
-		return this.getSessionUtilReady(3, 1);
+		return this.getSessionUtilReady(3, 3);
 	}
 
 	public final WebSocketSession getSessionUtilReady(int attempt, long retryInterval) {
