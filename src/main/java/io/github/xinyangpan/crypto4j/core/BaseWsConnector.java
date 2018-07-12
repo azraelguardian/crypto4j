@@ -6,7 +6,7 @@ import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public abstract class BaseWsConnector<H extends BaseWsHandler> {
+public abstract class BaseWsConnector<H extends BaseWsHandler<?>> {
 	private final String url;
 	protected final H wsHandler;
 	private WebSocketConnectionManager manager;

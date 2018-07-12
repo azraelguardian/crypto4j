@@ -11,7 +11,7 @@ import org.springframework.web.socket.WebSocketSession;
 import lombok.Setter;
 
 @Setter
-public class BaseDynamicWsSubscriber implements DynamicWsSubscriber {
+public class BaseDynamicWsSubscriber extends BaseWsSubscriber implements DynamicWsSubscriber {
 
 	protected Supplier<WebSocketSession> sessionSupplier;
 

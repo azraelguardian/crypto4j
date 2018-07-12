@@ -7,14 +7,16 @@ import java.util.function.Consumer;
 import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
 
-import io.github.xinyangpan.crypto4j.core.subscriber.WsSubscriber;
+import io.github.xinyangpan.crypto4j.core.subscriber.BaseWsSubscriber;
 import io.github.xinyangpan.crypto4j.exchange.binance.dto.Ticker;
 import io.github.xinyangpan.crypto4j.exchange.binance.dto.common.StreamData;
 import io.github.xinyangpan.crypto4j.exchange.binance.dto.depth.Depth;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
-public class BinanceSubscriber implements WsSubscriber {
+@Getter
+@Setter
+public class BinanceSubscriber extends BaseWsSubscriber {
 	private final List<String> streamNames = new ArrayList<>();
 	private Consumer<StreamData<Depth>> depthListener;
 	private Consumer<StreamData<Ticker>> tickerListener;
@@ -59,4 +61,12 @@ public class BinanceSubscriber implements WsSubscriber {
 		return Joiner.on('/').join(streamNames);
 	}
 
+	public void onTicker(StreamData<Ticker> data) {
+		tickerListener.accept(data);
+	}
+
+	public void onDepth(StreamData<Depth> data) {
+		depthListener.accept(data);
+	}
+	
 }

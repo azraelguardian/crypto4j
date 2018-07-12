@@ -10,9 +10,6 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import io.github.xinyangpan.crypto4j.core.BaseWsHandler;
-import io.github.xinyangpan.crypto4j.exchange.binance.dto.Ticker;
-import io.github.xinyangpan.crypto4j.exchange.binance.dto.common.StreamData;
-import io.github.xinyangpan.crypto4j.exchange.binance.dto.depth.Depth;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -38,28 +35,20 @@ public class BinanceWsHandler extends BaseWsHandler<BinanceSubscriber> {
 		String stream = rootNode.findValue("stream").asText();
 		DataType dataType = DataType.getDataType(stream);
 		if (dataType == null) {
-			log.warn("Unhandled message: {}", jsonMessage);
+			wsSubscriber.unhandledMessage(jsonMessage);
 			return;
 		}
 		JavaType javaType = dataType.getJavaType(objectMapper());
 		switch (dataType) {
 		case TICKER:
-			onTicker(objectMapper().readValue(jsonMessage, javaType));
+			wsSubscriber.onTicker(objectMapper().readValue(jsonMessage, javaType));
 			return;
 		case DEPTH:
-			onDepth(objectMapper().readValue(jsonMessage, javaType));
+			wsSubscriber.onDepth(objectMapper().readValue(jsonMessage, javaType));
 			return;
 		default:
 			throw new IllegalArgumentException(String.format("Not Supported Type: %s", dataType));
 		}
-	}
-
-	private void onTicker(StreamData<Ticker> data) {
-		wsSubscriber.getTickerListener().accept(data);
-	}
-
-	private void onDepth(StreamData<Depth> data) {
-		wsSubscriber.getDepthListener().accept(data);
 	}
 
 }

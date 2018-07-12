@@ -66,7 +66,7 @@ public class HuobiWsHandler extends BaseWsHandler<HuobiSubscriber> {
 			return;
 		}
 		// 
-		log.warn("Unhandled message: {}", jsonMessage);
+		wsSubscriber.unhandledMessage(jsonMessage);
 	}
 
 	private String getTextMessage(ByteBuffer payload) throws IOException {
