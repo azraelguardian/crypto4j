@@ -15,14 +15,13 @@ public abstract class BaseWsConnector<H extends BaseWsHandler<?>> {
 	public BaseWsConnector(String url, H wsHandler) {
 		this.url = url;
 		this.wsHandler = wsHandler;
+		// 
+		this.manager = createConnectionManager(url, wsHandler);
 	}
 
 	public void connect() {
 		// 
 		log.info("connecting to {}.", url);
-		// 
-		StandardWebSocketClient client = new StandardWebSocketClient();
-		manager = new WebSocketConnectionManager(client, wsHandler, url);
 		manager.start();
 	}
 
@@ -37,6 +36,11 @@ public abstract class BaseWsConnector<H extends BaseWsHandler<?>> {
 		log.info("try to reconnect...");
 		this.disconnect();
 		this.connect();
+	}
+
+	protected WebSocketConnectionManager createConnectionManager(String url, H wsHandler) {
+		StandardWebSocketClient client = new StandardWebSocketClient();
+		return new WebSocketConnectionManager(client, wsHandler, url);
 	}
 
 }

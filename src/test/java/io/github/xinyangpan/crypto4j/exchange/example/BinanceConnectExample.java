@@ -13,6 +13,8 @@ public class BinanceConnectExample {
 		// 
 		BinanceWsConnector connector = new BinanceWsConnector(subscription);
 		connector.connect();
+		Thread.sleep(5*1000);
+		connector.reconnect();
 		// 
 		Thread.sleep(Long.MAX_VALUE);
 	}
