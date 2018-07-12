@@ -9,7 +9,7 @@ import org.springframework.web.socket.WebSocketSession;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
 
-import io.github.xinyangpan.crypto4j.core.BaseWsHandler;
+import io.github.xinyangpan.crypto4j.core.handler.BaseWsHandler;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;

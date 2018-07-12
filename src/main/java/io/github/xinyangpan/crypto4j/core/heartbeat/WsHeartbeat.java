@@ -9,11 +9,13 @@ import org.springframework.web.socket.WebSocketSession;
 
 import com.google.common.base.Preconditions;
 
+import io.github.xinyangpan.crypto4j.core.failurehandler.FailureHandler;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public abstract class AbstractWsHeartbeat {
+public class WsHeartbeat {
 	// 
+	private final FailureHandler failureHandler;
 	private WebSocketSession session;
 	private Thread thread;
 	// 
@@ -22,7 +24,8 @@ public abstract class AbstractWsHeartbeat {
 	// 
 	private final LinkedBlockingQueue<Long> queue = new LinkedBlockingQueue<>();
 
-	public AbstractWsHeartbeat() {
+	public WsHeartbeat(FailureHandler failureHandler) {
+		this.failureHandler = failureHandler;
 	}
 
 	public void start(WebSocketSession session) {
@@ -53,7 +56,7 @@ public abstract class AbstractWsHeartbeat {
 					log.debug("Ping responded in {} ms", ts - start);
 				} else {
 					log.error("Ping timeout {}", System.currentTimeMillis() - start);
-					this.pingTimeout();
+					failureHandler.pingTimeout();
 				}
 			} catch (InterruptedException e) {
 				// return when interrupt, which means stop 
@@ -67,12 +70,10 @@ public abstract class AbstractWsHeartbeat {
 	public void onPong() {
 		queue.add(System.currentTimeMillis());
 	}
-	
+
 	// standard Ping, can be override for none standard. refer to okex
 	protected void sendPing(WebSocketSession session) throws IOException {
 		session.sendMessage(new PingMessage());
 	}
-
-	protected abstract void pingTimeout();
 
 }

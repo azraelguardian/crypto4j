@@ -1,10 +1,11 @@
-package io.github.xinyangpan.crypto4j.core;
+package io.github.xinyangpan.crypto4j.core.handler;
 
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.AbstractWebSocketHandler;
 
-import io.github.xinyangpan.crypto4j.core.heartbeat.AbstractWsHeartbeat;
+import io.github.xinyangpan.crypto4j.core.failurehandler.FailureHandler;
+import io.github.xinyangpan.crypto4j.core.heartbeat.WsHeartbeat;
 import io.github.xinyangpan.crypto4j.core.subscriber.DynamicWsSubscriber;
 import io.github.xinyangpan.crypto4j.core.subscriber.WsSubscriber;
 import lombok.Getter;
@@ -15,7 +16,8 @@ import lombok.extern.slf4j.Slf4j;
 public class BaseWsHandler<T extends WsSubscriber> extends AbstractWebSocketHandler {
 	protected String name;
 	protected @Getter WebSocketSession session;
-	protected @Getter @Setter AbstractWsHeartbeat heartbeat;
+	protected @Setter WsHeartbeat wsHeartbeat;
+	protected @Setter FailureHandler failureHandler;
 	protected T wsSubscriber;
 
 	public BaseWsHandler() {
@@ -32,19 +34,29 @@ public class BaseWsHandler<T extends WsSubscriber> extends AbstractWebSocketHand
 	@Override
 	public final synchronized void afterConnectionEstablished(WebSocketSession session) throws Exception {
 		log.info("Connection Established[{}].", name);
-		if (heartbeat != null) {
-			heartbeat.start(session);
+		if (wsHeartbeat != null) {
+			wsHeartbeat.start(session);
 		}
 		this.session = session;
 	}
 
 	@Override
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-		log.info("Connection Closed[{}], CloseStatus={}.", name, status);
-		if (heartbeat != null) {
-			heartbeat.stop();
+		log.debug("Connection Closed[{}], CloseStatus={}.", name, status);
+		if (wsHeartbeat != null) {
+			wsHeartbeat.stop();
 		}
 		this.session = null;
+		// normal close
+		if (CloseStatus.NORMAL.equalsCode(status)) {
+			log.info("Connection[{}] is normally closed.", name);
+			return;
+		}
+		// abnormal close
+		log.error("Connection[{}] is abnormally closed, CloseStatus={}.", name, status);
+		if (failureHandler != null) {
+			failureHandler.onAbnormalConnectionClosed(status);
+		}
 	}
 
 	@Override
@@ -55,7 +67,7 @@ public class BaseWsHandler<T extends WsSubscriber> extends AbstractWebSocketHand
 	public final WebSocketSession getSessionUtilReady() {
 		return this.getSessionUtilReady(3, 1);
 	}
-	
+
 	public final WebSocketSession getSessionUtilReady(int attempt, long retryInterval) {
 		try {
 			for (int i = 0; i < attempt; i++) {

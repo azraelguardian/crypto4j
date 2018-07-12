@@ -3,6 +3,7 @@ package io.github.xinyangpan.crypto4j.core;
 import org.springframework.web.socket.client.WebSocketConnectionManager;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 
+import io.github.xinyangpan.crypto4j.core.handler.BaseWsHandler;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

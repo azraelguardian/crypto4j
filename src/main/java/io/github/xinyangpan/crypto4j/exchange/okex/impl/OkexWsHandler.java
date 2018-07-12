@@ -9,7 +9,7 @@ import org.springframework.web.socket.WebSocketSession;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
 
-import io.github.xinyangpan.crypto4j.core.BaseWsHandler;
+import io.github.xinyangpan.crypto4j.core.handler.BaseWsHandler;
 import io.github.xinyangpan.crypto4j.exchange.okex.dto.DepthData;
 import io.github.xinyangpan.crypto4j.exchange.okex.dto.OkexWsResponse;
 import io.github.xinyangpan.crypto4j.exchange.okex.dto.ResultData;
@@ -79,7 +79,7 @@ public class OkexWsHandler extends BaseWsHandler<OkexWsSubscriber> {
 
 	private void onPong() {
 		log.debug("Pond recieved.");
-		heartbeat.onPong();
+		wsHeartbeat.onPong();
 	}
 
 	private void onResultData(OkexWsResponse<ResultData> response) {

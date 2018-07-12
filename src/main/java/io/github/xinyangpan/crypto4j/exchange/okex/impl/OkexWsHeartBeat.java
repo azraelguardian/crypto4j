@@ -5,23 +5,19 @@ import java.io.IOException;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
-import io.github.xinyangpan.crypto4j.core.heartbeat.AbstractWsHeartbeat;
+import io.github.xinyangpan.crypto4j.core.BaseWsConnector;
+import io.github.xinyangpan.crypto4j.core.failurehandler.SimpleFailureHandler;
+import io.github.xinyangpan.crypto4j.core.heartbeat.WsHeartbeat;
 
-public class OkexWsHeartBeat extends AbstractWsHeartbeat {
-	private final Runnable run;
+public class OkexWsHeartBeat extends WsHeartbeat {
 
-	public OkexWsHeartBeat(Runnable run) {
-		this.run = run;
+	public OkexWsHeartBeat(BaseWsConnector<?> wsConnector) {
+		super(new SimpleFailureHandler(wsConnector));
 	}
 
 	@Override
 	protected void sendPing(WebSocketSession session) throws IOException {
 		session.sendMessage(new TextMessage("{'event':'ping'}"));
-	}
-
-	@Override
-	protected void pingTimeout() {
-		this.run.run();
 	}
 
 }

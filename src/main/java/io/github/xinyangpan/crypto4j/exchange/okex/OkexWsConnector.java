@@ -10,7 +10,7 @@ public class OkexWsConnector extends BaseWsConnector<OkexWsHandler> {
 
 	public OkexWsConnector(OkexWsSubscriber okexWsSubscriber) {
 		super(DEFAULT_URL, new OkexWsHandler(okexWsSubscriber));
-		this.wsHandler.setHeartbeat(new OkexWsHeartBeat(this::reconnect));
+		this.wsHandler.setWsHeartbeat(new OkexWsHeartBeat(this));
 	}
 
 }

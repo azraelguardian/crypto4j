@@ -15,7 +15,7 @@ import org.springframework.web.socket.WebSocketSession;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.util.ByteBufferBackedInputStream;
 
-import io.github.xinyangpan.crypto4j.core.BaseWsHandler;
+import io.github.xinyangpan.crypto4j.core.handler.BaseWsHandler;
 import io.github.xinyangpan.crypto4j.exchange.huobi.dto.common.HuobiWsAck;
 import io.github.xinyangpan.crypto4j.exchange.huobi.dto.depth.DepthData;
 import io.github.xinyangpan.crypto4j.exchange.huobi.dto.kline.KlineData;
