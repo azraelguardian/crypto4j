@@ -67,7 +67,8 @@ public abstract class AbstractWsHeartbeat {
 	public void onPong() {
 		queue.add(System.currentTimeMillis());
 	}
-
+	
+	// standard Ping, can be override for none standard. refer to okex
 	protected void sendPing(WebSocketSession session) throws IOException {
 		session.sendMessage(new PingMessage());
 	}
