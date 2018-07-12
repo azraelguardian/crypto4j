@@ -1,7 +1,7 @@
 package io.github.xinyangpan.crypto4j.exchange.example;
 
 import io.github.xinyangpan.crypto4j.exchange.binance.BinanceWsConnector;
-import io.github.xinyangpan.crypto4j.exchange.binance.subscription.BinanceSubscription;
+import io.github.xinyangpan.crypto4j.exchange.binance.impl.BinanceSubscription;
 
 public class BinanceConnectExample {
 

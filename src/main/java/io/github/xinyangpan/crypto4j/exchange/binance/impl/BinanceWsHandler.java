@@ -13,7 +13,6 @@ import io.github.xinyangpan.crypto4j.core.BaseWsHandler;
 import io.github.xinyangpan.crypto4j.exchange.binance.dto.Ticker;
 import io.github.xinyangpan.crypto4j.exchange.binance.dto.common.StreamData;
 import io.github.xinyangpan.crypto4j.exchange.binance.dto.depth.Depth;
-import io.github.xinyangpan.crypto4j.exchange.binance.subscription.BinanceSubscription;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;

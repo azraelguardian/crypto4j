@@ -1,4 +1,4 @@
-package io.github.xinyangpan.crypto4j.exchange.binance.subscription;
+package io.github.xinyangpan.crypto4j.exchange.binance.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +14,7 @@ import lombok.Data;
 
 @Data
 public class BinanceSubscription {
-	private final List<String> subscriptions = new ArrayList<>();
+	private final List<String> streamNames = new ArrayList<>();
 	private Consumer<StreamData<Depth>> depthListener;
 	private Consumer<StreamData<Ticker>> tickerListener;
 
@@ -40,7 +40,7 @@ public class BinanceSubscription {
 		Preconditions.checkNotNull(symbols);
 		// 
 		for (String symbol : symbols) {
-			subscriptions.add(String.format("%s@depth%s", symbol, level));
+			streamNames.add(String.format("%s@depth%s", symbol, level));
 		}
 		return this;
 	}
@@ -49,13 +49,13 @@ public class BinanceSubscription {
 		Preconditions.checkNotNull(symbols);
 		// 
 		for (String symbol : symbols) {
-			subscriptions.add(String.format("%s@ticker", symbol));
+			streamNames.add(String.format("%s@ticker", symbol));
 		}
 		return this;
 	}
 
 	public String getUrlParameter() {
-		return Joiner.on('/').join(subscriptions);
+		return Joiner.on('/').join(streamNames);
 	}
 
 }

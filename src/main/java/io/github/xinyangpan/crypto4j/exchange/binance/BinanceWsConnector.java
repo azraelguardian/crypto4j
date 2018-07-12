@@ -2,8 +2,8 @@ package io.github.xinyangpan.crypto4j.exchange.binance;
 
 import io.github.xinyangpan.crypto4j.core.BaseWsConnector;
 import io.github.xinyangpan.crypto4j.core.WsSubscriber;
+import io.github.xinyangpan.crypto4j.exchange.binance.impl.BinanceSubscription;
 import io.github.xinyangpan.crypto4j.exchange.binance.impl.BinanceWsHandler;
-import io.github.xinyangpan.crypto4j.exchange.binance.subscription.BinanceSubscription;
 
 public class BinanceWsConnector extends BaseWsConnector<WsSubscriber, BinanceWsHandler> {
 	private static String DEFAULT_URL = "wss://stream.binance.com:9443/stream?streams=";
