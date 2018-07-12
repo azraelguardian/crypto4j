@@ -1,8 +1,10 @@
 package io.github.xinyangpan.crypto4j.core.heartbeat;
 
+import java.io.IOException;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
+import org.springframework.web.socket.PingMessage;
 import org.springframework.web.socket.WebSocketSession;
 
 import com.google.common.base.Preconditions;
@@ -10,9 +12,8 @@ import com.google.common.base.Preconditions;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class Heartbeat {
+public abstract class AbstractWsHeartbeat {
 	// 
-	private final HeartbeatHandler heartbeatHandler;
 	private WebSocketSession session;
 	private Thread thread;
 	// 
@@ -21,8 +22,7 @@ public class Heartbeat {
 	// 
 	private final LinkedBlockingQueue<Long> queue = new LinkedBlockingQueue<>();
 
-	public Heartbeat(HeartbeatHandler heartbeatHandler) {
-		this.heartbeatHandler = heartbeatHandler;
+	public AbstractWsHeartbeat() {
 	}
 
 	public void start(WebSocketSession session) {
@@ -41,18 +41,19 @@ public class Heartbeat {
 	}
 
 	private void run() {
-		while (!thread.isInterrupted() && session.isOpen()) {
+		while (!Thread.interrupted() && session != null && session.isOpen()) {
 			try {
+				Thread.sleep(interval * 1000);
 				this.queue.clear();
 				long start = System.currentTimeMillis();
-				this.heartbeatHandler.sendPing(session);
+				log.debug("Sending ping. sessionId={}", session.getId());
+				this.sendPing(session);
 				Long ts = this.queue.poll(timeout, TimeUnit.SECONDS);
 				if (ts != null) {
 					log.debug("Ping responded in {} ms", ts - start);
-					Thread.sleep(interval * 1000);
 				} else {
 					log.error("Ping timeout {}", System.currentTimeMillis() - start);
-					heartbeatHandler.pingTimeout();
+					this.pingTimeout();
 				}
 			} catch (InterruptedException e) {
 				// return when interrupt, which means stop 
@@ -66,5 +67,11 @@ public class Heartbeat {
 	public void onPong() {
 		queue.add(System.currentTimeMillis());
 	}
+
+	protected void sendPing(WebSocketSession session) throws IOException {
+		session.sendMessage(new PingMessage());
+	}
+
+	protected abstract void pingTimeout();
 
 }

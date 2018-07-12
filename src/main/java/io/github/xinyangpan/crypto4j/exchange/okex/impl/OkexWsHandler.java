@@ -26,10 +26,6 @@ public class OkexWsHandler extends BaseWsHandler<OkexWsSubscriber> {
 		super("okex", okexWsSubscriber);
 	}
 
-	public void setOkexWsHeartbeatHandler(OkexWsHeartbeatHandler okexWsHeartbeatHandler) {
-		this.setHeartbeatHandler(okexWsHeartbeatHandler);
-	}
-
 	@Override
 	protected void handleBinaryMessage(WebSocketSession session, BinaryMessage message) throws Exception {
 		throw new UnsupportedOperationException();

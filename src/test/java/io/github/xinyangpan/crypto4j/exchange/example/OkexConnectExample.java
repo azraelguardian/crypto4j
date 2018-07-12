@@ -13,8 +13,8 @@ public class OkexConnectExample {
 		OkexWsConnector connector = new OkexWsConnector(subscriber);
 		connector.connect();
 //		subscriber.depth("bch_btc", 20, System.out::println);
-		subscriber.ticker("bch_btc");
-		subscriber.ticker("ltc_btc");
+//		subscriber.ticker("bch_btc");
+//		subscriber.ticker("ltc_btc");
 		// 
 		Thread.sleep(Long.MAX_VALUE);
 	}

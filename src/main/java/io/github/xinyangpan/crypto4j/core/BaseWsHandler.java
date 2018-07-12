@@ -4,19 +4,18 @@ import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.AbstractWebSocketHandler;
 
-import io.github.xinyangpan.crypto4j.core.heartbeat.Heartbeat;
-import io.github.xinyangpan.crypto4j.core.heartbeat.HeartbeatHandler;
-import io.github.xinyangpan.crypto4j.core.heartbeat.StandardPingHeartbeatHandler;
+import io.github.xinyangpan.crypto4j.core.heartbeat.AbstractWsHeartbeat;
 import io.github.xinyangpan.crypto4j.core.subscriber.DynamicWsSubscriber;
 import io.github.xinyangpan.crypto4j.core.subscriber.WsSubscriber;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class BaseWsHandler<T extends WsSubscriber> extends AbstractWebSocketHandler {
 	protected String name;
 	protected @Getter WebSocketSession session;
-	protected Heartbeat heartbeat;
+	protected @Getter @Setter AbstractWsHeartbeat heartbeat;
 	protected T wsSubscriber;
 
 	public BaseWsHandler() {
@@ -69,14 +68,6 @@ public class BaseWsHandler<T extends WsSubscriber> extends AbstractWebSocketHand
 		} catch (InterruptedException e) {
 			return null;
 		}
-	}
-
-	public void setHeartbeatHandler(HeartbeatHandler heartbeatHandler) {
-		this.heartbeat = new Heartbeat(heartbeatHandler);
-	}
-
-	public void setStandardPingHeartbeatHandler(StandardPingHeartbeatHandler heartbeatHandler) {
-		this.setHeartbeatHandler(heartbeatHandler);
 	}
 
 }

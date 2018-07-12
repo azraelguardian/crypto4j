@@ -2,6 +2,7 @@ package io.github.xinyangpan.crypto4j.exchange.okex;
 
 import io.github.xinyangpan.crypto4j.core.BaseWsConnector;
 import io.github.xinyangpan.crypto4j.exchange.okex.impl.OkexWsHandler;
+import io.github.xinyangpan.crypto4j.exchange.okex.impl.OkexWsHeartBeat;
 import io.github.xinyangpan.crypto4j.exchange.okex.impl.OkexWsSubscriber;
 
 public class OkexWsConnector extends BaseWsConnector<OkexWsHandler> {
@@ -9,6 +10,7 @@ public class OkexWsConnector extends BaseWsConnector<OkexWsHandler> {
 
 	public OkexWsConnector(OkexWsSubscriber okexWsSubscriber) {
 		super(DEFAULT_URL, new OkexWsHandler(okexWsSubscriber));
+		this.wsHandler.setHeartbeat(new OkexWsHeartBeat(this::reconnect));
 	}
 
 }
