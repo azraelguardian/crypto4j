@@ -2,16 +2,12 @@ package io.github.xinyangpan.crypto4j.exchange.okex.impl;
 
 import static io.github.xinyangpan.crypto4j.exchange.ExchangeUtils.objectMapper;
 
-import java.util.Map;
-import java.util.function.Consumer;
-
 import org.springframework.web.socket.BinaryMessage;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.google.common.collect.Maps;
 
 import io.github.xinyangpan.crypto4j.core.BaseWsHandler;
 import io.github.xinyangpan.crypto4j.exchange.okex.dto.DepthData;
@@ -24,15 +20,12 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Getter(AccessLevel.PACKAGE)
-public class OkexWsHandler extends BaseWsHandler {
-	// ch -> listener
-	private final Map<String, Consumer<OkexWsResponse<DepthData>>> depthListenerMap = Maps.newHashMap();
-	private final Map<String, Consumer<OkexWsResponse<TickerData>>> tickerListenerMap = Maps.newHashMap();
+public class OkexWsHandler extends BaseWsHandler<OkexWsSubscriber> {
 
-	public OkexWsHandler() {
-		super("okex");
+	public OkexWsHandler(OkexWsSubscriber okexWsSubscriber) {
+		super("okex", okexWsSubscriber);
 	}
-	
+
 	public void setOkexWsHeartbeatHandler(OkexWsHeartbeatHandler okexWsHeartbeatHandler) {
 		this.setHeartbeatHandler(okexWsHeartbeatHandler);
 	}
@@ -98,13 +91,11 @@ public class OkexWsHandler extends BaseWsHandler {
 	}
 
 	private void onTickerData(OkexWsResponse<TickerData> response) {
-		Consumer<OkexWsResponse<TickerData>> listener = tickerListenerMap.get(response.getChannel());
-		listener.accept(response);
+		wsSubscriber.getTickerListener().accept(response);
 	}
 
 	private void onDepthData(OkexWsResponse<DepthData> response) {
-		Consumer<OkexWsResponse<DepthData>> listener = depthListenerMap.get(response.getChannel());
-		listener.accept(response);
+		wsSubscriber.getDepthListener().accept(response);
 	}
 
 }

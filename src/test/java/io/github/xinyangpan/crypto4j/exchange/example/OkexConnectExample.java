@@ -6,13 +6,17 @@ import io.github.xinyangpan.crypto4j.exchange.okex.impl.OkexWsSubscriber;
 public class OkexConnectExample {
 	
 	public static void main(String[] args) throws InterruptedException {
-		OkexWsConnector connector = new OkexWsConnector();
-		OkexWsSubscriber subscriber = connector.connect();
+		OkexWsSubscriber subscriber = new OkexWsSubscriber();
+		subscriber.setDepthListener(System.out::println);
+		subscriber.setTickerListener(System.out::println);
+		
+		OkexWsConnector connector = new OkexWsConnector(subscriber);
+		connector.connect();
 //		subscriber.depth("bch_btc", 20, System.out::println);
-		subscriber.ticker("bch_btc", System.out::println);
-		subscriber.ticker("ltc_btc", System.out::println);
+		subscriber.ticker("bch_btc");
+		subscriber.ticker("ltc_btc");
 		// 
 		Thread.sleep(Long.MAX_VALUE);
 	}
-	
+
 }

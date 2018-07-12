@@ -5,8 +5,6 @@ import static io.github.xinyangpan.crypto4j.exchange.ExchangeUtils.objectMapper;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
-import java.util.Map;
-import java.util.function.Consumer;
 import java.util.zip.GZIPInputStream;
 
 import org.apache.commons.io.IOUtils;
@@ -16,7 +14,6 @@ import org.springframework.web.socket.WebSocketSession;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.util.ByteBufferBackedInputStream;
-import com.google.common.collect.Maps;
 
 import io.github.xinyangpan.crypto4j.core.BaseWsHandler;
 import io.github.xinyangpan.crypto4j.exchange.huobi.dto.common.HuobiWsAck;
@@ -28,13 +25,10 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Getter(AccessLevel.PACKAGE)
-public class HuobiWsHandler extends BaseWsHandler {
-	// ch -> listener
-	private final Map<String, Consumer<DepthData>> depthListenerMap = Maps.newHashMap();
-	private final Map<String, Consumer<KlineData>> klineListenerMap = Maps.newHashMap();
+public class HuobiWsHandler extends BaseWsHandler<HuobiSubscriber> {
 	
-	public HuobiWsHandler() {
-		super("huobi");
+	public HuobiWsHandler(HuobiSubscriber huobiSubscriber) {
+		super("huobi", huobiSubscriber);
 	}
 	
 	@Override
@@ -90,13 +84,11 @@ public class HuobiWsHandler extends BaseWsHandler {
 	}
 
 	private void onDepthData(DepthData depthData) {
-		Consumer<DepthData> listener = depthListenerMap.get(depthData.getCh());
-		listener.accept(depthData);
+		wsSubscriber.getDepthListener().accept(depthData);
 	}
 
 	private void onKlineData(KlineData klineData) {
-		Consumer<KlineData> listener = klineListenerMap.get(klineData.getCh());
-		listener.accept(klineData);
+		wsSubscriber.getKlineListener().accept(klineData);
 	}
 
 }

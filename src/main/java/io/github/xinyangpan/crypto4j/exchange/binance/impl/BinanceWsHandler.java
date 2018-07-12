@@ -19,12 +19,10 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Getter(AccessLevel.PACKAGE)
-public class BinanceWsHandler extends BaseWsHandler {
-	private BinanceSubscription binanceSubscription;
+public class BinanceWsHandler extends BaseWsHandler<BinanceSubscriber> {
 
-	public BinanceWsHandler(BinanceSubscription binanceSubscription) {
-		super("binance");
-		this.binanceSubscription = binanceSubscription;
+	public BinanceWsHandler(BinanceSubscriber binanceSubscriber) {
+		super("binance", binanceSubscriber);
 	}
 
 	@Override
@@ -57,11 +55,11 @@ public class BinanceWsHandler extends BaseWsHandler {
 	}
 
 	private void onTicker(StreamData<Ticker> data) {
-		binanceSubscription.getTickerListener().accept(data);
+		wsSubscriber.getTickerListener().accept(data);
 	}
 
 	private void onDepth(StreamData<Depth> data) {
-		binanceSubscription.getDepthListener().accept(data);
+		wsSubscriber.getDepthListener().accept(data);
 	}
 
 }

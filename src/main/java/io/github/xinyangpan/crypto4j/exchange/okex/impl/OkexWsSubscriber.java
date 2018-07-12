@@ -2,25 +2,41 @@ package io.github.xinyangpan.crypto4j.exchange.okex.impl;
 
 import java.util.function.Consumer;
 
-import io.github.xinyangpan.crypto4j.core.WsSubscriber;
+import com.google.common.base.Preconditions;
+
+import io.github.xinyangpan.crypto4j.core.subscriber.BaseDynamicWsSubscriber;
 import io.github.xinyangpan.crypto4j.exchange.okex.dto.DepthData;
+import io.github.xinyangpan.crypto4j.exchange.okex.dto.OkexWsRequest;
 import io.github.xinyangpan.crypto4j.exchange.okex.dto.OkexWsResponse;
 import io.github.xinyangpan.crypto4j.exchange.okex.dto.TickerData;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
-public interface OkexWsSubscriber extends WsSubscriber {
+@Getter
+@Setter
+@Slf4j
+public class OkexWsSubscriber extends BaseDynamicWsSubscriber {
+	private Consumer<OkexWsResponse<DepthData>> depthListener;
+	private Consumer<OkexWsResponse<TickerData>> tickerListener;
 
-	/**
-	 * @param symbol required 交易对 btcusdt, ethusdt, ltcusdt, etcusdt, bchusdt, ethbtc, ltcbtc, etcbtc, bchbtc...
-	 * @param depth required. step0, step1, step2, step3, step4, step5（合并深度0-5）；step0时，不合并深度
-	 * @param listener listener
-	 */
-	void depth(String symbol, int depth, Consumer<OkexWsResponse<DepthData>> listener);
+	public void depth(String symbol, int depth) {
+		// 
+		Preconditions.checkNotNull(symbol);
+		Preconditions.checkArgument(depth >= 0);
+		// 
+		log.info("Subscribing marketDepth. symbol={}, type={}.", symbol, depth);
+		String channel = String.format("ok_sub_spot_%s_depth_%s", symbol, depth);
+		this.sendTextMessage(OkexWsRequest.addChannel(channel));
+	}
 
-	/**
-	 * @param symbol required 交易对 btcusdt, ethusdt, ltcusdt, etcusdt, bchusdt, ethbtc, ltcbtc, etcbtc, bchbtc...
-	 * @param 1min, 5min, 15min, 30min, 60min, 1day, 1mon, 1week, 1year
-	 * @param listener listener
-	 */
-	void ticker(String symbol, Consumer<OkexWsResponse<TickerData>> listener);
+	public void ticker(String symbol) {
+		// 
+		Preconditions.checkNotNull(symbol);
+		// 
+		log.info("Subscribing ticker. symbol={}, type={}.", symbol);
+		String channel = String.format("ok_sub_spot_%s_ticker", symbol);
+		this.sendTextMessage(OkexWsRequest.addChannel(channel));
+	}
 
 }

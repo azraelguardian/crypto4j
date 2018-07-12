@@ -1,6 +1,5 @@
 package io.github.xinyangpan.crypto4j.core;
 
-import org.springframework.util.Assert;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.AbstractWebSocketHandler;
@@ -8,20 +7,27 @@ import org.springframework.web.socket.handler.AbstractWebSocketHandler;
 import io.github.xinyangpan.crypto4j.core.heartbeat.Heartbeat;
 import io.github.xinyangpan.crypto4j.core.heartbeat.HeartbeatHandler;
 import io.github.xinyangpan.crypto4j.core.heartbeat.StandardPingHeartbeatHandler;
+import io.github.xinyangpan.crypto4j.core.subscriber.DynamicWsSubscriber;
+import io.github.xinyangpan.crypto4j.core.subscriber.WsSubscriber;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class BaseWsHandler extends AbstractWebSocketHandler {
+public class BaseWsHandler<T extends WsSubscriber> extends AbstractWebSocketHandler {
 	protected String name;
 	protected @Getter WebSocketSession session;
 	protected Heartbeat heartbeat;
+	protected T wsSubscriber;
 
 	public BaseWsHandler() {
 	}
 
-	public BaseWsHandler(String name) {
+	public BaseWsHandler(String name, T wsSubscriber) {
 		this.name = name;
+		if (wsSubscriber instanceof DynamicWsSubscriber) {
+			((DynamicWsSubscriber) wsSubscriber).setSessionSupplier(this::getSessionUtilReady);
+		}
+		this.wsSubscriber = wsSubscriber;
 	}
 
 	@Override
@@ -31,7 +37,6 @@ public class BaseWsHandler extends AbstractWebSocketHandler {
 			heartbeat.start(session);
 		}
 		this.session = session;
-		this.notifyAll();
 	}
 
 	@Override
@@ -48,24 +53,30 @@ public class BaseWsHandler extends AbstractWebSocketHandler {
 		log.error("Transport Error[{}].", name, exception);
 	}
 
-	public final synchronized void waitUtilConnectionEstablished() {
-		if (session != null) {
-			return;
-		}
-		try {
-			wait();
-			Assert.notNull(session, "Session should not be null.");
-		} catch (InterruptedException e) {
-			Assert.notNull(session, "Interrupted whiling waiting and session is still null.");
-		}
+	public final WebSocketSession getSessionUtilReady() {
+		return this.getSessionUtilReady(3, 1);
 	}
 	
+	public final WebSocketSession getSessionUtilReady(int attempt, long retryInterval) {
+		try {
+			for (int i = 0; i < attempt; i++) {
+				if (session != null && session.isOpen()) {
+					return session;
+				}
+				Thread.sleep(retryInterval * 1000);
+			}
+			throw new RuntimeException("Timeout.");
+		} catch (InterruptedException e) {
+			return null;
+		}
+	}
+
 	public void setHeartbeatHandler(HeartbeatHandler heartbeatHandler) {
 		this.heartbeat = new Heartbeat(heartbeatHandler);
 	}
-	
+
 	public void setStandardPingHeartbeatHandler(StandardPingHeartbeatHandler heartbeatHandler) {
 		this.setHeartbeatHandler(heartbeatHandler);
 	}
-	
+
 }

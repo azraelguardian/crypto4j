@@ -1,12 +1,12 @@
 package io.github.xinyangpan.crypto4j.exchange.example;
 
 import io.github.xinyangpan.crypto4j.exchange.binance.BinanceWsConnector;
-import io.github.xinyangpan.crypto4j.exchange.binance.impl.BinanceSubscription;
+import io.github.xinyangpan.crypto4j.exchange.binance.impl.BinanceSubscriber;
 
 public class BinanceConnectExample {
 
 	public static void main(String[] args) throws InterruptedException {
-		BinanceSubscription subscription = new BinanceSubscription()//
+		BinanceSubscriber subscription = new BinanceSubscriber()//
 			.depthAndTicker(20, "bnbbtc")//
 			.depthListener(System.out::println)//
 			.tickerListener(System.out::println);
