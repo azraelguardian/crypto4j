@@ -4,10 +4,10 @@ import org.springframework.web.socket.CloseStatus;
 
 import io.github.xinyangpan.crypto4j.core.BaseWsConnector;
 
-public class SimpleFailureHandler implements FailureHandler {
+public class FailureReconnect implements FailureHandler {
 	private final BaseWsConnector<?> wsConnector;
 
-	public SimpleFailureHandler(BaseWsConnector<?> wsConnector) {
+	public FailureReconnect(BaseWsConnector<?> wsConnector) {
 		this.wsConnector = wsConnector;
 	}
 

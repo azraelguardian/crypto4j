@@ -9,7 +9,11 @@ import org.springframework.web.socket.WebSocketSession;
 
 import com.google.common.base.Preconditions;
 
+import io.github.xinyangpan.crypto4j.core.BaseWsConnector;
 import io.github.xinyangpan.crypto4j.core.failurehandler.FailureHandler;
+import io.github.xinyangpan.crypto4j.core.failurehandler.FailureReconnect;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -19,13 +23,17 @@ public class WsHeartbeat {
 	private WebSocketSession session;
 	private Thread thread;
 	// 
-	private long interval = 30; // s
-	private long timeout = 3; // s
+	private @Getter @Setter long interval = 30; // s
+	private @Getter @Setter long timeout = 3; // s
 	// 
 	private final LinkedBlockingQueue<Long> queue = new LinkedBlockingQueue<>();
 
 	public WsHeartbeat(FailureHandler failureHandler) {
 		this.failureHandler = failureHandler;
+	}
+
+	public WsHeartbeat(BaseWsConnector<?> wsConnector) {
+		this(new FailureReconnect(wsConnector));
 	}
 
 	public void start(WebSocketSession session) {
