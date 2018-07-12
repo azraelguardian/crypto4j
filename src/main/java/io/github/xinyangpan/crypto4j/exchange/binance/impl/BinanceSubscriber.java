@@ -19,8 +19,8 @@ import lombok.Setter;
 @Setter
 public class BinanceSubscriber extends BaseWsSubscriber {
 	private final List<String> streamNames = new ArrayList<>();
-	private Consumer<StreamData<Depth>> depthListener = ExchangeUtils.noOpConsumer();
-	private Consumer<StreamData<Ticker>> tickerListener = ExchangeUtils.noOpConsumer();
+	private Consumer<StreamData<Depth>> depthListener = ExchangeUtils.logConsumer();
+	private Consumer<StreamData<Ticker>> tickerListener = ExchangeUtils.logConsumer();
 
 	public BinanceSubscriber depthListener(Consumer<StreamData<Depth>> depthListener) {
 		this.depthListener = depthListener;

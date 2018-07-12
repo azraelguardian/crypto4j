@@ -17,8 +17,8 @@ import lombok.extern.slf4j.Slf4j;
 @Setter
 @Slf4j
 public class HuobiSubscriber extends BaseDynamicWsSubscriber {
-	private Consumer<DepthData> depthListener = ExchangeUtils.noOpConsumer();
-	private Consumer<KlineData> klineListener = ExchangeUtils.noOpConsumer();
+	private Consumer<DepthData> depthListener = ExchangeUtils.logConsumer();
+	private Consumer<KlineData> klineListener = ExchangeUtils.logConsumer();
 
 	public void depth(String symbol, String type) {
 		// 

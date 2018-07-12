@@ -18,8 +18,8 @@ import lombok.extern.slf4j.Slf4j;
 @Setter
 @Slf4j
 public class OkexWsSubscriber extends BaseDynamicWsSubscriber {
-	private Consumer<OkexWsResponse<DepthData>> depthListener = ExchangeUtils.noOpConsumer();
-	private Consumer<OkexWsResponse<TickerData>> tickerListener = ExchangeUtils.noOpConsumer();
+	private Consumer<OkexWsResponse<DepthData>> depthListener = ExchangeUtils.logConsumer();
+	private Consumer<OkexWsResponse<TickerData>> tickerListener = ExchangeUtils.logConsumer();
 
 	public void depth(String symbol, int depth) {
 		// 
