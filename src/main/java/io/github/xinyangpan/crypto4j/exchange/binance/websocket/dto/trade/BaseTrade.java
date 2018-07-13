@@ -1,4 +1,4 @@
-package io.github.xinyangpan.crypto4j.exchange.binance.dto.trade;
+package io.github.xinyangpan.crypto4j.exchange.binance.websocket.dto.trade;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -8,7 +8,7 @@ import java.time.format.DateTimeFormatter;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import io.github.xinyangpan.crypto4j.exchange.binance.dto.common.BaseDto;
+import io.github.xinyangpan.crypto4j.exchange.binance.websocket.dto.common.BaseDto;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;

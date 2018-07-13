@@ -1,4 +1,4 @@
-package io.github.xinyangpan.crypto4j.exchange.binance.impl;
+package io.github.xinyangpan.crypto4j.exchange.binance.websocket.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,9 +9,9 @@ import com.google.common.base.Preconditions;
 
 import io.github.xinyangpan.crypto4j.core.subscriber.BaseWsSubscriber;
 import io.github.xinyangpan.crypto4j.exchange.ExchangeUtils;
-import io.github.xinyangpan.crypto4j.exchange.binance.dto.Ticker;
-import io.github.xinyangpan.crypto4j.exchange.binance.dto.common.StreamData;
-import io.github.xinyangpan.crypto4j.exchange.binance.dto.depth.Depth;
+import io.github.xinyangpan.crypto4j.exchange.binance.websocket.dto.Ticker;
+import io.github.xinyangpan.crypto4j.exchange.binance.websocket.dto.common.StreamData;
+import io.github.xinyangpan.crypto4j.exchange.binance.websocket.dto.depth.Depth;
 import lombok.Getter;
 import lombok.Setter;
 

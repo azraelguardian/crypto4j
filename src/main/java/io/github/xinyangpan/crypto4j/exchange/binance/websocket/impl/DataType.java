@@ -1,13 +1,13 @@
-package io.github.xinyangpan.crypto4j.exchange.binance.impl;
+package io.github.xinyangpan.crypto4j.exchange.binance.websocket.impl;
 
 import java.util.regex.Pattern;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import io.github.xinyangpan.crypto4j.exchange.binance.dto.Ticker;
-import io.github.xinyangpan.crypto4j.exchange.binance.dto.common.StreamData;
-import io.github.xinyangpan.crypto4j.exchange.binance.dto.depth.Depth;
+import io.github.xinyangpan.crypto4j.exchange.binance.websocket.dto.Ticker;
+import io.github.xinyangpan.crypto4j.exchange.binance.websocket.dto.common.StreamData;
+import io.github.xinyangpan.crypto4j.exchange.binance.websocket.dto.depth.Depth;
 
 public enum DataType {
 	TICKER("\\w*@ticker$", Ticker.class), DEPTH("\\w*@depth(5|10|20)", Depth.class);

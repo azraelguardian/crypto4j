@@ -1,4 +1,4 @@
-package io.github.xinyangpan.crypto4j.exchange.binance.dto.depth;
+package io.github.xinyangpan.crypto4j.exchange.binance.websocket.dto.depth;
 
 import java.util.List;
 

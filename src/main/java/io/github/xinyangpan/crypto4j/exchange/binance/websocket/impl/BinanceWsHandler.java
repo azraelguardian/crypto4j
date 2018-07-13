@@ -1,4 +1,4 @@
-package io.github.xinyangpan.crypto4j.exchange.binance.impl;
+package io.github.xinyangpan.crypto4j.exchange.binance.websocket.impl;
 
 import static io.github.xinyangpan.crypto4j.exchange.ExchangeUtils.objectMapper;
 

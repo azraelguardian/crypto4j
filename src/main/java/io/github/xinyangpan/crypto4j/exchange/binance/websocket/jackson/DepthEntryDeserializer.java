@@ -1,4 +1,4 @@
-package io.github.xinyangpan.crypto4j.exchange.binance.jackson;
+package io.github.xinyangpan.crypto4j.exchange.binance.websocket.jackson;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
 
-import io.github.xinyangpan.crypto4j.exchange.binance.dto.depth.DepthEntry;
+import io.github.xinyangpan.crypto4j.exchange.binance.websocket.dto.depth.DepthEntry;
 
 public class DepthEntryDeserializer extends JsonDeserializer<DepthEntry> {
 

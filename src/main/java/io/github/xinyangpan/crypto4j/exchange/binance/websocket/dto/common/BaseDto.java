@@ -1,4 +1,4 @@
-package io.github.xinyangpan.crypto4j.exchange.binance.dto.common;
+package io.github.xinyangpan.crypto4j.exchange.binance.websocket.dto.common;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
