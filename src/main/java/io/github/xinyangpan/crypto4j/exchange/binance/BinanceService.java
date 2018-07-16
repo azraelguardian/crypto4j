@@ -15,11 +15,19 @@ public class BinanceService {
 	private final BinanceMarketStreamWsConnector binanceMarketStreamWsConnector;
 
 	public BinanceService(BinanceSubscriber binanceSubscriber, BinanceProperties binanceProperties) {
+		this(binanceSubscriber, binanceProperties, true);
+	}
+
+	public BinanceService(BinanceSubscriber binanceSubscriber, BinanceProperties binanceProperties, boolean useUserStream) {
 		this.binanceSubscriber = binanceSubscriber;
 		this.binanceProperties = binanceProperties;
 		this.binanceRestService = new BinanceRestService(binanceProperties);
-		this.binanceUserStreamWsConnector = new BinanceUserStreamWsConnector(binanceSubscriber, binanceProperties);
 		this.binanceMarketStreamWsConnector = new BinanceMarketStreamWsConnector(binanceSubscriber, binanceProperties);
+		if (useUserStream) {
+			this.binanceUserStreamWsConnector = new BinanceUserStreamWsConnector(binanceSubscriber, binanceProperties);
+		} else {
+			this.binanceUserStreamWsConnector = null;
+		}
 	}
 
 	public BinanceRestService restService() {
@@ -35,12 +43,16 @@ public class BinanceService {
 	}
 
 	public void start() {
-		binanceUserStreamWsConnector.connect();
+		if (this.binanceUserStreamWsConnector != null) {
+			binanceUserStreamWsConnector.connect();
+		}
 		binanceMarketStreamWsConnector.connect();
 	}
 
 	public void stop() {
-		binanceUserStreamWsConnector.disconnect();
+		if (this.binanceUserStreamWsConnector != null) {
+			binanceUserStreamWsConnector.disconnect();
+		}
 		binanceMarketStreamWsConnector.disconnect();
 	}
 
