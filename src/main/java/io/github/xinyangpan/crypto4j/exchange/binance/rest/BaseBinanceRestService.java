@@ -11,14 +11,19 @@ import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
 
 import io.github.xinyangpan.crypto4j.exchange.ExchangeUtils;
+import io.github.xinyangpan.crypto4j.exchange.binance.BinanceProperties;
 
 public class BaseBinanceRestService {
-	private static String KEY = "RRNGWvMoqYvvTRjrVMzc54coOupxm7W5VqCzT60y5aENk6fM9mikjEqJ4KyWkDnt";
-	private static String SECRET = "";
-	private static String BASE_URL = "https://api.binance.com";
-	private static HashFunction HASHING = Hashing.hmacSha256(SECRET.getBytes());
+	private final BinanceProperties binanceProperties;
+	private final HashFunction HASHING;
 	// 
 	protected RestTemplate restTemplate = ExchangeUtils.restTemplate();
+
+	public BaseBinanceRestService(BinanceProperties binanceProperties) {
+		super();
+		this.binanceProperties = binanceProperties;
+		HASHING = Hashing.hmacSha256(binanceProperties.getRestSecret().getBytes());
+	}
 
 	protected String toRequestParam(Object object) {
 		@SuppressWarnings("unchecked")
@@ -30,7 +35,7 @@ public class BaseBinanceRestService {
 			.collect(Collectors.joining("&"));// joining by &
 		return param;
 	}
-	
+
 	protected String toSignedRequestParam(Object object) {
 		// 
 		String param = toRequestParam(object);
@@ -44,7 +49,7 @@ public class BaseBinanceRestService {
 
 	protected HttpEntity<String> buildRequestEntity(Object object, boolean sign) {
 		// body
-		String body = null; 
+		String body = null;
 		if (object != null) {
 			if (sign) {
 				body = toSignedRequestParam(object);
@@ -54,7 +59,7 @@ public class BaseBinanceRestService {
 		}
 		// Header
 		HttpHeaders headers = new HttpHeaders();
-		headers.add("X-MBX-APIKEY", KEY);
+		headers.add("X-MBX-APIKEY", binanceProperties.getRestKey());
 		// Requesting
 		HttpEntity<String> requestEntity = new HttpEntity<>(body, headers);
 		return requestEntity;
@@ -62,10 +67,10 @@ public class BaseBinanceRestService {
 
 	protected String getUrl(String path, Object... objects) {
 		if (objects == null || objects.length == 0) {
-			return BASE_URL + path;
+			return binanceProperties.getRestBaseUrl() + path;
 		}
 		path = String.format(path, objects);
-		return String.format("%s%s", BASE_URL, path);
+		return String.format("%s%s", binanceProperties.getRestBaseUrl(), path);
 	}
 
 }

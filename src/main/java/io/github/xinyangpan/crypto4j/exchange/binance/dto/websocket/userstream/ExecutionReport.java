@@ -72,7 +72,7 @@ public class ExecutionReport extends BaseDto {
 	@JsonProperty("M")
 	private Boolean ignore3;
 	@JsonProperty("O")
-	private Long o;
+	private Long orderTime;
 	@JsonProperty("Z")
 	private BigDecimal z;
 

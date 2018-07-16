@@ -6,9 +6,14 @@ import org.springframework.http.ResponseEntity;
 
 import com.google.common.base.Preconditions;
 
+import io.github.xinyangpan.crypto4j.exchange.binance.BinanceProperties;
 import io.github.xinyangpan.crypto4j.exchange.binance.dto.rest.ListenKey;
 
 public class BinanceUserStreamService extends BaseBinanceRestService {
+
+	public BinanceUserStreamService(BinanceProperties binanceProperties) {
+		super(binanceProperties);
+	}
 
 	public ListenKey start() {
 		String url = this.getUrl("/api/v1/userDataStream");
