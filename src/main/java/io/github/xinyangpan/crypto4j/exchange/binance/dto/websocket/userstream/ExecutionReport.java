@@ -1,15 +1,15 @@
-package io.github.xinyangpan.crypto4j.exchange.binance.websocket.dto.userstream;
+package io.github.xinyangpan.crypto4j.exchange.binance.dto.websocket.userstream;
 
 import java.math.BigDecimal;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import io.github.xinyangpan.crypto4j.exchange.binance.rest.dto.enums.ExecutionType;
-import io.github.xinyangpan.crypto4j.exchange.binance.rest.dto.enums.OrderStatus;
-import io.github.xinyangpan.crypto4j.exchange.binance.rest.dto.enums.OrderType;
-import io.github.xinyangpan.crypto4j.exchange.binance.rest.dto.enums.Side;
-import io.github.xinyangpan.crypto4j.exchange.binance.rest.dto.enums.TimeInForce;
-import io.github.xinyangpan.crypto4j.exchange.binance.websocket.dto.common.BaseDto;
+import io.github.xinyangpan.crypto4j.exchange.binance.dto.enums.ExecutionType;
+import io.github.xinyangpan.crypto4j.exchange.binance.dto.enums.OrderStatus;
+import io.github.xinyangpan.crypto4j.exchange.binance.dto.enums.OrderType;
+import io.github.xinyangpan.crypto4j.exchange.binance.dto.enums.Side;
+import io.github.xinyangpan.crypto4j.exchange.binance.dto.enums.TimeInForce;
+import io.github.xinyangpan.crypto4j.exchange.binance.dto.websocket.common.BaseDto;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;

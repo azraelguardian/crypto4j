@@ -1,4 +1,4 @@
-package io.github.xinyangpan.crypto4j.exchange.binance.websocket.dto.trade;
+package io.github.xinyangpan.crypto4j.exchange.binance.dto.websocket.trade;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;

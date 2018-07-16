@@ -1,4 +1,4 @@
-package io.github.xinyangpan.crypto4j.exchange.binance.rest.dto;
+package io.github.xinyangpan.crypto4j.exchange.binance.dto.rest;
 
 import java.math.BigDecimal;
 

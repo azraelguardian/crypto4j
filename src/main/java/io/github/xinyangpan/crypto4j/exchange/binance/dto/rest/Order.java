@@ -1,14 +1,14 @@
-package io.github.xinyangpan.crypto4j.exchange.binance.rest.dto;
+package io.github.xinyangpan.crypto4j.exchange.binance.dto.rest;
 
 import java.math.BigDecimal;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
-import io.github.xinyangpan.crypto4j.exchange.binance.rest.dto.enums.NewOrderRespType;
-import io.github.xinyangpan.crypto4j.exchange.binance.rest.dto.enums.OrderType;
-import io.github.xinyangpan.crypto4j.exchange.binance.rest.dto.enums.Side;
-import io.github.xinyangpan.crypto4j.exchange.binance.rest.dto.enums.TimeInForce;
+import io.github.xinyangpan.crypto4j.exchange.binance.dto.enums.NewOrderRespType;
+import io.github.xinyangpan.crypto4j.exchange.binance.dto.enums.OrderType;
+import io.github.xinyangpan.crypto4j.exchange.binance.dto.enums.Side;
+import io.github.xinyangpan.crypto4j.exchange.binance.dto.enums.TimeInForce;
 import lombok.Data;
 
 @Data

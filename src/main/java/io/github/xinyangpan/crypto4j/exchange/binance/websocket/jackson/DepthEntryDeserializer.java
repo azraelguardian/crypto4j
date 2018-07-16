@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
 
-import io.github.xinyangpan.crypto4j.exchange.binance.websocket.dto.depth.DepthEntry;
+import io.github.xinyangpan.crypto4j.exchange.binance.dto.websocket.depth.DepthEntry;
 
 public class DepthEntryDeserializer extends JsonDeserializer<DepthEntry> {
 

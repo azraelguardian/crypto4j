@@ -9,11 +9,11 @@ import com.google.common.base.Preconditions;
 
 import io.github.xinyangpan.crypto4j.core.subscriber.BaseWsSubscriber;
 import io.github.xinyangpan.crypto4j.exchange.ExchangeUtils;
-import io.github.xinyangpan.crypto4j.exchange.binance.websocket.dto.Ticker;
-import io.github.xinyangpan.crypto4j.exchange.binance.websocket.dto.common.StreamData;
-import io.github.xinyangpan.crypto4j.exchange.binance.websocket.dto.depth.Depth;
-import io.github.xinyangpan.crypto4j.exchange.binance.websocket.dto.userstream.AccountInfo;
-import io.github.xinyangpan.crypto4j.exchange.binance.websocket.dto.userstream.ExecutionReport;
+import io.github.xinyangpan.crypto4j.exchange.binance.dto.websocket.Ticker;
+import io.github.xinyangpan.crypto4j.exchange.binance.dto.websocket.common.StreamData;
+import io.github.xinyangpan.crypto4j.exchange.binance.dto.websocket.depth.Depth;
+import io.github.xinyangpan.crypto4j.exchange.binance.dto.websocket.userstream.AccountInfo;
+import io.github.xinyangpan.crypto4j.exchange.binance.dto.websocket.userstream.ExecutionReport;
 import lombok.Getter;
 import lombok.Setter;
 

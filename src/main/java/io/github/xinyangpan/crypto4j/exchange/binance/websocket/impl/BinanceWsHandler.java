@@ -14,8 +14,8 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import io.github.xinyangpan.crypto4j.core.handler.BaseWsHandler;
-import io.github.xinyangpan.crypto4j.exchange.binance.websocket.dto.userstream.AccountInfo;
-import io.github.xinyangpan.crypto4j.exchange.binance.websocket.dto.userstream.ExecutionReport;
+import io.github.xinyangpan.crypto4j.exchange.binance.dto.websocket.userstream.AccountInfo;
+import io.github.xinyangpan.crypto4j.exchange.binance.dto.websocket.userstream.ExecutionReport;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;

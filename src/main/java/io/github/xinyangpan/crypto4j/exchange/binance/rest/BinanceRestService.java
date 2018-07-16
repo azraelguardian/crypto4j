@@ -2,9 +2,9 @@ package io.github.xinyangpan.crypto4j.exchange.binance.rest;
 
 import org.springframework.http.HttpEntity;
 
-import io.github.xinyangpan.crypto4j.exchange.binance.rest.dto.BookTicker;
-import io.github.xinyangpan.crypto4j.exchange.binance.rest.dto.Order;
-import io.github.xinyangpan.crypto4j.exchange.binance.rest.dto.OrderResponse;
+import io.github.xinyangpan.crypto4j.exchange.binance.dto.rest.BookTicker;
+import io.github.xinyangpan.crypto4j.exchange.binance.dto.rest.Order;
+import io.github.xinyangpan.crypto4j.exchange.binance.dto.rest.OrderResponse;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

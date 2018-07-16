@@ -1,10 +1,10 @@
-package io.github.xinyangpan.crypto4j.exchange.binance.websocket.dto.userstream;
+package io.github.xinyangpan.crypto4j.exchange.binance.dto.websocket.userstream;
 
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import io.github.xinyangpan.crypto4j.exchange.binance.websocket.dto.common.BaseDto;
+import io.github.xinyangpan.crypto4j.exchange.binance.dto.websocket.common.BaseDto;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;

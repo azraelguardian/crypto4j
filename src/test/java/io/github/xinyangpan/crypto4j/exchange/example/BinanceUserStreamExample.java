@@ -1,7 +1,7 @@
 package io.github.xinyangpan.crypto4j.exchange.example;
 
+import io.github.xinyangpan.crypto4j.exchange.binance.dto.rest.ListenKey;
 import io.github.xinyangpan.crypto4j.exchange.binance.rest.BinanceUserStreamService;
-import io.github.xinyangpan.crypto4j.exchange.binance.rest.dto.ListenKey;
 
 public class BinanceUserStreamExample {
 
