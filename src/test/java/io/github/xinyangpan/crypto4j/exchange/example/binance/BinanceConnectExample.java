@@ -9,7 +9,7 @@ public class BinanceConnectExample {
 		// 
 		BinanceMarketStreamWsConnector connector = BinanceTestUtils.binanceService().marketStream();
 		connector.connect();
-		Thread.sleep(5*1000);
+		Thread.sleep(5 * 1000);
 		connector.reconnect();
 		// 
 		Thread.sleep(Long.MAX_VALUE);
