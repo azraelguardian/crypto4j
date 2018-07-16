@@ -17,7 +17,7 @@ public class BinanceRestExample {
 		order.setSymbol("ETHBTC");
 		order.setSide(Side.BUY);
 		order.setType(OrderType.LIMIT);
-		order.setTimeInForce(TimeInForce.GTC);
+		order.setTimeInForce(TimeInForce.IOC);
 		order.setQuantity(new BigDecimal("1"));
 		order.setPrice(new BigDecimal("0.01"));
 		order.setRecvWindow(5000L);
