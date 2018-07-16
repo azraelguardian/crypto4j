@@ -2,14 +2,20 @@ package io.github.xinyangpan.crypto4j.exchange.binance.websocket.impl;
 
 import static io.github.xinyangpan.crypto4j.exchange.ExchangeUtils.objectMapper;
 
+import java.io.IOException;
+
 import org.springframework.web.socket.BinaryMessage;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import io.github.xinyangpan.crypto4j.core.handler.BaseWsHandler;
+import io.github.xinyangpan.crypto4j.exchange.binance.websocket.dto.userstream.AccountInfo;
+import io.github.xinyangpan.crypto4j.exchange.binance.websocket.dto.userstream.ExecutionReport;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +38,36 @@ public class BinanceWsHandler extends BaseWsHandler<BinanceSubscriber> {
 		String jsonMessage = message.getPayload();
 		log.debug("handling message: {}", jsonMessage);
 		JsonNode rootNode = objectMapper().readTree(jsonMessage);
-		String stream = rootNode.findValue("stream").asText();
+		JsonNode eventTypeNode = rootNode.findValue("e");
+		if (eventTypeNode != null) {
+			userStream(jsonMessage, eventTypeNode);
+			return;
+		}
+		JsonNode streamNode = rootNode.findValue("stream");
+		if (streamNode != null) {
+			marketStream(jsonMessage, streamNode);
+			return;
+		}
+		wsSubscriber.unhandledMessage(jsonMessage);
+	}
+
+	private void userStream(String jsonMessage, JsonNode eventTypeNode) throws IOException, JsonParseException, JsonMappingException {
+		String eventType = eventTypeNode.asText();
+		switch (eventType) {
+		case "outboundAccountInfo":
+			wsSubscriber.getAccountInfoListener().accept(objectMapper().readValue(jsonMessage, AccountInfo.class));
+			return;
+		case "executionReport":
+			wsSubscriber.getExecutionReportListener().accept(objectMapper().readValue(jsonMessage, ExecutionReport.class));
+			return;
+		default:
+			wsSubscriber.unhandledMessage(jsonMessage);
+			return;
+		}
+	}
+
+	private void marketStream(String jsonMessage, JsonNode streamNode) throws IOException, JsonParseException, JsonMappingException {
+		String stream = streamNode.asText();
 		DataType dataType = DataType.getDataType(stream);
 		if (dataType == null) {
 			wsSubscriber.unhandledMessage(jsonMessage);
@@ -47,7 +82,8 @@ public class BinanceWsHandler extends BaseWsHandler<BinanceSubscriber> {
 			wsSubscriber.onDepth(objectMapper().readValue(jsonMessage, javaType));
 			return;
 		default:
-			throw new IllegalArgumentException(String.format("Not Supported Type: %s", dataType));
+			wsSubscriber.unhandledMessage(jsonMessage);
+			return;
 		}
 	}
 

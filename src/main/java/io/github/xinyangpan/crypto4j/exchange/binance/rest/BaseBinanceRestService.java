@@ -14,6 +14,7 @@ import io.github.xinyangpan.crypto4j.exchange.ExchangeUtils;
 
 public class BaseBinanceRestService {
 	private static String KEY = "RRNGWvMoqYvvTRjrVMzc54coOupxm7W5VqCzT60y5aENk6fM9mikjEqJ4KyWkDnt";
+	private static String SECRET = "";
 	private static String BASE_URL = "https://api.binance.com";
 	private static HashFunction HASHING = Hashing.hmacSha256(SECRET.getBytes());
 	// 

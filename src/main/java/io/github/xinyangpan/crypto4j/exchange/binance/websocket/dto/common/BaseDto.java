@@ -16,8 +16,6 @@ public class BaseDto {
 	protected String eventType;
 	@JsonProperty("E")
 	protected long eventTime;
-	@JsonProperty("s")
-	private String symbol;
 
 	public String getEventTimeText() {
 		LocalDateTime localDateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(eventTime), ZoneId.systemDefault());

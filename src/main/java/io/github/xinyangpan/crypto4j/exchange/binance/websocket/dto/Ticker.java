@@ -13,7 +13,9 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class Ticker extends BaseDto {
-	
+
+	@JsonProperty("s")
+	private String symbol;
 	@JsonProperty("p")
 	private BigDecimal change;
 	@JsonProperty("P")

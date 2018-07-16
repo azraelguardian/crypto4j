@@ -18,6 +18,8 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public class BaseTrade extends BaseDto {
 
+	@JsonProperty("s")
+	private String symbol;
 	@JsonProperty("p")
 	protected BigDecimal price;
 	@JsonProperty("q")
