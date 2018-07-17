@@ -8,4 +8,8 @@ public class StreamData<T> {
 	private String stream;
 	private T data;
 
+	public String toSymbol() {
+		return stream.split("@")[0];
+	}
+
 }

@@ -32,7 +32,7 @@ public class BaseWsHandler<T extends WsSubscriber> extends AbstractWebSocketHand
 	}
 
 	@Override
-	public final synchronized void afterConnectionEstablished(WebSocketSession session) throws Exception {
+	public final void afterConnectionEstablished(WebSocketSession session) throws Exception {
 		log.info("Connection Established[{}].", name);
 		if (wsHeartbeat != null) {
 			wsHeartbeat.start(session);

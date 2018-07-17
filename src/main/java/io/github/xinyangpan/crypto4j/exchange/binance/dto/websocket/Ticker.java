@@ -43,9 +43,9 @@ public class Ticker extends BaseDto {
 	@JsonProperty("l")
 	private BigDecimal low;
 	@JsonProperty("v")
-	private BigDecimal volume;
+	private BigDecimal baseVolume;
 	@JsonProperty("q")
-	private BigDecimal quantity;
+	private BigDecimal quoteVolume;
 	@JsonProperty("O")
 	private Long openTime;
 	@JsonProperty("C")

@@ -25,6 +25,11 @@ public abstract class BaseWsConnector<H extends BaseWsHandler<?>> {
 		manager.start();
 	}
 
+	public void connectSync() {
+		this.connect();
+		wsHandler.getSessionUtilReady();
+	}
+
 	public void disconnect() {
 		if (manager == null) {
 			return;
