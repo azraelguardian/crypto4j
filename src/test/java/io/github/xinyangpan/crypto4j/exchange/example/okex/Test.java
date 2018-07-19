@@ -7,11 +7,12 @@ import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 import io.github.xinyangpan.crypto4j.exchange.ExchangeUtils;
-import io.github.xinyangpan.crypto4j.exchange.okex.rest.dto.Order;
-import io.github.xinyangpan.crypto4j.exchange.okex.rest.dto.enums.OrderType;
+import io.github.xinyangpan.crypto4j.exchange.okex.dto.enums.OrderType;
+import io.github.xinyangpan.crypto4j.exchange.okex.dto.rest.Order;
 
 public class Test {
 
+	@SuppressWarnings("unchecked")
 	public static void main(String[] args) {
 		Order order = new Order();
 		order.setAmount(new BigDecimal("1.0"));

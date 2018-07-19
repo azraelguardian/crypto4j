@@ -1,4 +1,4 @@
-package io.github.xinyangpan.crypto4j.exchange.okex.impl;
+package io.github.xinyangpan.crypto4j.exchange.okex.websocket.impl;
 
 import static io.github.xinyangpan.crypto4j.exchange.ExchangeUtils.objectMapper;
 
@@ -10,10 +10,10 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import io.github.xinyangpan.crypto4j.core.handler.BaseWsHandler;
-import io.github.xinyangpan.crypto4j.exchange.okex.dto.DepthData;
-import io.github.xinyangpan.crypto4j.exchange.okex.dto.OkexWsResponse;
-import io.github.xinyangpan.crypto4j.exchange.okex.dto.ResultData;
-import io.github.xinyangpan.crypto4j.exchange.okex.dto.TickerData;
+import io.github.xinyangpan.crypto4j.exchange.okex.dto.websocket.DepthData;
+import io.github.xinyangpan.crypto4j.exchange.okex.dto.websocket.OkexWsResponse;
+import io.github.xinyangpan.crypto4j.exchange.okex.dto.websocket.ResultData;
+import io.github.xinyangpan.crypto4j.exchange.okex.dto.websocket.TickerData;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;

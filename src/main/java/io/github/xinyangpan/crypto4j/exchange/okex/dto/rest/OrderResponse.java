@@ -1,4 +1,4 @@
-package io.github.xinyangpan.crypto4j.exchange.okex.rest.dto;
+package io.github.xinyangpan.crypto4j.exchange.okex.dto.rest;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -9,6 +9,8 @@ public class OrderResponse {
 
 	private Boolean result;
 	@JsonProperty("order_id")
-	private String orderId;
+	private Long orderId;
+	@JsonProperty("error_code")
+	private Integer errorCode;
 
 }

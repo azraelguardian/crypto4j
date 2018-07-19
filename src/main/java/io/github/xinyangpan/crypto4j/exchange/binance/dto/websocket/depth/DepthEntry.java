@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
-import io.github.xinyangpan.crypto4j.exchange.binance.websocket.jackson.DepthEntryDeserializer;
+import io.github.xinyangpan.crypto4j.exchange.binance.dto.util.DepthEntryDeserializer;
 import lombok.Data;
 
 @Data

@@ -1,8 +1,8 @@
-package io.github.xinyangpan.crypto4j.exchange.okex.rest.dto;
+package io.github.xinyangpan.crypto4j.exchange.okex.dto.rest;
 
 import java.math.BigDecimal;
 
-import io.github.xinyangpan.crypto4j.exchange.okex.rest.dto.enums.OrderType;
+import io.github.xinyangpan.crypto4j.exchange.okex.dto.enums.OrderType;
 import lombok.Data;
 
 @Data

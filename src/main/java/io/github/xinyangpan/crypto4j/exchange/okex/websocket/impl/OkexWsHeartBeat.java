@@ -1,4 +1,4 @@
-package io.github.xinyangpan.crypto4j.exchange.okex.impl;
+package io.github.xinyangpan.crypto4j.exchange.okex.websocket.impl;
 
 import java.io.IOException;
 

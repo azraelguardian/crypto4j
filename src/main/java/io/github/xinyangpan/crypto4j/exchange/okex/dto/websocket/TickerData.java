@@ -1,4 +1,4 @@
-package io.github.xinyangpan.crypto4j.exchange.okex.dto;
+package io.github.xinyangpan.crypto4j.exchange.okex.dto.websocket;
 
 import java.math.BigDecimal;
 

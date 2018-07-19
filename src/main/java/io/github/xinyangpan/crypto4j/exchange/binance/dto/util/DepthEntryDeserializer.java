@@ -1,4 +1,4 @@
-package io.github.xinyangpan.crypto4j.exchange.binance.websocket.jackson;
+package io.github.xinyangpan.crypto4j.exchange.binance.dto.util;
 
 import java.io.IOException;
 import java.math.BigDecimal;
