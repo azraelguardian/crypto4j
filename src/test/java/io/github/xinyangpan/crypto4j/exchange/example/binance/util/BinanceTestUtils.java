@@ -23,7 +23,7 @@ public class BinanceTestUtils {
 
 	public static BinanceSubscriber binanceSubscriber() {
 		BinanceSubscriber binanceSubscriber = new BinanceSubscriber();
-		binanceSubscriber.depthAndTicker(20, "bnbbtc");
+		binanceSubscriber.depthAndTicker(5, "ethbtc");
 		binanceSubscriber.setDepthListener(System.out::println);
 		binanceSubscriber.setTickerListener(System.out::println);
 		binanceSubscriber.setAccountInfoListener(System.out::println);

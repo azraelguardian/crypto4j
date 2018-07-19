@@ -7,7 +7,7 @@ public class BaseWsSubscriber implements WsSubscriber {
 
 	@Override
 	public void unhandledMessage(Object obj) {
-		log.warn("Unhandled Message: {}", obj);
+		log.warn("Unhandled Message: {}", obj, new RuntimeException());
 	}
 
 }

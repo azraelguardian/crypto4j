@@ -11,5 +11,5 @@ public class StreamData<T> {
 	public String toSymbol() {
 		return stream.split("@")[0];
 	}
-
+	
 }

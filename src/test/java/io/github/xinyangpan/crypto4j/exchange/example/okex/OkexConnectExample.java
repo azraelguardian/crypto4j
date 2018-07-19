@@ -1,4 +1,4 @@
-package io.github.xinyangpan.crypto4j.exchange.example;
+package io.github.xinyangpan.crypto4j.exchange.example.okex;
 
 import io.github.xinyangpan.crypto4j.exchange.okex.OkexWsConnector;
 import io.github.xinyangpan.crypto4j.exchange.okex.impl.OkexWsSubscriber;

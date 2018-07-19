@@ -10,7 +10,7 @@ import io.github.xinyangpan.crypto4j.exchange.binance.dto.websocket.common.Strea
 import io.github.xinyangpan.crypto4j.exchange.binance.dto.websocket.depth.Depth;
 
 public enum DataType {
-	TICKER("\\w*@ticker$", Ticker.class), DEPTH("\\w*@depth(5|10|20)", Depth.class);
+	TICKER("\\w*@ticker", Ticker.class), DEPTH("\\w*@depth(5|10|20)", Depth.class);
 
 	private final Pattern pattern;
 	private final Class<?> dataClass;
