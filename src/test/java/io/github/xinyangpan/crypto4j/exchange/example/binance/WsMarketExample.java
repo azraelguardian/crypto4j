@@ -3,7 +3,7 @@ package io.github.xinyangpan.crypto4j.exchange.example.binance;
 import io.github.xinyangpan.crypto4j.exchange.binance.websocket.BinanceMarketStreamWsConnector;
 import io.github.xinyangpan.crypto4j.exchange.example.binance.util.BinanceTestUtils;
 
-public class BinanceConnectExample {
+public class WsMarketExample {
 
 	public static void main(String[] args) throws InterruptedException {
 		// 

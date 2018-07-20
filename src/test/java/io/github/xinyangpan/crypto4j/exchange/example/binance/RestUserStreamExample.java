@@ -4,7 +4,7 @@ import io.github.xinyangpan.crypto4j.exchange.binance.dto.rest.ListenKey;
 import io.github.xinyangpan.crypto4j.exchange.binance.rest.BinanceUserStreamService;
 import io.github.xinyangpan.crypto4j.exchange.example.binance.util.BinanceTestUtils;
 
-public class BinanceUserStreamExample {
+public class RestUserStreamExample {
 
 	public static void main(String[] args) throws InterruptedException {
 		// 

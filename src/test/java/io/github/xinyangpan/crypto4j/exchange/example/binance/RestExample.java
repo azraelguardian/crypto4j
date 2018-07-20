@@ -9,7 +9,7 @@ import io.github.xinyangpan.crypto4j.exchange.binance.dto.rest.Order;
 import io.github.xinyangpan.crypto4j.exchange.binance.rest.BinanceRestService;
 import io.github.xinyangpan.crypto4j.exchange.example.binance.util.BinanceTestUtils;
 
-public class BinanceRestExample {
+public class RestExample {
 
 	public static void main(String[] args) throws InterruptedException {
 		// 
