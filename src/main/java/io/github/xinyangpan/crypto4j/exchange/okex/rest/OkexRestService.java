@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 
+import io.github.xinyangpan.crypto4j.exchange.okex.OkexProperties;
 import io.github.xinyangpan.crypto4j.exchange.okex.dto.rest.CancelOrder;
 import io.github.xinyangpan.crypto4j.exchange.okex.dto.rest.CancelOrderResponse;
 import io.github.xinyangpan.crypto4j.exchange.okex.dto.rest.Order;
@@ -27,28 +28,28 @@ public class OkexRestService extends BaseOkexRestService {
 	public OrderResponse placeOrder(Order order) {
 		log.debug("{}", order);
 		String url = this.getUrl("/api/v1/trade.do");
-		HttpEntity<String> requestEntity = this.buildSignedRequestEntity(order, true);
+		HttpEntity<String> requestEntity = this.buildSignedRequestEntity(order);
 		return restTemplate.postForObject(url, requestEntity, OrderResponse.class);
 	}
 
 	public CancelOrderResponse cancelOrder(CancelOrder cancelOrder) {
 		log.debug("{}", cancelOrder);
 		String url = this.getUrl("/api/v1/cancel_order.do");
-		HttpEntity<String> requestEntity = this.buildSignedRequestEntity(cancelOrder, true);
+		HttpEntity<String> requestEntity = this.buildSignedRequestEntity(cancelOrder);
 		return restTemplate.postForObject(url, requestEntity, CancelOrderResponse.class);
 	}
 
 	public String queryOrder(QueryOrder queryOrder) {
 		log.debug("{}", queryOrder);
 		String url = this.getUrl("/api/v1/order_info.do");
-		HttpEntity<String> requestEntity = this.buildSignedRequestEntity(queryOrder, true);
+		HttpEntity<String> requestEntity = this.buildSignedRequestEntity(queryOrder);
 		return restTemplate.postForObject(url, requestEntity, String.class);
 	}
 
 	public String userinfo() {
 		log.debug("userinfo");
 		String url = this.getUrl("/api/v1/userinfo.do");
-		HttpEntity<String> requestEntity = this.buildSignedRequestEntity(null, true);
+		HttpEntity<String> requestEntity = this.buildSignedRequestEntity(null);
 		return restTemplate.postForObject(url, requestEntity, String.class);
 	}
 

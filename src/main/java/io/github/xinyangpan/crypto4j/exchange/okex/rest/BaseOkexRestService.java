@@ -16,6 +16,7 @@ import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
 
 import io.github.xinyangpan.crypto4j.exchange.ExchangeUtils;
+import io.github.xinyangpan.crypto4j.exchange.okex.OkexProperties;
 
 public class BaseOkexRestService {
 	// 
@@ -73,14 +74,9 @@ public class BaseOkexRestService {
 		return requestEntity;
 	}
 
-	protected HttpEntity<String> buildSignedRequestEntity(Object object, boolean sign) {
+	protected HttpEntity<String> buildSignedRequestEntity(Object object) {
 		// body
-		String body = null;
-		if (sign) {
-			body = toSignedRequestParam(object);
-		} else {
-			body = toRequestParam(object);
-		}
+		String body = toSignedRequestParam(object);
 		// Header
 		HttpHeaders headers = new HttpHeaders();
 		headers.add(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded");

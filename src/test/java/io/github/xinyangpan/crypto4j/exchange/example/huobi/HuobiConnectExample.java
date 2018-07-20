@@ -1,7 +1,7 @@
-package io.github.xinyangpan.crypto4j.exchange.example;
+package io.github.xinyangpan.crypto4j.exchange.example.huobi;
 
-import io.github.xinyangpan.crypto4j.exchange.huobi.HuobiWsConnector;
-import io.github.xinyangpan.crypto4j.exchange.huobi.impl.HuobiSubscriber;
+import io.github.xinyangpan.crypto4j.exchange.huobi.websocket.HuobiWsConnector;
+import io.github.xinyangpan.crypto4j.exchange.huobi.websocket.impl.HuobiSubscriber;
 
 public class HuobiConnectExample {
 	

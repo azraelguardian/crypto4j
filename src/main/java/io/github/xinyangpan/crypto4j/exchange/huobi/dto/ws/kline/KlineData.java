@@ -1,4 +1,4 @@
-package io.github.xinyangpan.crypto4j.exchange.huobi.dto.kline;
+package io.github.xinyangpan.crypto4j.exchange.huobi.dto.ws.kline;
 
 import lombok.Data;
 

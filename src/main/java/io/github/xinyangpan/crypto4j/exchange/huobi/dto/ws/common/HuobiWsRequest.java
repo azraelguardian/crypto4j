@@ -1,4 +1,4 @@
-package io.github.xinyangpan.crypto4j.exchange.huobi.dto.common;
+package io.github.xinyangpan.crypto4j.exchange.huobi.dto.ws.common;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
