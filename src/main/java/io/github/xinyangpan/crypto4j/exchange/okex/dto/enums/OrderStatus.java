@@ -1,13 +1,11 @@
 package io.github.xinyangpan.crypto4j.exchange.okex.dto.enums;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.annotation.JsonCreator;
 
-import io.github.xinyangpan.crypto4j.exchange.okex.dto.util.OrderStatusDeserializer;
-
-@JsonDeserialize(using = OrderStatusDeserializer.class)
 public enum OrderStatus {
 	CANCELED, NEW, PARTIALLY_FILLED, FILLED, PENDING_CANCEL;
-
+	
+	@JsonCreator
 	public static OrderStatus valueOf(int status) {
 		switch (status) {
 		case -1:

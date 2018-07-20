@@ -32,12 +32,12 @@ public class HuobiRestService extends BaseHuobiRestService {
 		return restTemplate.exchange(uri, HttpMethod.GET, requestEntity, ACCOUNT_INFO).getBody();
 	}
 
-	//	public OrderResponse placeOrder(Order order) {
-	//		log.debug("{}", order);
-	//		String url = this.getUrl("/api/v1/trade.do");
-	//		HttpEntity<String> requestEntity = this.buildSignedRequestEntity(order, true);
-	//		return restTemplate.postForObject(url, requestEntity, OrderResponse.class);
-	//	}
+//	public OrderResponse placeOrder(Order order) {
+//		log.debug("{}", order);
+//		String url = this.getUrl("/api/v1/trade.do");
+//		HttpEntity<String> requestEntity = this.buildSignedRequestEntity(order, true);
+//		return restTemplate.postForObject(url, requestEntity, OrderResponse.class);
+//	}
 	//
 	//	public CancelOrderResponse cancelOrder(CancelOrder cancelOrder) {
 	//		log.debug("{}", cancelOrder);

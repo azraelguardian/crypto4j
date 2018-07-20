@@ -11,6 +11,7 @@ import io.github.xinyangpan.crypto4j.exchange.okex.dto.rest.CancelOrderResponse;
 import io.github.xinyangpan.crypto4j.exchange.okex.dto.rest.Order;
 import io.github.xinyangpan.crypto4j.exchange.okex.dto.rest.OrderResponse;
 import io.github.xinyangpan.crypto4j.exchange.okex.dto.rest.QueryOrder;
+import io.github.xinyangpan.crypto4j.exchange.okex.dto.rest.QueryOrderResponse;
 
 public class OkexRestService extends BaseOkexRestService {
 	private static final Logger log = LoggerFactory.getLogger(OkexRestService.class);
@@ -39,11 +40,11 @@ public class OkexRestService extends BaseOkexRestService {
 		return restTemplate.postForObject(url, requestEntity, CancelOrderResponse.class);
 	}
 
-	public String queryOrder(QueryOrder queryOrder) {
+	public QueryOrderResponse queryOrder(QueryOrder queryOrder) {
 		log.debug("{}", queryOrder);
 		String url = this.getUrl("/api/v1/order_info.do");
 		HttpEntity<String> requestEntity = this.buildSignedRequestEntity(queryOrder);
-		return restTemplate.postForObject(url, requestEntity, String.class);
+		return restTemplate.postForObject(url, requestEntity, QueryOrderResponse.class);
 	}
 
 	public String userinfo() {

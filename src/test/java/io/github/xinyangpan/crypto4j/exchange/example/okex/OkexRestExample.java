@@ -5,8 +5,9 @@ import java.math.BigDecimal;
 import io.github.xinyangpan.crypto4j.exchange.example.Crypto4jUtils;
 import io.github.xinyangpan.crypto4j.exchange.okex.OkexProperties;
 import io.github.xinyangpan.crypto4j.exchange.okex.dto.enums.OrderType;
-import io.github.xinyangpan.crypto4j.exchange.okex.dto.rest.CancelOrder;
 import io.github.xinyangpan.crypto4j.exchange.okex.dto.rest.Order;
+import io.github.xinyangpan.crypto4j.exchange.okex.dto.rest.OrderResponse;
+import io.github.xinyangpan.crypto4j.exchange.okex.dto.rest.QueryOrder;
 import io.github.xinyangpan.crypto4j.exchange.okex.rest.OkexRestService;
 
 public class OkexRestExample {
@@ -25,10 +26,10 @@ public class OkexRestExample {
 		// 
 		OkexRestService okexRestService = new OkexRestService(okexProperties);
 //		System.out.println(okexRestService.ticker("btc_usdt"));
-//		OrderResponse orderResponse = okexRestService.placeOrder(order);
-//		System.out.println(orderResponse);
-//		System.out.println(okexRestService.queryOrder(new QueryOrder(order.getSymbol(), 834593837)));
-		System.out.println(okexRestService.cancelOrder(new CancelOrder(order.getSymbol(), 835120964, 835120003)));
+		OrderResponse orderResponse = okexRestService.placeOrder(order);
+		System.out.println(orderResponse);
+		System.out.println(okexRestService.queryOrder(new QueryOrder(order.getSymbol(), orderResponse.getOrderId())));
+//		System.out.println(okexRestService.cancelOrder(new CancelOrder(order.getSymbol(), 835120964, 835120003)));
 //		System.out.println(okexRestService.userinfo());
 	}
 
