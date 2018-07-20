@@ -7,12 +7,15 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import io.github.xinyangpan.crypto4j.exchange.ExchangeUtils;
 
 public class BaseRestService {
 	// 
 	protected final RestTemplate restTemplate = ExchangeUtils.restTemplate();
-
+	protected final ObjectMapper objectMapper = ExchangeUtils.objectMapper();
 
 	public <T> String urlEncode(String text) {
 		try {
@@ -30,5 +33,12 @@ public class BaseRestService {
 		HttpEntity<String> requestEntity = new HttpEntity<>(headers);
 		return requestEntity;
 	}
-	
+
+	protected String toJson(Object object) {
+		try {
+			return objectMapper.writeValueAsString(object);
+		} catch (JsonProcessingException e) {
+			throw new RuntimeException(e);
+		}
+	}
 }

@@ -19,7 +19,6 @@ import org.springframework.http.MediaType;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 import org.springframework.web.util.DefaultUriBuilderFactory.EncodingMode;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.common.collect.Lists;
 import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
@@ -34,7 +33,7 @@ public class BaseHuobiRestService extends BaseRestService {
 	protected final HuobiProperties huobiProperties;
 	private final HashFunction HASHING;
 	private final DefaultUriBuilderFactory builderFactory;
-	
+
 	public BaseHuobiRestService(HuobiProperties huobiProperties) {
 		this.huobiProperties = huobiProperties;
 		HASHING = Hashing.hmacSha256(huobiProperties.getRestSecret().getBytes());
@@ -63,27 +62,6 @@ public class BaseHuobiRestService extends BaseRestService {
 		return param;
 	}
 
-	@SuppressWarnings("unchecked")
-	protected String toRequestBodyParam(Object object) {
-		try {
-			return ExchangeUtils.objectMapper().writeValueAsString(object);
-		} catch (JsonProcessingException e) {
-			return null;
-		}
-//		Map<String, Object> value = null;
-//		if (object == null) {
-//			value = new HashMap<>();
-//		} else {
-//			value = (Map<String, Object>) ExchangeUtils.objectMapper().convertValue(object, Map.class);
-//		}
-//		// 
-//		String param = value.entrySet().stream()//
-//			.filter(e -> e.getValue() != null)// filter out null field
-//			.map(e -> String.format("%s=%s", e.getKey(), e.getValue()))// entry to string ${key}=${value}
-//			.collect(Collectors.joining("&"));// joining by &
-//		return param;
-	}
-	
 	private String getValue(Object o, boolean encode) {
 		if (encode) {
 			return urlEncode(String.valueOf(o));
@@ -110,7 +88,7 @@ public class BaseHuobiRestService extends BaseRestService {
 	private String encodeSignature(String signature) {
 		return signature.replaceAll("\\+", "%2B").replaceAll("=", "%3D");
 	}
-	
+
 	protected String getUrl(String path, Object... objects) {
 		if (objects == null || objects.length == 0) {
 			return huobiProperties.getRestBaseUrl() + path;
@@ -127,7 +105,7 @@ public class BaseHuobiRestService extends BaseRestService {
 
 	protected HttpEntity<String> buildPostRequestEntity(Object object) {
 		// body
-		String body = toRequestBodyParam(object);
+		String body = toJson(object);
 		// Header
 		HttpHeaders headers = new HttpHeaders();
 		headers.add(HttpHeaders.CONTENT_TYPE, "application/json");
