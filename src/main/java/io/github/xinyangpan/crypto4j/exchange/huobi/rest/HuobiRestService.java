@@ -1,6 +1,7 @@
 package io.github.xinyangpan.crypto4j.exchange.huobi.rest;
 
 import java.net.URI;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,11 +11,13 @@ import org.springframework.http.HttpMethod;
 
 import io.github.xinyangpan.crypto4j.exchange.huobi.HuobiProperties;
 import io.github.xinyangpan.crypto4j.exchange.huobi.dto.rest.AccountInfo;
+import io.github.xinyangpan.crypto4j.exchange.huobi.dto.rest.Order;
 import io.github.xinyangpan.crypto4j.exchange.huobi.dto.rest.RestResponse;
 
 public class HuobiRestService extends BaseHuobiRestService {
 	private static final Logger log = LoggerFactory.getLogger(HuobiRestService.class);
-	private static ParameterizedTypeReference<RestResponse<AccountInfo>> ACCOUNT_INFO = new ParameterizedTypeReference<RestResponse<AccountInfo>>() {};
+	private static ParameterizedTypeReference<RestResponse<List<AccountInfo>>> ACCOUNT_INFO = new ParameterizedTypeReference<RestResponse<List<AccountInfo>>>() {};
+	private static ParameterizedTypeReference<RestResponse<Long>> ORDER_RESPONSE = new ParameterizedTypeReference<RestResponse<Long>>() {};
 
 	public HuobiRestService(HuobiProperties huobiProperties) {
 		super(huobiProperties);
@@ -26,18 +29,18 @@ public class HuobiRestService extends BaseHuobiRestService {
 		return restTemplate.exchange(url, HttpMethod.GET, requestEntity, String.class).getBody();
 	}
 
-	public RestResponse<AccountInfo> accounts() {
-		URI uri = this.getUrlWithSignature("/v1/account/accounts", null);
+	public RestResponse<List<AccountInfo>> accounts() {
+		URI uri = this.getUrlWithSignature("/v1/account/accounts", RequestType.GET, null);
 		HttpEntity<String> requestEntity = this.requestEntityWithUserAgent();
 		return restTemplate.exchange(uri, HttpMethod.GET, requestEntity, ACCOUNT_INFO).getBody();
 	}
 
-//	public OrderResponse placeOrder(Order order) {
-//		log.debug("{}", order);
-//		String url = this.getUrl("/api/v1/trade.do");
-//		HttpEntity<String> requestEntity = this.buildSignedRequestEntity(order, true);
-//		return restTemplate.postForObject(url, requestEntity, OrderResponse.class);
-//	}
+	public RestResponse<Long> placeOrder(Order order) {
+		log.debug("{}", order);
+		URI url = this.getUrlWithSignature("/v1/order/orders/place", RequestType.POST, null);
+		HttpEntity<String> requestEntity = this.buildPostRequestEntity(order);
+		return restTemplate.exchange(url, HttpMethod.POST, requestEntity, ORDER_RESPONSE).getBody();
+	}
 	//
 	//	public CancelOrderResponse cancelOrder(CancelOrder cancelOrder) {
 	//		log.debug("{}", cancelOrder);

@@ -19,6 +19,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 import org.springframework.web.util.DefaultUriBuilderFactory.EncodingMode;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.common.collect.Lists;
 import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
@@ -33,7 +34,7 @@ public class BaseHuobiRestService extends BaseRestService {
 	protected final HuobiProperties huobiProperties;
 	private final HashFunction HASHING;
 	private final DefaultUriBuilderFactory builderFactory;
-
+	
 	public BaseHuobiRestService(HuobiProperties huobiProperties) {
 		this.huobiProperties = huobiProperties;
 		HASHING = Hashing.hmacSha256(huobiProperties.getRestSecret().getBytes());
@@ -61,6 +62,27 @@ public class BaseHuobiRestService extends BaseRestService {
 			.collect(Collectors.joining("&"));// joining by &
 		return param;
 	}
+
+	@SuppressWarnings("unchecked")
+	protected String toRequestBodyParam(Object object) {
+		try {
+			return ExchangeUtils.objectMapper().writeValueAsString(object);
+		} catch (JsonProcessingException e) {
+			return null;
+		}
+//		Map<String, Object> value = null;
+//		if (object == null) {
+//			value = new HashMap<>();
+//		} else {
+//			value = (Map<String, Object>) ExchangeUtils.objectMapper().convertValue(object, Map.class);
+//		}
+//		// 
+//		String param = value.entrySet().stream()//
+//			.filter(e -> e.getValue() != null)// filter out null field
+//			.map(e -> String.format("%s=%s", e.getKey(), e.getValue()))// entry to string ${key}=${value}
+//			.collect(Collectors.joining("&"));// joining by &
+//		return param;
+	}
 	
 	private String getValue(Object o, boolean encode) {
 		if (encode) {
@@ -70,11 +92,11 @@ public class BaseHuobiRestService extends BaseRestService {
 		}
 	}
 
-	protected String toSignedRequestParam(Object object, String path, String methodType) {
+	protected String toSignedRequestParam(Object object, String path, RequestType requestType) {
 		// 
 		String param = toRequestParam(object, true);
 		StringBuilder sb = new StringBuilder();
-		sb.append(methodType).append("\n");
+		sb.append(requestType.name()).append("\n");
 		sb.append("api.huobi.pro").append("\n");
 		sb.append(path).append("\n");
 		sb.append(param);
@@ -97,23 +119,18 @@ public class BaseHuobiRestService extends BaseRestService {
 		return String.format("%s%s", huobiProperties.getRestBaseUrl(), path);
 	}
 
-	protected URI getUrlWithSignature(String path, Object object) {
-		String signedRequestParam = this.toSignedRequestParam(object, path, "GET");
+	protected URI getUrlWithSignature(String path, RequestType requestType, Object object) {
+		String signedRequestParam = this.toSignedRequestParam(object, path, requestType);
 		String url = String.format("%s%s?%s", huobiProperties.getRestBaseUrl(), path, signedRequestParam);
 		return builderFactory.expand(url);
 	}
 
-	protected HttpEntity<String> buildSignedRequestEntity(Object object, boolean sign) {
+	protected HttpEntity<String> buildPostRequestEntity(Object object) {
 		// body
-		String body = null;
-		if (sign) {
-			//			body = toSignedRequestParam(object, "POST");
-		} else {
-			body = toRequestParam(object, true);
-		}
+		String body = toRequestBodyParam(object);
 		// Header
 		HttpHeaders headers = new HttpHeaders();
-		headers.add(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded");
+		headers.add(HttpHeaders.CONTENT_TYPE, "application/json");
 		headers.setAccept(Lists.newArrayList(MediaType.APPLICATION_JSON));
 		headers.add("User-Agent", "My Agent");
 		// Requesting
