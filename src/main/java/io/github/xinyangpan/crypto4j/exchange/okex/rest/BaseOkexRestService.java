@@ -9,21 +9,19 @@ import java.util.stream.Collectors;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.web.client.RestTemplate;
 
 import com.google.common.collect.Lists;
 import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
 
+import io.github.xinyangpan.crypto4j.core.rest.BaseRestService;
 import io.github.xinyangpan.crypto4j.exchange.ExchangeUtils;
 import io.github.xinyangpan.crypto4j.exchange.okex.OkexProperties;
 
-public class BaseOkexRestService {
+public class BaseOkexRestService extends BaseRestService {
 	// 
 	protected final OkexProperties okexProperties;
 	private final HashFunction HASHING;
-	// 
-	protected RestTemplate restTemplate = ExchangeUtils.restTemplate();
 
 	@SuppressWarnings("deprecation")
 	public BaseOkexRestService(OkexProperties okexProperties) {
@@ -65,15 +63,6 @@ public class BaseOkexRestService {
 		return String.format("%s%s", okexProperties.getRestBaseUrl(), path);
 	}
 	
-	protected HttpEntity<String> buildGetRequestEntity() {
-		// Header
-		HttpHeaders headers = new HttpHeaders();
-		headers.add("User-Agent", "My Agent");
-		// Requesting
-		HttpEntity<String> requestEntity = new HttpEntity<>(headers);
-		return requestEntity;
-	}
-
 	protected HttpEntity<String> buildSignedRequestEntity(Object object) {
 		// body
 		String body = toSignedRequestParam(object);

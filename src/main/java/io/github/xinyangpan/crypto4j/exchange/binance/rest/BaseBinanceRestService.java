@@ -5,19 +5,17 @@ import java.util.stream.Collectors;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.web.client.RestTemplate;
 
 import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
 
+import io.github.xinyangpan.crypto4j.core.rest.BaseRestService;
 import io.github.xinyangpan.crypto4j.exchange.ExchangeUtils;
 import io.github.xinyangpan.crypto4j.exchange.binance.BinanceProperties;
 
-public class BaseBinanceRestService {
+public class BaseBinanceRestService extends BaseRestService {
 	private final BinanceProperties binanceProperties;
 	private final HashFunction HASHING;
-	// 
-	protected RestTemplate restTemplate = ExchangeUtils.restTemplate();
 
 	public BaseBinanceRestService(BinanceProperties binanceProperties) {
 		super();

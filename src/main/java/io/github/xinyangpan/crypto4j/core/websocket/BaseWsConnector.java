@@ -1,9 +1,9 @@
-package io.github.xinyangpan.crypto4j.core;
+package io.github.xinyangpan.crypto4j.core.websocket;
 
 import org.springframework.web.socket.client.WebSocketConnectionManager;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 
-import io.github.xinyangpan.crypto4j.core.handler.BaseWsHandler;
+import io.github.xinyangpan.crypto4j.core.websocket.handler.BaseWsHandler;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

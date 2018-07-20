@@ -1,8 +1,8 @@
-package io.github.xinyangpan.crypto4j.core.failurehandler;
+package io.github.xinyangpan.crypto4j.core.websocket.failurehandler;
 
 import org.springframework.web.socket.CloseStatus;
 
-import io.github.xinyangpan.crypto4j.core.BaseWsConnector;
+import io.github.xinyangpan.crypto4j.core.websocket.BaseWsConnector;
 
 public class FailureReconnect implements FailureHandler {
 	private final BaseWsConnector<?> wsConnector;

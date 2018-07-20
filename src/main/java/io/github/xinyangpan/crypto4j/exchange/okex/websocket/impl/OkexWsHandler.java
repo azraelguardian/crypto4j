@@ -9,7 +9,7 @@ import org.springframework.web.socket.WebSocketSession;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
 
-import io.github.xinyangpan.crypto4j.core.handler.BaseWsHandler;
+import io.github.xinyangpan.crypto4j.core.websocket.handler.BaseWsHandler;
 import io.github.xinyangpan.crypto4j.exchange.okex.dto.websocket.DepthData;
 import io.github.xinyangpan.crypto4j.exchange.okex.dto.websocket.OkexWsResponse;
 import io.github.xinyangpan.crypto4j.exchange.okex.dto.websocket.ResultData;

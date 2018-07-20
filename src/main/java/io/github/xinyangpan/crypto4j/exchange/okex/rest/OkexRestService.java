@@ -21,7 +21,7 @@ public class OkexRestService extends BaseOkexRestService {
 
 	public String ticker(String symbol) {
 		String url = this.getUrl("/api/v1/ticker.do?symbol=%s", symbol);
-		HttpEntity<String> requestEntity = this.buildGetRequestEntity();
+		HttpEntity<String> requestEntity = this.requestEntityWithUserAgent();
 		return restTemplate.exchange(url, HttpMethod.GET, requestEntity, String.class).getBody();
 	}
 

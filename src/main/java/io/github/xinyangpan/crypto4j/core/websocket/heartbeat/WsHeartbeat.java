@@ -1,4 +1,4 @@
-package io.github.xinyangpan.crypto4j.core.heartbeat;
+package io.github.xinyangpan.crypto4j.core.websocket.heartbeat;
 
 import java.io.IOException;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -9,9 +9,9 @@ import org.springframework.web.socket.WebSocketSession;
 
 import com.google.common.base.Preconditions;
 
-import io.github.xinyangpan.crypto4j.core.BaseWsConnector;
-import io.github.xinyangpan.crypto4j.core.failurehandler.FailureHandler;
-import io.github.xinyangpan.crypto4j.core.failurehandler.FailureReconnect;
+import io.github.xinyangpan.crypto4j.core.websocket.BaseWsConnector;
+import io.github.xinyangpan.crypto4j.core.websocket.failurehandler.FailureHandler;
+import io.github.xinyangpan.crypto4j.core.websocket.failurehandler.FailureReconnect;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;

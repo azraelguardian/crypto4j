@@ -1,4 +1,4 @@
-package io.github.xinyangpan.crypto4j.core.subscriber;
+package io.github.xinyangpan.crypto4j.core.websocket.subscriber;
 
 import static io.github.xinyangpan.crypto4j.exchange.ExchangeUtils.objectMapper;
 
