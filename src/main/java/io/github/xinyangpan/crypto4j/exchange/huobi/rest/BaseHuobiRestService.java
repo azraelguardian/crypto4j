@@ -46,6 +46,8 @@ public class BaseHuobiRestService extends BaseRestService {
 		Map<String, Object> value = null;
 		if (object == null) {
 			value = new HashMap<>();
+		} else if (object instanceof Map) {
+			value = new HashMap<>((Map<String, Object>)object);
 		} else {
 			value = (Map<String, Object>) ExchangeUtils.objectMapper().convertValue(object, Map.class);
 		}

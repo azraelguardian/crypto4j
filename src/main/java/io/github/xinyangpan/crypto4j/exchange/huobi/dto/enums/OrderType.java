@@ -1,5 +1,9 @@
 package io.github.xinyangpan.crypto4j.exchange.huobi.dto.enums;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum OrderType {
@@ -10,10 +14,25 @@ public enum OrderType {
 	BUY_IOC("buy-ioc"), SELL_IOC("sell-ioc"), //
 	BUY_LIMIT_MAKER("buy-limit-maker"), SELL_LIMIT_MAKER("sell-limit-maker");//
 
+	//
+	private static final Map<String, OrderType> INDEX = new HashMap<>();
+	
+	static {
+		OrderType[] values = values();
+		for (OrderType orderType : values) {
+			INDEX.put(orderType.value, orderType);
+		}
+	}
+
 	private final String value;
 
 	private OrderType(String value) {
 		this.value = value;
+	}
+
+	@JsonCreator
+	public static OrderType parse(String value) {
+		return INDEX.get(value);
 	}
 
 	@JsonValue
