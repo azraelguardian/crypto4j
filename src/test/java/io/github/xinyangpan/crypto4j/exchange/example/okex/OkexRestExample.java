@@ -15,7 +15,7 @@ public class OkexRestExample {
 	public static void main(String[] args) throws InterruptedException {
 		OkexProperties okexProperties = new OkexProperties();
 		okexProperties.setRestBaseUrl("https://www.okex.com");
-		okexProperties.setRestKey("e33c4b9a-c20d-46e8-9329-ab8b0f810cf1");
+		okexProperties.setRestKey(Crypto4jUtils.getSecret("okex.key"));
 		okexProperties.setRestSecret(Crypto4jUtils.getSecret("okex.secret"));
 		// 
 		Order order = new Order();

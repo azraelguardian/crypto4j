@@ -13,7 +13,7 @@ public class HuobiRestExample {
 	public static void main(String[] args) throws InterruptedException {
 		HuobiProperties huobiProperties = new HuobiProperties();
 		huobiProperties.setRestBaseUrl("https://api.huobi.pro");
-		huobiProperties.setRestKey("061b36c2-2d372ce2-dbec74c0-b52cb");
+		huobiProperties.setRestKey(Crypto4jUtils.getSecret("huobi.key"));
 		huobiProperties.setRestSecret(Crypto4jUtils.getSecret("huobi.secret"));
 		// 
 		Order order = new Order();
