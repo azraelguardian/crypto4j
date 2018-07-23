@@ -14,9 +14,6 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public class HuobiDepthEntry extends DepthEntry {
 
-	private BigDecimal price;
-	private BigDecimal quantity;
-
 	@JsonCreator
 	public static HuobiDepthEntry create(String[] data) {
 		final String price = data[0];

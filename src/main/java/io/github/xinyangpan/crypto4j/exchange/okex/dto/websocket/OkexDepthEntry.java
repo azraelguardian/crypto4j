@@ -14,9 +14,6 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public class OkexDepthEntry extends DepthEntry {
 
-	private BigDecimal price;
-	private BigDecimal quantity;
-
 	@JsonCreator
 	public static OkexDepthEntry create(String[] data) {
 		final String price = data[0];
