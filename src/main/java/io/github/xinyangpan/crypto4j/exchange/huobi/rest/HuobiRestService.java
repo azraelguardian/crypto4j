@@ -51,4 +51,11 @@ public class HuobiRestService extends BaseHuobiRestService {
 		return restTemplate.exchange(url, HttpMethod.GET, requestEntity, ORDER_RESULT).getBody();
 	}
 
+	public String queryExecution(String orderId) {
+		log.debug("{}", orderId);
+		URI url = this.getUrlWithSignature(String.format("/v1/order/orders/%s/matchresults", orderId), RequestType.GET, null);
+		HttpEntity<String> requestEntity = this.requestEntityWithUserAgent();
+		return restTemplate.exchange(url, HttpMethod.GET, requestEntity, String.class).getBody();
+	}
+
 }

@@ -7,6 +7,6 @@ public class DepthData {
 
 	private String ch;
 	private Long ts;
-	private Tick tick;
+	private Depth tick;
 
 }
