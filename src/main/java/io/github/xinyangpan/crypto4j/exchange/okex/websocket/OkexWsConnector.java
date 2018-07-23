@@ -9,7 +9,11 @@ public class OkexWsConnector extends BaseWsConnector<OkexWsHandler> {
 	private static String DEFAULT_URL = "wss://real.okex.com:10441/websocket";
 
 	public OkexWsConnector(OkexWsSubscriber okexWsSubscriber) {
-		super(DEFAULT_URL, new OkexWsHandler(okexWsSubscriber));
+		this(okexWsSubscriber, DEFAULT_URL);
+	}
+
+	public OkexWsConnector(OkexWsSubscriber okexWsSubscriber, String url) {
+		super(url, new OkexWsHandler(okexWsSubscriber));
 		this.wsHandler.setWsHeartbeat(new OkexWsHeartBeat(this));
 	}
 

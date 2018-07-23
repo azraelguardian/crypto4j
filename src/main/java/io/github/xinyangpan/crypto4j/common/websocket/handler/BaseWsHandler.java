@@ -1,6 +1,7 @@
 package io.github.xinyangpan.crypto4j.common.websocket.handler;
 
 import org.springframework.web.socket.CloseStatus;
+import org.springframework.web.socket.WebSocketMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.AbstractWebSocketHandler;
 
@@ -14,13 +15,23 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class BaseWsHandler<T extends WsSubscriber> extends AbstractWebSocketHandler {
-	protected String name;
+	protected final String name;
 	protected @Getter WebSocketSession session;
 	protected @Setter WsHeartbeat wsHeartbeat;
 	protected @Setter FailureHandler failureHandler;
 	protected T wsSubscriber;
 
 	public BaseWsHandler() {
+		this.name = null;
+	}
+
+	@Override
+	public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws Exception {
+		try {
+			super.handleMessage(session, message);
+		} catch (Exception e) {
+			log.error("handleMessage error. message: {}", message, e);
+		}
 	}
 
 	public BaseWsHandler(String name, T wsSubscriber) {

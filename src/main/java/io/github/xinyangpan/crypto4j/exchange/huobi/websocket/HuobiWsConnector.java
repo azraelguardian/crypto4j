@@ -8,7 +8,11 @@ public class HuobiWsConnector extends BaseWsConnector<HuobiWsHandler> {
 	private static String DEFAULT_URL = "wss://api.huobi.pro/ws";
 
 	public HuobiWsConnector(HuobiSubscriber huobiSubscriber) {
-		super(DEFAULT_URL, new HuobiWsHandler(huobiSubscriber));
+		this(huobiSubscriber, DEFAULT_URL);
+	}
+
+	public HuobiWsConnector(HuobiSubscriber huobiSubscriber, String url) {
+		super(url, new HuobiWsHandler(huobiSubscriber));
 	}
 
 }
