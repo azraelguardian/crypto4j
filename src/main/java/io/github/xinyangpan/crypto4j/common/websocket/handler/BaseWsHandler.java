@@ -15,14 +15,13 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class BaseWsHandler<T extends WsSubscriber> extends AbstractWebSocketHandler {
-	protected final String name;
+	protected @Setter String name;
 	protected @Getter WebSocketSession session;
 	protected @Setter WsHeartbeat wsHeartbeat;
 	protected @Setter FailureHandler failureHandler;
 	protected T wsSubscriber;
 
 	public BaseWsHandler() {
-		this.name = null;
 	}
 
 	@Override
