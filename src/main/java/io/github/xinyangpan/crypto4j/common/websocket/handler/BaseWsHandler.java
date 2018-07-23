@@ -30,7 +30,7 @@ public class BaseWsHandler<T extends WsSubscriber> extends AbstractWebSocketHand
 		try {
 			super.handleMessage(session, message);
 		} catch (Exception e) {
-			log.error("handleMessage error. message: {}", message, e);
+			log.error("handleMessage[{}] error. message: {}", name, message, e);
 		}
 	}
 
