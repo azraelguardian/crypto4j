@@ -8,7 +8,7 @@ import lombok.Data;
 public class Depth {
 
 	private Long lastUpdateId;
-	private List<DepthEntry> bids;
-	private List<DepthEntry> asks;
+	private List<BinanceDepthEntry> bids;
+	private List<BinanceDepthEntry> asks;
 
 }

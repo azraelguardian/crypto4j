@@ -6,9 +6,9 @@ import com.google.common.base.Preconditions;
 
 import io.github.xinyangpan.crypto4j.common.websocket.subscriber.BaseDynamicWsSubscriber;
 import io.github.xinyangpan.crypto4j.exchange.ExchangeUtils;
-import io.github.xinyangpan.crypto4j.exchange.huobi.dto.ws.common.HuobiWsRequest;
-import io.github.xinyangpan.crypto4j.exchange.huobi.dto.ws.depth.DepthData;
-import io.github.xinyangpan.crypto4j.exchange.huobi.dto.ws.kline.KlineData;
+import io.github.xinyangpan.crypto4j.exchange.huobi.dto.websocket.common.HuobiWsRequest;
+import io.github.xinyangpan.crypto4j.exchange.huobi.dto.websocket.depth.DepthData;
+import io.github.xinyangpan.crypto4j.exchange.huobi.dto.websocket.kline.KlineData;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;

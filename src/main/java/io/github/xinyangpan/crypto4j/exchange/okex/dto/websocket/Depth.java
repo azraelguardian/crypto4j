@@ -7,8 +7,8 @@ import lombok.Data;
 @Data
 public class Depth {
 
-	private List<DepthEntry> bids;
-	private List<DepthEntry> asks;
+	private List<OkexDepthEntry> bids;
+	private List<OkexDepthEntry> asks;
 	private Long timestamp;
 	
 }

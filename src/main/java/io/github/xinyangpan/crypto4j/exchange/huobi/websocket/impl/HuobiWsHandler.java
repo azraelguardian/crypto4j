@@ -16,9 +16,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.util.ByteBufferBackedInputStream;
 
 import io.github.xinyangpan.crypto4j.common.websocket.handler.BaseWsHandler;
-import io.github.xinyangpan.crypto4j.exchange.huobi.dto.ws.common.HuobiWsAck;
-import io.github.xinyangpan.crypto4j.exchange.huobi.dto.ws.depth.DepthData;
-import io.github.xinyangpan.crypto4j.exchange.huobi.dto.ws.kline.KlineData;
+import io.github.xinyangpan.crypto4j.exchange.huobi.dto.websocket.common.HuobiWsAck;
+import io.github.xinyangpan.crypto4j.exchange.huobi.dto.websocket.depth.DepthData;
+import io.github.xinyangpan.crypto4j.exchange.huobi.dto.websocket.kline.KlineData;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;

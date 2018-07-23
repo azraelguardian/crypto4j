@@ -1,4 +1,4 @@
-package io.github.xinyangpan.crypto4j.exchange.huobi.dto.ws.common;
+package io.github.xinyangpan.crypto4j.exchange.huobi.dto.websocket.common;
 
 import lombok.Data;
 
