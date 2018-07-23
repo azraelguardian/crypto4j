@@ -4,7 +4,7 @@ import java.util.function.Consumer;
 
 import com.google.common.base.Preconditions;
 
-import io.github.xinyangpan.crypto4j.core.websocket.subscriber.BaseDynamicWsSubscriber;
+import io.github.xinyangpan.crypto4j.common.websocket.subscriber.BaseDynamicWsSubscriber;
 import io.github.xinyangpan.crypto4j.exchange.ExchangeUtils;
 import io.github.xinyangpan.crypto4j.exchange.okex.dto.websocket.Depth;
 import io.github.xinyangpan.crypto4j.exchange.okex.dto.websocket.OkexWsRequest;

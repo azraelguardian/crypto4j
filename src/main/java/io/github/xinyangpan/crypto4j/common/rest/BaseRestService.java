@@ -1,4 +1,4 @@
-package io.github.xinyangpan.crypto4j.core.rest;
+package io.github.xinyangpan.crypto4j.common.rest;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;

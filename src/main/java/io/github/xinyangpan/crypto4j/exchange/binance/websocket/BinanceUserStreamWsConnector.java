@@ -1,6 +1,6 @@
 package io.github.xinyangpan.crypto4j.exchange.binance.websocket;
 
-import io.github.xinyangpan.crypto4j.core.websocket.BaseWsConnector;
+import io.github.xinyangpan.crypto4j.common.websocket.BaseWsConnector;
 import io.github.xinyangpan.crypto4j.exchange.binance.BinanceProperties;
 import io.github.xinyangpan.crypto4j.exchange.binance.dto.rest.ListenKey;
 import io.github.xinyangpan.crypto4j.exchange.binance.rest.BinanceUserStreamService;

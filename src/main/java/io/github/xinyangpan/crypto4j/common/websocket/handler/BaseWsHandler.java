@@ -1,13 +1,13 @@
-package io.github.xinyangpan.crypto4j.core.websocket.handler;
+package io.github.xinyangpan.crypto4j.common.websocket.handler;
 
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.AbstractWebSocketHandler;
 
-import io.github.xinyangpan.crypto4j.core.websocket.failurehandler.FailureHandler;
-import io.github.xinyangpan.crypto4j.core.websocket.heartbeat.WsHeartbeat;
-import io.github.xinyangpan.crypto4j.core.websocket.subscriber.DynamicWsSubscriber;
-import io.github.xinyangpan.crypto4j.core.websocket.subscriber.WsSubscriber;
+import io.github.xinyangpan.crypto4j.common.websocket.failurehandler.FailureHandler;
+import io.github.xinyangpan.crypto4j.common.websocket.heartbeat.WsHeartbeat;
+import io.github.xinyangpan.crypto4j.common.websocket.subscriber.DynamicWsSubscriber;
+import io.github.xinyangpan.crypto4j.common.websocket.subscriber.WsSubscriber;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;

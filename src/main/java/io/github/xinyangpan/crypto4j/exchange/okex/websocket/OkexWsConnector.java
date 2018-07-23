@@ -1,6 +1,6 @@
 package io.github.xinyangpan.crypto4j.exchange.okex.websocket;
 
-import io.github.xinyangpan.crypto4j.core.websocket.BaseWsConnector;
+import io.github.xinyangpan.crypto4j.common.websocket.BaseWsConnector;
 import io.github.xinyangpan.crypto4j.exchange.okex.websocket.impl.OkexWsHandler;
 import io.github.xinyangpan.crypto4j.exchange.okex.websocket.impl.OkexWsHeartBeat;
 import io.github.xinyangpan.crypto4j.exchange.okex.websocket.impl.OkexWsSubscriber;

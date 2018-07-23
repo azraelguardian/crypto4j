@@ -23,7 +23,7 @@ import com.google.common.collect.Lists;
 import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
 
-import io.github.xinyangpan.crypto4j.core.rest.BaseRestService;
+import io.github.xinyangpan.crypto4j.common.rest.BaseRestService;
 import io.github.xinyangpan.crypto4j.exchange.ExchangeUtils;
 import io.github.xinyangpan.crypto4j.exchange.huobi.HuobiProperties;
 

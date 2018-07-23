@@ -7,7 +7,7 @@ import java.util.function.Consumer;
 import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
 
-import io.github.xinyangpan.crypto4j.core.websocket.subscriber.BaseWsSubscriber;
+import io.github.xinyangpan.crypto4j.common.websocket.subscriber.BaseWsSubscriber;
 import io.github.xinyangpan.crypto4j.exchange.ExchangeUtils;
 import io.github.xinyangpan.crypto4j.exchange.binance.dto.websocket.Ticker;
 import io.github.xinyangpan.crypto4j.exchange.binance.dto.websocket.common.StreamData;
