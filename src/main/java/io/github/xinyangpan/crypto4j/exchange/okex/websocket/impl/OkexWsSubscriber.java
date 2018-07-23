@@ -6,7 +6,7 @@ import com.google.common.base.Preconditions;
 
 import io.github.xinyangpan.crypto4j.core.websocket.subscriber.BaseDynamicWsSubscriber;
 import io.github.xinyangpan.crypto4j.exchange.ExchangeUtils;
-import io.github.xinyangpan.crypto4j.exchange.okex.dto.websocket.DepthData;
+import io.github.xinyangpan.crypto4j.exchange.okex.dto.websocket.Depth;
 import io.github.xinyangpan.crypto4j.exchange.okex.dto.websocket.OkexWsRequest;
 import io.github.xinyangpan.crypto4j.exchange.okex.dto.websocket.OkexWsResponse;
 import io.github.xinyangpan.crypto4j.exchange.okex.dto.websocket.TickerData;
@@ -18,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 @Setter
 @Slf4j
 public class OkexWsSubscriber extends BaseDynamicWsSubscriber {
-	private Consumer<OkexWsResponse<DepthData>> depthListener = ExchangeUtils.logConsumer();
+	private Consumer<OkexWsResponse<Depth>> depthListener = ExchangeUtils.logConsumer();
 	private Consumer<OkexWsResponse<TickerData>> tickerListener = ExchangeUtils.logConsumer();
 
 	public void depth(String symbol, int depth) {

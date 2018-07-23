@@ -10,7 +10,7 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import io.github.xinyangpan.crypto4j.core.websocket.handler.BaseWsHandler;
-import io.github.xinyangpan.crypto4j.exchange.okex.dto.websocket.DepthData;
+import io.github.xinyangpan.crypto4j.exchange.okex.dto.websocket.Depth;
 import io.github.xinyangpan.crypto4j.exchange.okex.dto.websocket.OkexWsResponse;
 import io.github.xinyangpan.crypto4j.exchange.okex.dto.websocket.ResultData;
 import io.github.xinyangpan.crypto4j.exchange.okex.dto.websocket.TickerData;
@@ -51,8 +51,8 @@ public class OkexWsHandler extends BaseWsHandler<OkexWsSubscriber> {
 			}
 			return;
 		} else if (channel.contains("depth")) {
-			OkexWsResponse<DepthData>[] responses = this.parse(jsonMessage, DepthData.class);
-			for (OkexWsResponse<DepthData> response : responses) {
+			OkexWsResponse<Depth>[] responses = this.parse(jsonMessage, Depth.class);
+			for (OkexWsResponse<Depth> response : responses) {
 				onDepthData(response);
 			}
 			return;
@@ -90,7 +90,7 @@ public class OkexWsHandler extends BaseWsHandler<OkexWsSubscriber> {
 		wsSubscriber.getTickerListener().accept(response);
 	}
 
-	private void onDepthData(OkexWsResponse<DepthData> response) {
+	private void onDepthData(OkexWsResponse<Depth> response) {
 		wsSubscriber.getDepthListener().accept(response);
 	}
 

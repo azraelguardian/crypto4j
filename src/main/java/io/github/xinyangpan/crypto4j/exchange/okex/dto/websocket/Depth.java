@@ -5,10 +5,10 @@ import java.util.List;
 import lombok.Data;
 
 @Data
-public class DepthData {
+public class Depth {
 
-	private List<String[]> bids;
-	private List<String[]> asks;
+	private List<DepthEntry> bids;
+	private List<DepthEntry> asks;
 	private Long timestamp;
 	
 }
