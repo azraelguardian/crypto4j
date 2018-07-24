@@ -4,11 +4,11 @@
 
 ### Huobi Order
 
-* place order 
-```
-req: {"amount":0.08,"price":7000,"source":null,"symbol":"btcusdt","type":"sell-ioc","account-id":4275858}
-res: RestResponse(status=ok, errCode=null, errMsg=null, data=8467743061)
-```
+#### Place order 
+
+* req: {"amount":0.08,"price":7000,"source":null,"symbol":"btcusdt","type":"sell-ioc","account-id":4275858}
+* res: RestResponse(status=ok, errCode=null, errMsg=null, data=8467743061)
+
 * query order
 ```
 req: https://api.huobi.pro/v1/order/orders/8467743061
