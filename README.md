@@ -2,11 +2,11 @@
 
 ## Order
 
-|         | Has IOC | Has User Data Websocket | Has Execution/Trade Details |
-|---------|---------|-------------------------|-----------------------------|
-| Huobi   | YES     | NO                      | YES                         |
-| Binance | YES     | YES                     | YES                         |
-| Okex    | NO      | YES                     | NO                          |
+|         | Has IOC | Has User Data Websocket | Has Execution/Trade Details | Comment                          |
+|---------|---------|-------------------------|-----------------------------|----------------------------------|
+| Huobi   | YES     | NO                      | YES                         | Trade Query has delay            |
+| Binance | YES     | YES                     | YES                         | Can't Query Trades from order Id |
+| Okex    | NO      | YES                     | NO                          |                                  |
 
 ### Huobi Order
 
