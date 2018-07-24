@@ -1,12 +1,12 @@
-# crypto4j
+# Crypto4j
 
 ## Order
 
-|         | Has IOC | Has User Data Websocket |
-| ------- | ------- | ----------------------- |
-| Huobi   | YES     | NO                      |
-| Binance | YES     | YES                     |
-| Okex    | NO      | YES                     |
+|         | Has IOC | Has User Data Websocket | Has Execution/Trade Details |
+|---------|---------|-------------------------|-----------------------------|
+| Huobi   | YES     | NO                      | YES                         |
+| Binance | YES     | YES                     | YES                         |
+| Okex    | NO      | YES                     | NO                          |
 
 ### Huobi Order
 
