@@ -2,6 +2,12 @@
 
 ## Order
 
+|         | Has IOC | Has User Data Websocket |
+| ------- | ------- | ----------------------- |
+| Huobi   | YES     | NO                      |
+| Binance | YES     | YES                     |
+| Okex    | NO      | YES                     |
+
 ### Huobi Order
 
 #### Place Order 
