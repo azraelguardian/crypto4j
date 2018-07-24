@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import com.google.common.base.Preconditions;
 
 import io.github.xinyangpan.crypto4j.exchange.binance.BinanceProperties;
-import io.github.xinyangpan.crypto4j.exchange.binance.dto.rest.ListenKey;
+import io.github.xinyangpan.crypto4j.exchange.binance.dto.rest.common.ListenKey;
 
 public class BinanceUserStreamService extends BaseBinanceRestService {
 

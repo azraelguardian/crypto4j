@@ -1,4 +1,4 @@
-package io.github.xinyangpan.crypto4j.exchange.binance.dto.rest;
+package io.github.xinyangpan.crypto4j.exchange.binance.dto.rest.common;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

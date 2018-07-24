@@ -2,6 +2,9 @@ package io.github.xinyangpan.crypto4j.common.rest;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -40,5 +43,23 @@ public class BaseRestService {
 		} catch (JsonProcessingException e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	protected String toRequestParam(Object object) {
+		Map<String, Object> value = null;
+		if (object == null) {
+			value = new HashMap<>();
+		} else if (object instanceof Map) {
+			value = new HashMap<>((Map<String, Object>) object);
+		} else {
+			value = (Map<String, Object>) ExchangeUtils.objectMapper().convertValue(object, Map.class);
+		}
+		// 
+		String param = value.entrySet().stream()//
+			.filter(e -> e.getValue() != null)// filter out null field
+			.map(e -> String.format("%s=%s", e.getKey(), e.getValue()))// entry to string ${key}=${value}
+			.collect(Collectors.joining("&"));// joining by &
+		return param;
 	}
 }

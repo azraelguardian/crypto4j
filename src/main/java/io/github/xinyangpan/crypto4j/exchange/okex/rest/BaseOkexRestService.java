@@ -28,7 +28,8 @@ public class BaseOkexRestService extends BaseRestService {
 		this.okexProperties = okexProperties;
 		HASHING = Hashing.md5();
 	}
-
+	
+	@Override
 	@SuppressWarnings("unchecked")
 	protected String toRequestParam(Object object) {
 		Map<String, Object> value = null;

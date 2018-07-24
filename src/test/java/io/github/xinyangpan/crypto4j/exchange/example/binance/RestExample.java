@@ -5,7 +5,9 @@ import java.math.BigDecimal;
 import io.github.xinyangpan.crypto4j.exchange.binance.dto.enums.OrderType;
 import io.github.xinyangpan.crypto4j.exchange.binance.dto.enums.Side;
 import io.github.xinyangpan.crypto4j.exchange.binance.dto.enums.TimeInForce;
-import io.github.xinyangpan.crypto4j.exchange.binance.dto.rest.Order;
+import io.github.xinyangpan.crypto4j.exchange.binance.dto.rest.account.QueryTradeRequest;
+import io.github.xinyangpan.crypto4j.exchange.binance.dto.rest.order.PlaceOrderRequest;
+import io.github.xinyangpan.crypto4j.exchange.binance.dto.rest.order.QueryOrderRequest;
 import io.github.xinyangpan.crypto4j.exchange.binance.rest.BinanceRestService;
 import io.github.xinyangpan.crypto4j.exchange.example.binance.util.BinanceTestUtils;
 
@@ -13,19 +15,32 @@ public class RestExample {
 
 	public static void main(String[] args) throws InterruptedException {
 		// 
-		Order order = new Order();
-		order.setSymbol("ETHBTC");
-		order.setSide(Side.BUY);
-		order.setType(OrderType.LIMIT);
-		order.setTimeInForce(TimeInForce.IOC);
-		order.setQuantity(new BigDecimal("1"));
-		order.setPrice(new BigDecimal("0.01"));
-		order.setRecvWindow(5000L);
-		order.setTimestamp(System.currentTimeMillis());
+		PlaceOrderRequest placeOrderRequest = new PlaceOrderRequest();
+		placeOrderRequest.setSymbol("BTCUSDT");
+		placeOrderRequest.setSide(Side.SELL);
+		placeOrderRequest.setType(OrderType.LIMIT);
+		placeOrderRequest.setTimeInForce(TimeInForce.IOC);
+		placeOrderRequest.setQuantity(new BigDecimal("0.01"));
+		placeOrderRequest.setPrice(new BigDecimal("7700"));
+		placeOrderRequest.setRecvWindow(5000L);
+		placeOrderRequest.setTimestamp(System.currentTimeMillis());
 		// 
 		BinanceRestService binanceRestService = BinanceTestUtils.binanceService().restService();
-		System.out.println(binanceRestService.bookTicker("ETHBTC"));
-		System.out.println(binanceRestService.placeOrder(order));
+//		System.out.println(binanceRestService.bookTicker("BTCUSDT"));
+//		System.out.println(binanceRestService.placeOrderRequest(placeOrderRequest));
+		
+		QueryOrderRequest queryOrderRequest = new QueryOrderRequest();
+		queryOrderRequest.setOrderId(136685394L);
+//		queryOrderRequest.setOrigClientOrderId("3KSTatVeIcySChuZG42OCw");
+		queryOrderRequest.setSymbol("BTCUSDT");
+//		queryOrderRequest.setRecvWindow(5000L);
+//		queryOrderRequest.setTimestamp(System.currentTimeMillis());
+//		System.out.println(binanceRestService.queryOrder(queryOrderRequest));
+		
+		// Query Trade
+		QueryTradeRequest queryTradeRequest = new QueryTradeRequest();
+		queryTradeRequest.setSymbol("BTCUSDT");
+		System.out.println(binanceRestService.queryTrade(queryTradeRequest));
 	}
 
 }

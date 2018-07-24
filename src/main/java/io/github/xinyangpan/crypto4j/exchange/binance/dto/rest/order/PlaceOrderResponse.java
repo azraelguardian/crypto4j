@@ -1,4 +1,4 @@
-package io.github.xinyangpan.crypto4j.exchange.binance.dto.rest;
+package io.github.xinyangpan.crypto4j.exchange.binance.dto.rest.order;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -10,7 +10,7 @@ import io.github.xinyangpan.crypto4j.exchange.binance.dto.enums.TimeInForce;
 import lombok.Data;
 
 @Data
-public class OrderResponse {
+public class PlaceOrderResponse {
 
 	private String symbol;
 	private Long orderId;

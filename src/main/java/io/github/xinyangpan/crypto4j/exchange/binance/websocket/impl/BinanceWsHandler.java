@@ -38,7 +38,7 @@ public class BinanceWsHandler extends BaseWsHandler<BinanceSubscriber> {
 		String jsonMessage = message.getPayload();
 		log.debug("handling message: {}", jsonMessage);
 		JsonNode rootNode = objectMapper().readTree(jsonMessage);
-		JsonNode eventTypeNode = rootNode.at("/a");
+		JsonNode eventTypeNode = rootNode.at("/e");
 		if (!eventTypeNode.isMissingNode()) {
 			userStream(jsonMessage, eventTypeNode);
 			return;
