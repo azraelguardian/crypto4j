@@ -19,10 +19,10 @@ public class OkexRestExample {
 		okexProperties.setRestSecret(Crypto4jUtils.getSecret("okex.secret"));
 		// 
 		Order order = new Order();
-		order.setAmount(new BigDecimal("0.01"));
-		order.setPrice(new BigDecimal("9465"));
+		order.setAmount(new BigDecimal("0.09"));
+		order.setPrice(new BigDecimal("7823"));
 		order.setSymbol("btc_usdt");
-		order.setType(OrderType.sell);
+		order.setType(OrderType.buy);
 		// 
 		OkexRestService okexRestService = new OkexRestService(okexProperties);
 //		System.out.println(okexRestService.ticker("btc_usdt"));
