@@ -39,7 +39,7 @@
 
 #### Query Execution/Trade
 
-* req: https://api.huobi.pro/v1/order/orders/8467743061/matchresults
+* req: /api/v3/myTrades
 * res: {"symbol":"BTCUSDT","id":58523157,"orderId":136685394,"price":"7737.99000000","qty":"0.01000000","commission":"0.07737990","commissionAsset":"USDT","time":1532401146328,"isBuyer":false,"isMaker":false,"isBestMatch":true}
 * one order with multi trades: {"symbol":"BTCUSDT","id":58346827,"orderId":136276302,"price":"7756.50000000","qty":"0.00846500","commission":"0.06565877","commissionAsset":"USDT","time":1532331223480,"isBuyer":false,"isMaker":false,"isBestMatch":true},{"symbol":"BTCUSDT","id":58346828,"orderId":136276302,"price":"7755.86000000","qty":"0.02153500","commission":"0.16702245","commissionAsset":"USDT","time":1532331223480,"isBuyer":false,"isMaker":false,"isBestMatch":true}
 
