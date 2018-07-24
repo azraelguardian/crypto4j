@@ -38,3 +38,20 @@
 * one order with multi trades: {"symbol":"BTCUSDT","id":58346827,"orderId":136276302,"price":"7756.50000000","qty":"0.00846500","commission":"0.06565877","commissionAsset":"USDT","time":1532331223480,"isBuyer":false,"isMaker":false,"isBestMatch":true},{"symbol":"BTCUSDT","id":58346828,"orderId":136276302,"price":"7755.86000000","qty":"0.02153500","commission":"0.16702245","commissionAsset":"USDT","time":1532331223480,"isBuyer":false,"isMaker":false,"isBestMatch":true}
 
 
+### Okex Order
+
+#### Place Order 
+
+* req: amount=0.09&api_key=xxx&price=7823&symbol=btc_usdt&type=buy&sign=xxx
+* res: OrderResponse(result=true, orderId=848476058, errorCode=null)
+
+#### Query Order
+
+* req: api_key=xxx&order_id=848476058&symbol=btc_usdt&sign=xxx
+* res: QueryOrderResponse(result=true, orders=[OrderResult(amount=0.09, avgPrice=7820.70847925, createDate=1532407241000, dealAmount=0, orderId=848476058, ordersId=848476058, price=7823, status=FILLED, symbol=btc_usdt, type=buy)])
+
+
+#### Query Execution/Trade
+
+Does not support
+
