@@ -35,7 +35,7 @@ public class OkexWsSubscriber extends BaseDynamicWsSubscriber {
 		// 
 		Preconditions.checkNotNull(symbol);
 		// 
-		log.info("Subscribing ticker. symbol={}, type={}.", symbol);
+		log.info("Subscribing ticker. symbol={}.", symbol);
 		String channel = String.format("ok_sub_spot_%s_ticker", symbol);
 		this.sendTextMessage(OkexWsRequest.addChannel(channel));
 	}
