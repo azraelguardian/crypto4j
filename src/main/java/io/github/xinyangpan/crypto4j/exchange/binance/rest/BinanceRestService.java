@@ -23,7 +23,7 @@ public class BinanceRestService extends BaseBinanceRestService {
 		return restTemplate.getForObject(url, BookTicker.class);
 	}
 
-	public PlaceOrderResponse placeOrderRequest(PlaceOrderRequest placeOrderRequest) {
+	public PlaceOrderResponse placeOrder(PlaceOrderRequest placeOrderRequest) {
 		log.debug("{}", placeOrderRequest);
 		String url = this.getUrl("/api/v3/order");
 		HttpEntity<String> requestEntity = this.buildSignedRequestEntity(placeOrderRequest);
