@@ -1,6 +1,8 @@
 package io.github.xinyangpan.crypto4j.exchange.okex.websocket;
 
 import io.github.xinyangpan.crypto4j.common.websocket.BaseWsConnector;
+import io.github.xinyangpan.crypto4j.common.websocket.failurehandler.FailureHandler;
+import io.github.xinyangpan.crypto4j.common.websocket.failurehandler.FailureReconnect;
 import io.github.xinyangpan.crypto4j.exchange.okex.websocket.impl.OkexWsHandler;
 import io.github.xinyangpan.crypto4j.exchange.okex.websocket.impl.OkexWsHeartBeat;
 import io.github.xinyangpan.crypto4j.exchange.okex.websocket.impl.OkexWsSubscriber;
@@ -14,7 +16,15 @@ public class OkexWsConnector extends BaseWsConnector<OkexWsHandler> {
 
 	public OkexWsConnector(OkexWsSubscriber okexWsSubscriber, String url) {
 		super(url, new OkexWsHandler(okexWsSubscriber));
-		this.wsHandler.setWsHeartbeat(new OkexWsHeartBeat(this));
+		FailureHandler failureHandler = new FailureReconnect(this);
+		this.wsHandler.setWsHeartbeat(new OkexWsHeartBeat(failureHandler));
+		this.wsHandler.setFailureHandler(failureHandler);
+	}
+
+	public OkexWsConnector(OkexWsSubscriber okexWsSubscriber, String url, FailureHandler failureHandler) {
+		super(url, new OkexWsHandler(okexWsSubscriber));
+		this.wsHandler.setWsHeartbeat(new OkexWsHeartBeat(failureHandler));
+		this.wsHandler.setFailureHandler(failureHandler);
 	}
 
 }

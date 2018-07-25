@@ -3,6 +3,7 @@ package io.github.xinyangpan.crypto4j.common.websocket;
 import org.springframework.web.socket.client.WebSocketConnectionManager;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 
+import io.github.xinyangpan.crypto4j.common.websocket.failurehandler.FailureHandler;
 import io.github.xinyangpan.crypto4j.common.websocket.handler.BaseWsHandler;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +17,13 @@ public abstract class BaseWsConnector<H extends BaseWsHandler<?>> {
 	public BaseWsConnector(String url, H wsHandler) {
 		this.url = url;
 		this.wsHandler = wsHandler;
+	}
+
+	public void setFailureHandler(FailureHandler failureHandler) {
+		this.wsHandler.setFailureHandler(failureHandler);
+		if (this.wsHandler.getWsHeartbeat() != null) {
+			this.wsHandler.getWsHeartbeat().setFailureHandler(failureHandler);
+		}
 	}
 
 	public void connect() {

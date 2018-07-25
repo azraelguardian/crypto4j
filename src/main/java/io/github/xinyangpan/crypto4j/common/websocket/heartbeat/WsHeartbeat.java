@@ -19,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class WsHeartbeat {
 	// 
-	private final FailureHandler failureHandler;
+	private @Setter FailureHandler failureHandler;
 	private WebSocketSession session;
 	private Thread thread;
 	// 
@@ -64,7 +64,9 @@ public class WsHeartbeat {
 					log.debug("Ping responded in {} ms", ts - start);
 				} else {
 					log.error("Ping timeout {}", System.currentTimeMillis() - start);
-					failureHandler.pingTimeout();
+					if (failureHandler != null) {
+						failureHandler.pingTimeout();
+					}
 				}
 			} catch (InterruptedException e) {
 				// return when interrupt, which means stop 
