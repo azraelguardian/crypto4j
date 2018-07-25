@@ -19,7 +19,7 @@ public class BaseWsHandler<T extends WsSubscriber> extends AbstractWebSocketHand
 	protected @Getter WebSocketSession session;
 	protected @Setter WsHeartbeat wsHeartbeat;
 	protected @Setter FailureHandler failureHandler;
-	protected T wsSubscriber;
+	protected @Getter T wsSubscriber;
 
 	public BaseWsHandler() {
 	}

@@ -4,12 +4,13 @@ import org.springframework.web.socket.client.WebSocketConnectionManager;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 
 import io.github.xinyangpan.crypto4j.common.websocket.handler.BaseWsHandler;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public abstract class BaseWsConnector<H extends BaseWsHandler<?>> {
 	protected String url;
-	protected final H wsHandler;
+	protected @Getter final H wsHandler;
 	private WebSocketConnectionManager manager;
 
 	public BaseWsConnector(String url, H wsHandler) {
