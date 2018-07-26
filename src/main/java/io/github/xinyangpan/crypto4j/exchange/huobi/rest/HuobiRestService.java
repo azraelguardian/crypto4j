@@ -9,7 +9,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 
-import io.github.xinyangpan.crypto4j.exchange.huobi.HuobiProperties;
+import io.github.xinyangpan.crypto4j.common.RestProperties;
 import io.github.xinyangpan.crypto4j.exchange.huobi.dto.rest.AccountInfo;
 import io.github.xinyangpan.crypto4j.exchange.huobi.dto.rest.Execution;
 import io.github.xinyangpan.crypto4j.exchange.huobi.dto.rest.Order;
@@ -23,8 +23,8 @@ public class HuobiRestService extends BaseHuobiRestService {
 	private static ParameterizedTypeReference<RestResponse<OrderResult>> ORDER_RESULT = new ParameterizedTypeReference<RestResponse<OrderResult>>() {};
 	private static ParameterizedTypeReference<RestResponse<List<Execution>>> EXECUTION_RESULT = new ParameterizedTypeReference<RestResponse<List<Execution>>>() {};
 
-	public HuobiRestService(HuobiProperties huobiProperties) {
-		super(huobiProperties);
+	public HuobiRestService(RestProperties restProperties) {
+		super(restProperties);
 	}
 
 	public String tickers() {

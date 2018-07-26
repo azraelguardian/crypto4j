@@ -23,20 +23,20 @@ import com.google.common.collect.Lists;
 import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
 
+import io.github.xinyangpan.crypto4j.common.RestProperties;
 import io.github.xinyangpan.crypto4j.common.rest.BaseRestService;
 import io.github.xinyangpan.crypto4j.exchange.ExchangeUtils;
-import io.github.xinyangpan.crypto4j.exchange.huobi.HuobiProperties;
 
 public class BaseHuobiRestService extends BaseRestService {
 	private static final Logger log = LoggerFactory.getLogger(BaseHuobiRestService.class);
 	// 
-	protected final HuobiProperties huobiProperties;
+	protected final RestProperties restProperties;
 	private final HashFunction HASHING;
 	private final DefaultUriBuilderFactory builderFactory;
 
-	public BaseHuobiRestService(HuobiProperties huobiProperties) {
-		this.huobiProperties = huobiProperties;
-		HASHING = Hashing.hmacSha256(huobiProperties.getRestSecret().getBytes());
+	public BaseHuobiRestService(RestProperties restProperties) {
+		this.restProperties = restProperties;
+		HASHING = Hashing.hmacSha256(restProperties.getRestSecret().getBytes());
 		builderFactory = new DefaultUriBuilderFactory();
 		builderFactory.setEncodingMode(EncodingMode.NONE);
 	}
@@ -51,7 +51,7 @@ public class BaseHuobiRestService extends BaseRestService {
 		} else {
 			value = (Map<String, Object>) ExchangeUtils.objectMapper().convertValue(object, Map.class);
 		}
-		value.put("AccessKeyId", huobiProperties.getRestKey());
+		value.put("AccessKeyId", restProperties.getRestKey());
 		value.put("SignatureMethod", "HmacSHA256");
 		value.put("SignatureVersion", "2");
 		value.put("Timestamp", LocalDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
@@ -93,15 +93,15 @@ public class BaseHuobiRestService extends BaseRestService {
 
 	protected String getUrl(String path, Object... objects) {
 		if (objects == null || objects.length == 0) {
-			return huobiProperties.getRestBaseUrl() + path;
+			return restProperties.getRestBaseUrl() + path;
 		}
 		path = String.format(path, objects);
-		return String.format("%s%s", huobiProperties.getRestBaseUrl(), path);
+		return String.format("%s%s", restProperties.getRestBaseUrl(), path);
 	}
 
 	protected URI getUrlWithSignature(String path, RequestType requestType, Object object) {
 		String signedRequestParam = this.toSignedRequestParam(object, path, requestType);
-		String url = String.format("%s%s?%s", huobiProperties.getRestBaseUrl(), path, signedRequestParam);
+		String url = String.format("%s%s?%s", restProperties.getRestBaseUrl(), path, signedRequestParam);
 		return builderFactory.expand(url);
 	}
 

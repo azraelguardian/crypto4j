@@ -2,8 +2,8 @@ package io.github.xinyangpan.crypto4j.exchange.example.huobi;
 
 import java.math.BigDecimal;
 
+import io.github.xinyangpan.crypto4j.common.RestProperties;
 import io.github.xinyangpan.crypto4j.exchange.example.Crypto4jUtils;
-import io.github.xinyangpan.crypto4j.exchange.huobi.HuobiProperties;
 import io.github.xinyangpan.crypto4j.exchange.huobi.dto.enums.OrderType;
 import io.github.xinyangpan.crypto4j.exchange.huobi.dto.rest.Order;
 import io.github.xinyangpan.crypto4j.exchange.huobi.rest.HuobiRestService;
@@ -11,10 +11,10 @@ import io.github.xinyangpan.crypto4j.exchange.huobi.rest.HuobiRestService;
 public class HuobiRestExample {
 	
 	public static void main(String[] args) throws InterruptedException {
-		HuobiProperties huobiProperties = new HuobiProperties();
-		huobiProperties.setRestBaseUrl("https://api.huobi.pro");
-		huobiProperties.setRestKey(Crypto4jUtils.getSecret("huobi.key"));
-		huobiProperties.setRestSecret(Crypto4jUtils.getSecret("huobi.secret"));
+		RestProperties restProperties = new RestProperties();
+		restProperties.setRestBaseUrl("https://api.huobi.pro");
+		restProperties.setRestKey(Crypto4jUtils.getSecret("huobi.key"));
+		restProperties.setRestSecret(Crypto4jUtils.getSecret("huobi.secret"));
 		// 
 		Order order = new Order();
 		order.setAccountId(4275858L);
@@ -23,7 +23,7 @@ public class HuobiRestExample {
 		order.setSymbol("btcusdt");
 		order.setType(OrderType.BUY_IOC);
 		// 
-		HuobiRestService huobiRestService = new HuobiRestService(huobiProperties);
+		HuobiRestService huobiRestService = new HuobiRestService(restProperties);
 //		System.out.println(huobiRestService.tickers());
 		System.out.println(huobiRestService.accounts());
 //		RestResponse<String> restResponse = huobiRestService.placeOrder(order);

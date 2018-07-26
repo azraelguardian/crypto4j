@@ -8,7 +8,7 @@ public class RestUserStreamExample {
 
 	public static void main(String[] args) throws InterruptedException {
 		// 
-		BinanceUserStreamService binanceUserStreamService = new BinanceUserStreamService(BinanceTestUtils.binanceProperties());
+		BinanceUserStreamService binanceUserStreamService = new BinanceUserStreamService(BinanceTestUtils.binanceProperties().getRestProperties());
 		ListenKey listenKey = binanceUserStreamService.start();
 		System.out.println(listenKey);
 		binanceUserStreamService.keeplive(listenKey.getListenKey());

@@ -8,9 +8,6 @@ import lombok.Data;
 @ConfigurationProperties("okex")
 public class OkexProperties {
 
-	private String restKey;
-	private String restSecret;
-	private String restBaseUrl;
 	private String websocketUserStreamBaseUrl;
 	private String websocketMarketBaseUrl;
 

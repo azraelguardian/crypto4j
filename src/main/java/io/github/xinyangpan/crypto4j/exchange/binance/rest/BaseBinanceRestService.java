@@ -6,17 +6,17 @@ import org.springframework.http.HttpHeaders;
 import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
 
+import io.github.xinyangpan.crypto4j.common.RestProperties;
 import io.github.xinyangpan.crypto4j.common.rest.BaseRestService;
-import io.github.xinyangpan.crypto4j.exchange.binance.BinanceProperties;
 
 public class BaseBinanceRestService extends BaseRestService {
-	private final BinanceProperties binanceProperties;
+	private final RestProperties restProperties;
 	private final HashFunction HASHING;
 
-	public BaseBinanceRestService(BinanceProperties binanceProperties) {
+	public BaseBinanceRestService(RestProperties restProperties) {
 		super();
-		this.binanceProperties = binanceProperties;
-		HASHING = Hashing.hmacSha256(binanceProperties.getRestSecret().getBytes());
+		this.restProperties = restProperties;
+		HASHING = Hashing.hmacSha256(restProperties.getRestSecret().getBytes());
 	}
 
 	protected String toSignedRequestParam(Object object) {
@@ -42,7 +42,7 @@ public class BaseBinanceRestService extends BaseRestService {
 		}
 		// Header
 		HttpHeaders headers = new HttpHeaders();
-		headers.add("X-MBX-APIKEY", binanceProperties.getRestKey());
+		headers.add("X-MBX-APIKEY", restProperties.getRestKey());
 		// Requesting
 		HttpEntity<String> requestEntity = new HttpEntity<>(body, headers);
 		return requestEntity;
@@ -50,10 +50,10 @@ public class BaseBinanceRestService extends BaseRestService {
 
 	protected String getUrl(String path, Object... objects) {
 		if (objects == null || objects.length == 0) {
-			return binanceProperties.getRestBaseUrl() + path;
+			return restProperties.getRestBaseUrl() + path;
 		}
 		path = String.format(path, objects);
-		return String.format("%s%s", binanceProperties.getRestBaseUrl(), path);
+		return String.format("%s%s", restProperties.getRestBaseUrl(), path);
 	}
 
 }

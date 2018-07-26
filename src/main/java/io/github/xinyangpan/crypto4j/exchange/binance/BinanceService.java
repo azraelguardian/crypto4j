@@ -21,7 +21,7 @@ public class BinanceService {
 	public BinanceService(BinanceSubscriber binanceSubscriber, BinanceProperties binanceProperties, boolean useUserStream) {
 		this.binanceSubscriber = binanceSubscriber;
 		this.binanceProperties = binanceProperties;
-		this.binanceRestService = new BinanceRestService(binanceProperties);
+		this.binanceRestService = new BinanceRestService(binanceProperties.getRestProperties());
 		this.binanceMarketStreamWsConnector = new BinanceMarketStreamWsConnector(binanceSubscriber, binanceProperties);
 		if (useUserStream) {
 			this.binanceUserStreamWsConnector = new BinanceUserStreamWsConnector(binanceSubscriber, binanceProperties);

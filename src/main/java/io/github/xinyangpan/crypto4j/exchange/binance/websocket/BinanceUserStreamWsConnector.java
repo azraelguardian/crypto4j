@@ -16,7 +16,7 @@ public class BinanceUserStreamWsConnector extends BaseWsConnector<BinanceWsHandl
 	public BinanceUserStreamWsConnector(BinanceSubscriber binanceSubscriber, BinanceProperties binanceProperties) {
 		super(null, new BinanceWsHandler(binanceSubscriber));
 		this.binanceProperties = binanceProperties;
-		this.binanceUserStreamService = new BinanceUserStreamService(binanceProperties);
+		this.binanceUserStreamService = new BinanceUserStreamService(binanceProperties.getRestProperties());
 	}
 
 	@Override

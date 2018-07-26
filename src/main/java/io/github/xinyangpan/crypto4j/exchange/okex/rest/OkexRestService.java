@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 
-import io.github.xinyangpan.crypto4j.exchange.okex.OkexProperties;
+import io.github.xinyangpan.crypto4j.common.RestProperties;
 import io.github.xinyangpan.crypto4j.exchange.okex.dto.rest.account.UserInfo;
 import io.github.xinyangpan.crypto4j.exchange.okex.dto.rest.order.CancelOrder;
 import io.github.xinyangpan.crypto4j.exchange.okex.dto.rest.order.CancelOrderResponse;
@@ -17,8 +17,8 @@ import io.github.xinyangpan.crypto4j.exchange.okex.dto.rest.order.QueryOrderResp
 public class OkexRestService extends BaseOkexRestService {
 	private static final Logger log = LoggerFactory.getLogger(OkexRestService.class);
 
-	public OkexRestService(OkexProperties okexProperties) {
-		super(okexProperties);
+	public OkexRestService(RestProperties restProperties) {
+		super(restProperties);
 	}
 
 	public String ticker(String symbol) {

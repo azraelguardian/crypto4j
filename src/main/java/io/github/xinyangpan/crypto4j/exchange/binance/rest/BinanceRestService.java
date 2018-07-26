@@ -3,7 +3,7 @@ package io.github.xinyangpan.crypto4j.exchange.binance.rest;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 
-import io.github.xinyangpan.crypto4j.exchange.binance.BinanceProperties;
+import io.github.xinyangpan.crypto4j.common.RestProperties;
 import io.github.xinyangpan.crypto4j.exchange.binance.dto.rest.account.Account;
 import io.github.xinyangpan.crypto4j.exchange.binance.dto.rest.account.QueryTradeRequest;
 import io.github.xinyangpan.crypto4j.exchange.binance.dto.rest.common.BaseRequest;
@@ -17,8 +17,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class BinanceRestService extends BaseBinanceRestService {
 
-	public BinanceRestService(BinanceProperties binanceProperties) {
-		super(binanceProperties);
+	public BinanceRestService(RestProperties restProperties) {
+		super(restProperties);
 	}
 
 	public ServerTime serverTime() {

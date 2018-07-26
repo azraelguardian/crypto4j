@@ -14,21 +14,21 @@ import com.google.common.collect.Lists;
 import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
 
+import io.github.xinyangpan.crypto4j.common.RestProperties;
 import io.github.xinyangpan.crypto4j.common.rest.BaseRestService;
 import io.github.xinyangpan.crypto4j.exchange.ExchangeUtils;
-import io.github.xinyangpan.crypto4j.exchange.okex.OkexProperties;
 
 public class BaseOkexRestService extends BaseRestService {
 	// 
-	protected final OkexProperties okexProperties;
+	protected final RestProperties restProperties;
 	private final HashFunction HASHING;
 
 	@SuppressWarnings("deprecation")
-	public BaseOkexRestService(OkexProperties okexProperties) {
-		this.okexProperties = okexProperties;
+	public BaseOkexRestService(RestProperties restProperties) {
+		this.restProperties = restProperties;
 		HASHING = Hashing.md5();
 	}
-	
+
 	@Override
 	@SuppressWarnings("unchecked")
 	protected String toRequestParam(Object object) {
@@ -38,7 +38,7 @@ public class BaseOkexRestService extends BaseRestService {
 		} else {
 			value = (Map<String, Object>) ExchangeUtils.objectMapper().convertValue(object, Map.class);
 		}
-		value.put("api_key", okexProperties.getRestKey());
+		value.put("api_key", restProperties.getRestKey());
 		// 
 		String param = value.entrySet().stream()//
 			.filter(e -> e.getValue() != null)// filter out null field
@@ -51,19 +51,19 @@ public class BaseOkexRestService extends BaseRestService {
 	protected String toSignedRequestParam(Object object) {
 		// 
 		String param = toRequestParam(object);
-		String toSignParam = String.format("%s&secret_key=%s", param, okexProperties.getRestSecret());
+		String toSignParam = String.format("%s&secret_key=%s", param, restProperties.getRestSecret());
 		String sign = HASHING.hashBytes(toSignParam.getBytes()).toString().toUpperCase();
 		return String.format("%s&sign=%s", param, sign);
 	}
 
 	protected String getUrl(String path, Object... objects) {
 		if (objects == null || objects.length == 0) {
-			return okexProperties.getRestBaseUrl() + path;
+			return restProperties.getRestBaseUrl() + path;
 		}
 		path = String.format(path, objects);
-		return String.format("%s%s", okexProperties.getRestBaseUrl(), path);
+		return String.format("%s%s", restProperties.getRestBaseUrl(), path);
 	}
-	
+
 	protected HttpEntity<String> buildSignedRequestEntity(Object object) {
 		// body
 		String body = toSignedRequestParam(object);
