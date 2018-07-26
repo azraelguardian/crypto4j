@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class AccountInfo {
 	
-	private Integer id;
+	private Long id;
 	private String type;
 	private String subtype;
 	private String state;

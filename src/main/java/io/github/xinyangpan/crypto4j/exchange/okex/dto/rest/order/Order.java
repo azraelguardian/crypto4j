@@ -1,4 +1,4 @@
-package io.github.xinyangpan.crypto4j.exchange.okex.dto.rest;
+package io.github.xinyangpan.crypto4j.exchange.okex.dto.rest.order;
 
 import java.math.BigDecimal;
 

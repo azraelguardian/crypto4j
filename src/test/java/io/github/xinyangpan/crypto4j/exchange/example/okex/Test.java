@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 import io.github.xinyangpan.crypto4j.exchange.ExchangeUtils;
 import io.github.xinyangpan.crypto4j.exchange.okex.dto.enums.OrderType;
-import io.github.xinyangpan.crypto4j.exchange.okex.dto.rest.Order;
+import io.github.xinyangpan.crypto4j.exchange.okex.dto.rest.order.Order;
 
 public class Test {
 

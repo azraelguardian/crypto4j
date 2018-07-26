@@ -19,8 +19,8 @@ public enum OrderType {
 	
 	static {
 		OrderType[] values = values();
-		for (OrderType orderType : values) {
-			INDEX.put(orderType.value, orderType);
+		for (OrderType v : values) {
+			INDEX.put(v.value, v);
 		}
 	}
 

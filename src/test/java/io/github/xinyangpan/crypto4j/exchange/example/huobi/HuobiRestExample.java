@@ -25,11 +25,11 @@ public class HuobiRestExample {
 		// 
 		HuobiRestService huobiRestService = new HuobiRestService(huobiProperties);
 //		System.out.println(huobiRestService.tickers());
-//		System.out.println(huobiRestService.accounts());
+		System.out.println(huobiRestService.accounts());
 //		RestResponse<String> restResponse = huobiRestService.placeOrder(order);
 //		System.out.println(restResponse);
 //		System.out.println(huobiRestService.queryOrder(restResponse.getData()));
-		System.out.println(huobiRestService.queryExecution("8467743061"));
+//		System.out.println(huobiRestService.queryExecution("8467743061"));
 //		System.out.println(huobiRestService.queryOrder(new QueryOrder(order.getSymbol(), 834593837)));
 //		System.out.println(huobiRestService.cancelOrder(new CancelOrder(order.getSymbol(), 835120964, 835120003)));
 //		System.out.println(huobiRestService.userinfo());

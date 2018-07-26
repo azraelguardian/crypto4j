@@ -6,12 +6,13 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 
 import io.github.xinyangpan.crypto4j.exchange.okex.OkexProperties;
-import io.github.xinyangpan.crypto4j.exchange.okex.dto.rest.CancelOrder;
-import io.github.xinyangpan.crypto4j.exchange.okex.dto.rest.CancelOrderResponse;
-import io.github.xinyangpan.crypto4j.exchange.okex.dto.rest.Order;
-import io.github.xinyangpan.crypto4j.exchange.okex.dto.rest.OrderResponse;
-import io.github.xinyangpan.crypto4j.exchange.okex.dto.rest.QueryOrder;
-import io.github.xinyangpan.crypto4j.exchange.okex.dto.rest.QueryOrderResponse;
+import io.github.xinyangpan.crypto4j.exchange.okex.dto.rest.account.UserInfo;
+import io.github.xinyangpan.crypto4j.exchange.okex.dto.rest.order.CancelOrder;
+import io.github.xinyangpan.crypto4j.exchange.okex.dto.rest.order.CancelOrderResponse;
+import io.github.xinyangpan.crypto4j.exchange.okex.dto.rest.order.Order;
+import io.github.xinyangpan.crypto4j.exchange.okex.dto.rest.order.OrderResponse;
+import io.github.xinyangpan.crypto4j.exchange.okex.dto.rest.order.QueryOrder;
+import io.github.xinyangpan.crypto4j.exchange.okex.dto.rest.order.QueryOrderResponse;
 
 public class OkexRestService extends BaseOkexRestService {
 	private static final Logger log = LoggerFactory.getLogger(OkexRestService.class);
@@ -47,11 +48,11 @@ public class OkexRestService extends BaseOkexRestService {
 		return restTemplate.postForObject(url, requestEntity, QueryOrderResponse.class);
 	}
 
-	public String userinfo() {
+	public UserInfo userinfo() {
 		log.debug("userinfo");
 		String url = this.getUrl("/api/v1/userinfo.do");
 		HttpEntity<String> requestEntity = this.buildSignedRequestEntity(null);
-		return restTemplate.postForObject(url, requestEntity, String.class);
+		return restTemplate.postForObject(url, requestEntity, UserInfo.class);
 	}
 
 }

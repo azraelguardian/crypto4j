@@ -14,5 +14,16 @@ public class RestResponse<T> {
 	@JsonProperty("err-msg")
 	private String errMsg;
 	private T data;
-
+	
+	public RestResponse<T> throwExeceptionWhenError() {
+		if (status == Status.ok) {
+			return this;
+		}
+		throw new RuntimeException(String.format("errCode: %s. err-msg: %s", errCode, errMsg));
+	}
+	
+	public T fethData() {
+		return this.throwExeceptionWhenError().data;
+	}
+	
 }

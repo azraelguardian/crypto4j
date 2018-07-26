@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import io.github.xinyangpan.crypto4j.exchange.huobi.dto.enums.OrderState;
 import io.github.xinyangpan.crypto4j.exchange.huobi.dto.enums.OrderType;
 import lombok.Data;
 
@@ -28,7 +29,7 @@ public class OrderResult {
 	@JsonProperty("finished-at")
 	private Long finishedAt;
 	private String source;
-	private String state;
+	private OrderState state;
 	@JsonProperty("canceled-at")
 	private Long canceledAt;
 

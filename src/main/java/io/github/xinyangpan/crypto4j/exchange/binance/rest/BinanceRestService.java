@@ -4,10 +4,13 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 
 import io.github.xinyangpan.crypto4j.exchange.binance.BinanceProperties;
+import io.github.xinyangpan.crypto4j.exchange.binance.dto.rest.account.Account;
 import io.github.xinyangpan.crypto4j.exchange.binance.dto.rest.account.QueryTradeRequest;
+import io.github.xinyangpan.crypto4j.exchange.binance.dto.rest.common.BaseRequest;
 import io.github.xinyangpan.crypto4j.exchange.binance.dto.rest.market.BookTicker;
-import io.github.xinyangpan.crypto4j.exchange.binance.dto.rest.order.PlaceOrderResponse;
+import io.github.xinyangpan.crypto4j.exchange.binance.dto.rest.market.ServerTime;
 import io.github.xinyangpan.crypto4j.exchange.binance.dto.rest.order.PlaceOrderRequest;
+import io.github.xinyangpan.crypto4j.exchange.binance.dto.rest.order.PlaceOrderResponse;
 import io.github.xinyangpan.crypto4j.exchange.binance.dto.rest.order.QueryOrderRequest;
 import lombok.extern.slf4j.Slf4j;
 
@@ -18,9 +21,21 @@ public class BinanceRestService extends BaseBinanceRestService {
 		super(binanceProperties);
 	}
 
+	public ServerTime serverTime() {
+		String url = this.getUrl("/api/v1/time");
+		return restTemplate.getForObject(url, ServerTime.class);
+	}
+
 	public BookTicker bookTicker(String symbol) {
 		String url = this.getUrl("/api/v3/ticker/bookTicker?symbol=%s", symbol);
 		return restTemplate.getForObject(url, BookTicker.class);
+	}
+
+	public Account account() {
+		log.debug("account");
+		String url = this.getUrl("/api/v3/account?%s", this.toSignedRequestParam(new BaseRequest()));
+		HttpEntity<String> requestEntity = this.buildRequestEntity(null, false);
+		return restTemplate.exchange(url, HttpMethod.GET, requestEntity, Account.class).getBody();
 	}
 
 	public PlaceOrderResponse placeOrder(PlaceOrderRequest placeOrderRequest) {
