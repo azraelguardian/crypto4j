@@ -11,7 +11,7 @@ import lombok.Data;
 @Data
 public class OrderResult {
 
-	private Long id;
+	private String id;
 	private String symbol;
 	@JsonProperty("account-id")
 	private Long accountId;
