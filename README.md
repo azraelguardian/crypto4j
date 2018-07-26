@@ -8,23 +8,6 @@
 | Binance | YES     | YES                     | YES                         | Can't Query Trades from order Id |
 | Okex    | NO      | YES                     | NO                          |                                  |
 
-### Huobi Order
-
-#### Place Order 
-
-* req: {"amount":0.08,"price":7000,"source":null,"symbol":"btcusdt","type":"sell-ioc","account-id":4275858}
-* res: RestResponse(status=ok, errCode=null, errMsg=null, data=8467743061)
-
-#### Query Order
-
-* req: https://api.huobi.pro/v1/order/orders/8467743061
-* res: RestResponse(status=ok, errCode=null, errMsg=null, data=OrderResult(id=8467743061, symbol=btcusdt, accountId=4275858, amount=0.080000000000000000, price=7000.000000000000000000, createdAt=1532398948811, type=SELL_IOC, fieldAmount=0.080000000000000000, fieldCashAmount=620.125600000000000000, fieldFees=1.240251200000000000, finishedAt=1532398949035, source=spot-api, state=filled, canceledAt=0))
-
-#### Query Execution/Trade
-
-* req: https://api.huobi.pro/v1/order/orders/8467743061/matchresults
-* res: {"status":"ok","data":[{"id":2130365761,"order-id":8467743061,"match-id":13514172747,"symbol":"btcusdt","type":"sell-ioc","source":"spot-api","price":"7751.570000000000000000","filled-amount":"0.080000000000000000","filled-fees":"1.240251200000000000","filled-points":"0.0","created-at":1532398949074}]}
-
 ### Binance Order
 
 #### Place Order 
@@ -43,6 +26,22 @@
 * res: {"symbol":"BTCUSDT","id":58523157,"orderId":136685394,"price":"7737.99000000","qty":"0.01000000","commission":"0.07737990","commissionAsset":"USDT","time":1532401146328,"isBuyer":false,"isMaker":false,"isBestMatch":true}
 * one order with multi trades: {"symbol":"BTCUSDT","id":58346827,"orderId":136276302,"price":"7756.50000000","qty":"0.00846500","commission":"0.06565877","commissionAsset":"USDT","time":1532331223480,"isBuyer":false,"isMaker":false,"isBestMatch":true},{"symbol":"BTCUSDT","id":58346828,"orderId":136276302,"price":"7755.86000000","qty":"0.02153500","commission":"0.16702245","commissionAsset":"USDT","time":1532331223480,"isBuyer":false,"isMaker":false,"isBestMatch":true}
 
+### Huobi Order
+
+#### Place Order 
+
+* req: {"amount":0.08,"price":7000,"source":null,"symbol":"btcusdt","type":"sell-ioc","account-id":4275858}
+* res: RestResponse(status=ok, errCode=null, errMsg=null, data=8467743061)
+
+#### Query Order
+
+* req: https://api.huobi.pro/v1/order/orders/8467743061
+* res: RestResponse(status=ok, errCode=null, errMsg=null, data=OrderResult(id=8467743061, symbol=btcusdt, accountId=4275858, amount=0.080000000000000000, price=7000.000000000000000000, createdAt=1532398948811, type=SELL_IOC, fieldAmount=0.080000000000000000, fieldCashAmount=620.125600000000000000, fieldFees=1.240251200000000000, finishedAt=1532398949035, source=spot-api, state=filled, canceledAt=0))
+
+#### Query Execution/Trade
+
+* req: https://api.huobi.pro/v1/order/orders/8467743061/matchresults
+* res: {"status":"ok","data":[{"id":2130365761,"order-id":8467743061,"match-id":13514172747,"symbol":"btcusdt","type":"sell-ioc","source":"spot-api","price":"7751.570000000000000000","filled-amount":"0.080000000000000000","filled-fees":"1.240251200000000000","filled-points":"0.0","created-at":1532398949074}]}
 
 ### Okex Order
 
