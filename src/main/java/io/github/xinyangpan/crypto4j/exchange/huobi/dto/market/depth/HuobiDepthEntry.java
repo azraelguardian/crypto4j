@@ -1,4 +1,4 @@
-package io.github.xinyangpan.crypto4j.exchange.huobi.dto.websocket.depth;
+package io.github.xinyangpan.crypto4j.exchange.huobi.dto.market.depth;
 
 import java.math.BigDecimal;
 

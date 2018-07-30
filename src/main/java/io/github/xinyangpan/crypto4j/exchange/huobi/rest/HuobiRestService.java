@@ -1,5 +1,6 @@
 package io.github.xinyangpan.crypto4j.exchange.huobi.rest;
 
+import java.math.BigDecimal;
 import java.net.URI;
 import java.util.List;
 
@@ -12,14 +13,14 @@ import org.springframework.http.HttpMethod;
 import com.fasterxml.jackson.core.type.TypeReference;
 
 import io.github.xinyangpan.crypto4j.common.RestProperties;
-import io.github.xinyangpan.crypto4j.exchange.ExchangeUtils;
-import io.github.xinyangpan.crypto4j.exchange.huobi.dto.rest.AccountInfo;
-import io.github.xinyangpan.crypto4j.exchange.huobi.dto.rest.Execution;
-import io.github.xinyangpan.crypto4j.exchange.huobi.dto.rest.Order;
-import io.github.xinyangpan.crypto4j.exchange.huobi.dto.rest.OrderResult;
-import io.github.xinyangpan.crypto4j.exchange.huobi.dto.rest.RestChannelResponse;
-import io.github.xinyangpan.crypto4j.exchange.huobi.dto.rest.RestResponse;
-import io.github.xinyangpan.crypto4j.exchange.huobi.dto.websocket.depth.Depth;
+import io.github.xinyangpan.crypto4j.exchange.huobi.dto.account.AccountInfo;
+import io.github.xinyangpan.crypto4j.exchange.huobi.dto.common.RestChannelResponse;
+import io.github.xinyangpan.crypto4j.exchange.huobi.dto.common.RestResponse;
+import io.github.xinyangpan.crypto4j.exchange.huobi.dto.market.depth.Depth;
+import io.github.xinyangpan.crypto4j.exchange.huobi.dto.trade.Execution;
+import io.github.xinyangpan.crypto4j.exchange.huobi.dto.trade.Order;
+import io.github.xinyangpan.crypto4j.exchange.huobi.dto.trade.OrderDetail;
+import io.github.xinyangpan.crypto4j.exchange.huobi.dto.trade.OrderResult;
 
 public class HuobiRestService extends BaseHuobiRestService {
 	private static final Logger log = LoggerFactory.getLogger(HuobiRestService.class);
@@ -27,7 +28,7 @@ public class HuobiRestService extends BaseHuobiRestService {
 	private static ParameterizedTypeReference<RestResponse<String>> ORDER_RESPONSE = new ParameterizedTypeReference<RestResponse<String>>() {};
 	private static ParameterizedTypeReference<RestResponse<OrderResult>> ORDER_RESULT = new ParameterizedTypeReference<RestResponse<OrderResult>>() {};
 	private static ParameterizedTypeReference<RestResponse<List<Execution>>> EXECUTION_RESULT = new ParameterizedTypeReference<RestResponse<List<Execution>>>() {};
-	private static TypeReference <RestChannelResponse<Depth>> DEPTH_RESULT = new TypeReference <RestChannelResponse<Depth>>() {};
+	private static TypeReference<RestChannelResponse<Depth>> DEPTH_RESULT = new TypeReference<RestChannelResponse<Depth>>() {};
 
 	public HuobiRestService(RestProperties restProperties) {
 		super(restProperties);
@@ -38,14 +39,10 @@ public class HuobiRestService extends BaseHuobiRestService {
 	}
 
 	public RestResponse<Depth> depth(String symbol, String type) {
-		try {
-			String url = this.getUrl("/market/depth?symbol=%s&type=%s", symbol, type);
-			HttpEntity<String> requestEntity = this.requestEntityWithUserAgent();
-			String body = restTemplate.exchange(url, HttpMethod.GET, requestEntity, String.class).getBody();
-			return ExchangeUtils.objectMapper().readValue(body, DEPTH_RESULT);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
+		String url = this.getUrl("/market/depth?symbol=%s&type=%s", symbol, type);
+		HttpEntity<String> requestEntity = this.requestEntityWithUserAgent();
+		String body = restTemplate.exchange(url, HttpMethod.GET, requestEntity, String.class).getBody();
+		return this.readValue(body, DEPTH_RESULT);
 	}
 
 	public String tickers() {
@@ -79,6 +76,24 @@ public class HuobiRestService extends BaseHuobiRestService {
 		URI url = this.getUrlWithSignature(String.format("/v1/order/orders/%s/matchresults", orderId), RequestType.GET, null);
 		HttpEntity<String> requestEntity = this.requestEntityWithUserAgent();
 		return restTemplate.exchange(url, HttpMethod.GET, requestEntity, EXECUTION_RESULT).getBody();
+	}
+
+	public OrderDetail placeAndQueryDetails(Order order) {
+		String orderId = this.placeOrder(order).fethData();
+		return this.queryOrderDetail(orderId);
+	}
+
+	public OrderDetail queryOrderDetail(String orderId) {
+		OrderDetail orderDetail = new OrderDetail();
+		orderDetail.setOrderId(orderId);
+		OrderResult orderResult = this.queryOrder(orderId).fethData();
+		orderDetail.setOrderResult(orderResult);
+		if (orderResult.getFieldAmount().compareTo(BigDecimal.ZERO) > 0) {
+			List<Execution> executions = this.queryExecution(orderId).fethData();
+			orderDetail.setExecutions(executions);
+		}
+		// 
+		return orderDetail;
 	}
 
 }

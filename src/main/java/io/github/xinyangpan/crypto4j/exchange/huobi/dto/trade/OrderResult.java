@@ -1,4 +1,4 @@
-package io.github.xinyangpan.crypto4j.exchange.huobi.dto.rest;
+package io.github.xinyangpan.crypto4j.exchange.huobi.dto.trade;
 
 import java.math.BigDecimal;
 

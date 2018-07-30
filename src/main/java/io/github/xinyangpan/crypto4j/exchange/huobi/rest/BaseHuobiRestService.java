@@ -19,6 +19,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 import org.springframework.web.util.DefaultUriBuilderFactory.EncodingMode;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.collect.Lists;
 import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
@@ -47,7 +48,7 @@ public class BaseHuobiRestService extends BaseRestService {
 		if (object == null) {
 			value = new HashMap<>();
 		} else if (object instanceof Map) {
-			value = new HashMap<>((Map<String, Object>)object);
+			value = new HashMap<>((Map<String, Object>) object);
 		} else {
 			value = (Map<String, Object>) ExchangeUtils.objectMapper().convertValue(object, Map.class);
 		}
@@ -116,6 +117,14 @@ public class BaseHuobiRestService extends BaseRestService {
 		// Requesting
 		HttpEntity<String> requestEntity = new HttpEntity<>(body, headers);
 		return requestEntity;
+	}
+
+	protected <T> T readValue(String body, TypeReference<T> typeReference) {
+		try {
+			return ExchangeUtils.objectMapper().readValue(body, typeReference);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 }
