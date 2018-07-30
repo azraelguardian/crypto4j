@@ -5,32 +5,65 @@ import java.math.BigDecimal;
 import io.github.xinyangpan.crypto4j.common.RestProperties;
 import io.github.xinyangpan.crypto4j.exchange.example.Crypto4jUtils;
 import io.github.xinyangpan.crypto4j.exchange.okex.dto.enums.OrderType;
-import io.github.xinyangpan.crypto4j.exchange.okex.dto.rest.order.Order;
-import io.github.xinyangpan.crypto4j.exchange.okex.dto.rest.order.OrderResponse;
-import io.github.xinyangpan.crypto4j.exchange.okex.dto.rest.order.QueryOrder;
+import io.github.xinyangpan.crypto4j.exchange.okex.dto.market.Depth;
+import io.github.xinyangpan.crypto4j.exchange.okex.dto.market.OkexDepthEntry;
+import io.github.xinyangpan.crypto4j.exchange.okex.dto.trade.Order;
+import io.github.xinyangpan.crypto4j.exchange.okex.dto.trade.QueryOrder;
+import io.github.xinyangpan.crypto4j.exchange.okex.dto.trade.QueryOrderResponse;
 import io.github.xinyangpan.crypto4j.exchange.okex.rest.OkexRestService;
 
 public class OkexRestExample {
-	
-	public static void main(String[] args) throws InterruptedException {
+	private static final String BTCUSDT = "btc_usdt";
+	private static OkexRestService okexRestService;
+	static {
 		RestProperties restProperties = new RestProperties();
 		restProperties.setRestBaseUrl("https://www.okex.com");
 		restProperties.setRestKey(Crypto4jUtils.getSecret("okex.key"));
 		restProperties.setRestSecret(Crypto4jUtils.getSecret("okex.secret"));
 		// 
-		Order order = new Order();
-		order.setAmount(new BigDecimal("0.09"));
-		order.setPrice(new BigDecimal("7823"));
-		order.setSymbol("btc_usdt");
-		order.setType(OrderType.buy);
+		okexRestService = new OkexRestService(restProperties);
+		
+	}
+
+	static void tryPartialFill() throws InterruptedException {
 		// 
-		OkexRestService okexRestService = new OkexRestService(restProperties);
-//		System.out.println(okexRestService.ticker("btc_usdt"));
-		OrderResponse orderResponse = okexRestService.placeOrder(order);
-		System.out.println(orderResponse);
-		System.out.println(okexRestService.queryOrder(new QueryOrder(order.getSymbol(), orderResponse.getOrderId())));
-//		System.out.println(okexRestService.cancelOrder(new CancelOrder(order.getSymbol(), 835120964, 835120003)));
-//		System.out.println(okexRestService.userinfo());
+		Order order = new Order();
+		order.setAmount(new BigDecimal("0.08"));
+		order.setPrice(new BigDecimal("7800"));
+		order.setSymbol(BTCUSDT);
+		order.setType(OrderType.buy);
+		
+		while(true) {
+			Depth depth = okexRestService.depth(BTCUSDT);
+			OkexDepthEntry entry = depth.getAsks().get(0);
+//			BigDecimal amount = entry.getPrice().multiply(entry.getQuantity());
+			if (order.getAmount().compareTo(entry.getQuantity()) < 0) {
+				System.out.println("continue ...  " + entry);
+				Thread.sleep(1000L);
+				continue;
+			}
+			System.out.println(entry);
+			order.setPrice(entry.getPrice().stripTrailingZeros());
+			QueryOrderResponse orderResponse = okexRestService.placeAndQueryOrder(order);
+			System.out.println(orderResponse);
+			break;
+		}
+	}
+	
+	static void placeOrder() {
+		// 
+		Order order = new Order();
+		order.setAmount(new BigDecimal("0.04"));
+//		order.setPrice(new BigDecimal("700"));
+		order.setSymbol(BTCUSDT);
+		order.setType(OrderType.sell_market);
+		// 
+		System.out.println(okexRestService.placeAndQueryOrder(order));
+	}
+	
+	public static void main(String[] args) throws InterruptedException {
+//		tryPartialFill();
+		System.out.println(okexRestService.queryOrder(new QueryOrder(BTCUSDT, 863266553)));
 	}
 
 }

@@ -1,4 +1,4 @@
-package io.github.xinyangpan.crypto4j.exchange.okex.dto.rest.order;
+package io.github.xinyangpan.crypto4j.exchange.okex.dto.trade;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;

@@ -6,13 +6,14 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 
 import io.github.xinyangpan.crypto4j.common.RestProperties;
-import io.github.xinyangpan.crypto4j.exchange.okex.dto.rest.account.UserInfo;
-import io.github.xinyangpan.crypto4j.exchange.okex.dto.rest.order.CancelOrder;
-import io.github.xinyangpan.crypto4j.exchange.okex.dto.rest.order.CancelOrderResponse;
-import io.github.xinyangpan.crypto4j.exchange.okex.dto.rest.order.Order;
-import io.github.xinyangpan.crypto4j.exchange.okex.dto.rest.order.OrderResponse;
-import io.github.xinyangpan.crypto4j.exchange.okex.dto.rest.order.QueryOrder;
-import io.github.xinyangpan.crypto4j.exchange.okex.dto.rest.order.QueryOrderResponse;
+import io.github.xinyangpan.crypto4j.exchange.okex.dto.account.UserInfo;
+import io.github.xinyangpan.crypto4j.exchange.okex.dto.market.Depth;
+import io.github.xinyangpan.crypto4j.exchange.okex.dto.trade.CancelOrder;
+import io.github.xinyangpan.crypto4j.exchange.okex.dto.trade.CancelOrderResponse;
+import io.github.xinyangpan.crypto4j.exchange.okex.dto.trade.Order;
+import io.github.xinyangpan.crypto4j.exchange.okex.dto.trade.OrderResponse;
+import io.github.xinyangpan.crypto4j.exchange.okex.dto.trade.QueryOrder;
+import io.github.xinyangpan.crypto4j.exchange.okex.dto.trade.QueryOrderResponse;
 
 public class OkexRestService extends BaseOkexRestService {
 	private static final Logger log = LoggerFactory.getLogger(OkexRestService.class);
@@ -25,6 +26,19 @@ public class OkexRestService extends BaseOkexRestService {
 		String url = this.getUrl("/api/v1/ticker.do?symbol=%s", symbol);
 		HttpEntity<String> requestEntity = this.requestEntityWithUserAgent();
 		return restTemplate.exchange(url, HttpMethod.GET, requestEntity, String.class).getBody();
+	}
+
+	public Depth depth(String symbol) {
+		String url = this.getUrl("/api/v1/depth.do?symbol=%s", symbol);
+		HttpEntity<String> requestEntity = this.requestEntityWithUserAgent();
+		return restTemplate.exchange(url, HttpMethod.GET, requestEntity, Depth.class).getBody();
+	}
+
+	public UserInfo userinfo() {
+		log.debug("userinfo");
+		String url = this.getUrl("/api/v1/userinfo.do");
+		HttpEntity<String> requestEntity = this.buildSignedRequestEntity(null);
+		return restTemplate.postForObject(url, requestEntity, UserInfo.class);
 	}
 
 	public OrderResponse placeOrder(Order order) {
@@ -48,11 +62,9 @@ public class OkexRestService extends BaseOkexRestService {
 		return restTemplate.postForObject(url, requestEntity, QueryOrderResponse.class);
 	}
 
-	public UserInfo userinfo() {
-		log.debug("userinfo");
-		String url = this.getUrl("/api/v1/userinfo.do");
-		HttpEntity<String> requestEntity = this.buildSignedRequestEntity(null);
-		return restTemplate.postForObject(url, requestEntity, UserInfo.class);
+	public QueryOrderResponse placeAndQueryOrder(Order order) {
+		OrderResponse orderResponse = this.placeOrder(order).throwExeceptionWhenError();
+		return this.queryOrder(new QueryOrder(order.getSymbol(), orderResponse.getOrderId()));
 	}
 
 }

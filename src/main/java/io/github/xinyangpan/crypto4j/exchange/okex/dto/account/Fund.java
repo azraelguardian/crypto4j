@@ -1,4 +1,4 @@
-package io.github.xinyangpan.crypto4j.exchange.okex.dto.rest.account;
+package io.github.xinyangpan.crypto4j.exchange.okex.dto.account;
 
 import java.math.BigDecimal;
 import java.util.Map;

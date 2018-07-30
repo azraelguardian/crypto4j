@@ -10,10 +10,10 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import io.github.xinyangpan.crypto4j.common.websocket.handler.BaseWsHandler;
-import io.github.xinyangpan.crypto4j.exchange.okex.dto.websocket.Depth;
-import io.github.xinyangpan.crypto4j.exchange.okex.dto.websocket.OkexWsResponse;
-import io.github.xinyangpan.crypto4j.exchange.okex.dto.websocket.ResultData;
-import io.github.xinyangpan.crypto4j.exchange.okex.dto.websocket.TickerData;
+import io.github.xinyangpan.crypto4j.exchange.okex.dto.common.OkexWsResponse;
+import io.github.xinyangpan.crypto4j.exchange.okex.dto.common.ResultData;
+import io.github.xinyangpan.crypto4j.exchange.okex.dto.market.Depth;
+import io.github.xinyangpan.crypto4j.exchange.okex.dto.market.TickerData;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;

@@ -1,4 +1,4 @@
-package io.github.xinyangpan.crypto4j.exchange.okex.dto.websocket;
+package io.github.xinyangpan.crypto4j.exchange.okex.dto.common;
 
 import lombok.Data;
 

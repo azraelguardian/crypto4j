@@ -6,10 +6,10 @@ import com.google.common.base.Preconditions;
 
 import io.github.xinyangpan.crypto4j.common.websocket.subscriber.BaseDynamicWsSubscriber;
 import io.github.xinyangpan.crypto4j.exchange.ExchangeUtils;
-import io.github.xinyangpan.crypto4j.exchange.okex.dto.websocket.Depth;
-import io.github.xinyangpan.crypto4j.exchange.okex.dto.websocket.OkexWsRequest;
-import io.github.xinyangpan.crypto4j.exchange.okex.dto.websocket.OkexWsResponse;
-import io.github.xinyangpan.crypto4j.exchange.okex.dto.websocket.TickerData;
+import io.github.xinyangpan.crypto4j.exchange.okex.dto.common.OkexWsRequest;
+import io.github.xinyangpan.crypto4j.exchange.okex.dto.common.OkexWsResponse;
+import io.github.xinyangpan.crypto4j.exchange.okex.dto.market.Depth;
+import io.github.xinyangpan.crypto4j.exchange.okex.dto.market.TickerData;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
