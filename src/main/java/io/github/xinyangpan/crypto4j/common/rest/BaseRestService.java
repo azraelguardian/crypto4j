@@ -8,10 +8,12 @@ import java.util.stream.Collectors;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Lists;
 
 import io.github.xinyangpan.crypto4j.exchange.ExchangeUtils;
 
@@ -32,6 +34,7 @@ public class BaseRestService {
 		// Header
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("User-Agent", "My Agent");
+		headers.setAccept(Lists.newArrayList(MediaType.ALL));
 		// Requesting
 		HttpEntity<String> requestEntity = new HttpEntity<>(headers);
 		return requestEntity;

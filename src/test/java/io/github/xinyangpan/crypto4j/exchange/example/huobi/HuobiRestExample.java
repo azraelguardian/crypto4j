@@ -25,7 +25,7 @@ public class HuobiRestExample {
 		// 
 		HuobiRestService huobiRestService = new HuobiRestService(restProperties);
 //		System.out.println(huobiRestService.tickers());
-		System.out.println(huobiRestService.accounts());
+		System.out.println(huobiRestService.depth("btcusdt"));
 //		RestResponse<String> restResponse = huobiRestService.placeOrder(order);
 //		System.out.println(restResponse);
 //		System.out.println(huobiRestService.queryOrder(restResponse.getData()));
