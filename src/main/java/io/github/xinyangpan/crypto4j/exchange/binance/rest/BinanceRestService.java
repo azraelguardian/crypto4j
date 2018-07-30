@@ -3,7 +3,10 @@ package io.github.xinyangpan.crypto4j.exchange.binance.rest;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 
+import com.google.common.base.MoreObjects;
+
 import io.github.xinyangpan.crypto4j.common.RestProperties;
+import io.github.xinyangpan.crypto4j.exchange.binance.dto.depth.Depth;
 import io.github.xinyangpan.crypto4j.exchange.binance.dto.rest.account.Account;
 import io.github.xinyangpan.crypto4j.exchange.binance.dto.rest.account.QueryTradeRequest;
 import io.github.xinyangpan.crypto4j.exchange.binance.dto.rest.common.BaseRequest;
@@ -29,6 +32,12 @@ public class BinanceRestService extends BaseBinanceRestService {
 	public BookTicker bookTicker(String symbol) {
 		String url = this.getUrl("/api/v3/ticker/bookTicker?symbol=%s", symbol);
 		return restTemplate.getForObject(url, BookTicker.class);
+	}
+
+	public Depth depth(String symbol, Integer limit) {
+		limit = MoreObjects.firstNonNull(limit, 20);
+		String url = this.getUrl("/api/v1/depth?symbol=%s&limit=%s", symbol, limit);
+		return restTemplate.getForObject(url, Depth.class);
 	}
 
 	public Account account() {

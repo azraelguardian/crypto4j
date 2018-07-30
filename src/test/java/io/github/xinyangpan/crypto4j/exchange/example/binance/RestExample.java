@@ -2,43 +2,73 @@ package io.github.xinyangpan.crypto4j.exchange.example.binance;
 
 import java.math.BigDecimal;
 
+import com.google.common.base.MoreObjects;
+
 import io.github.xinyangpan.crypto4j.exchange.binance.dto.enums.OrderType;
 import io.github.xinyangpan.crypto4j.exchange.binance.dto.enums.Side;
-import io.github.xinyangpan.crypto4j.exchange.binance.dto.enums.TimeInForce;
+import io.github.xinyangpan.crypto4j.exchange.binance.dto.rest.account.QueryTradeRequest;
+import io.github.xinyangpan.crypto4j.exchange.binance.dto.rest.market.BookTicker;
 import io.github.xinyangpan.crypto4j.exchange.binance.dto.rest.order.PlaceOrderRequest;
+import io.github.xinyangpan.crypto4j.exchange.binance.dto.rest.order.PlaceOrderResponse;
+import io.github.xinyangpan.crypto4j.exchange.binance.dto.rest.order.QueryOrderRequest;
 import io.github.xinyangpan.crypto4j.exchange.binance.rest.BinanceRestService;
 import io.github.xinyangpan.crypto4j.exchange.example.binance.util.BinanceTestUtils;
 
 public class RestExample {
 
-	public static void main(String[] args) throws InterruptedException {
-		// 
+	private static final String BTCUSDT = "BTCUSDT";
+	private static final BinanceRestService binanceRestService = BinanceTestUtils.binanceService().restService();
+
+	static QueryTradeRequest queryTradeRequest() {
+		QueryTradeRequest queryTradeRequest = new QueryTradeRequest();
+		queryTradeRequest.setSymbol(BTCUSDT);
+		return queryTradeRequest;
+	}
+
+	static QueryOrderRequest queryOrderRequest() {
+		QueryOrderRequest queryOrderRequest = new QueryOrderRequest();
+		queryOrderRequest.setOrderId(136685394L);
+		queryOrderRequest.setSymbol(BTCUSDT);
+		queryOrderRequest.setRecvWindow(5000L);
+		queryOrderRequest.setTimestamp(System.currentTimeMillis());
+		return queryOrderRequest;
+	}
+
+	static PlaceOrderRequest placeOrderRequest(BigDecimal price, BigDecimal qty) {
+		price = MoreObjects.firstNonNull(price, new BigDecimal("7700"));
+		qty = MoreObjects.firstNonNull(qty, new BigDecimal("0.01"));
+		//
 		PlaceOrderRequest placeOrderRequest = new PlaceOrderRequest();
-		placeOrderRequest.setSymbol("BTCUSDT");
-		placeOrderRequest.setSide(Side.SELL);
-		placeOrderRequest.setType(OrderType.LIMIT);
-		placeOrderRequest.setTimeInForce(TimeInForce.IOC);
-		placeOrderRequest.setQuantity(new BigDecimal("0.01"));
-		placeOrderRequest.setPrice(new BigDecimal("7700"));
-		placeOrderRequest.setRecvWindow(5000L);
-		placeOrderRequest.setTimestamp(System.currentTimeMillis());
-		// 
-		BinanceRestService binanceRestService = BinanceTestUtils.binanceService().restService();
-		System.out.println(binanceRestService.account());
-//		System.out.println(binanceRestService.bookTicker("BTCUSDT"));
-//		System.out.println(binanceRestService.placeOrderRequest(placeOrderRequest));
-		
-//		QueryOrderRequest queryOrderRequest = new QueryOrderRequest();
-//		queryOrderRequest.setOrderId(136685394L);
-//		queryOrderRequest.setSymbol("BTCUSDT");
-//		queryOrderRequest.setRecvWindow(5000L);
-//		queryOrderRequest.setTimestamp(System.currentTimeMillis());
-//		System.out.println(binanceRestService.queryOrder(queryOrderRequest));
-		
-		// Query Trade
-//		QueryTradeRequest queryTradeRequest = new QueryTradeRequest();
-//		queryTradeRequest.setSymbol("BTCUSDT");
-//		System.out.println(binanceRestService.queryTrade(queryTradeRequest));
+		placeOrderRequest.setSymbol(BTCUSDT);
+		placeOrderRequest.setSide(Side.BUY);
+		placeOrderRequest.setType(OrderType.MARKET);
+//		placeOrderRequest.setTimeInForce(TimeInForce.GTC);
+//		placeOrderRequest.setPrice(price);
+		placeOrderRequest.setQuantity(qty);
+		return placeOrderRequest;
+	}
+
+	static void tryPartialFill() throws InterruptedException {
+		while(true) {
+			BookTicker bookTicker = binanceRestService.bookTicker(BTCUSDT);
+			BigDecimal amount = bookTicker.getAskPrice().multiply(bookTicker.getAskQty());
+			if (amount.compareTo(new BigDecimal("700")) > 0) {
+				System.out.println("continue ...");
+				Thread.sleep(1000L);
+				continue;
+			}
+			System.out.println(bookTicker);
+			PlaceOrderRequest placeOrderRequest = placeOrderRequest(bookTicker.getAskPrice(), bookTicker.getAskQty());
+			PlaceOrderResponse placeOrderResponse = binanceRestService.placeOrder(placeOrderRequest);
+			System.out.println(placeOrderResponse);
+			break;
+		}
+	}
+
+	public static void main(String[] args) throws InterruptedException {
+		PlaceOrderRequest placeOrderRequest = placeOrderRequest(null, null);
+		PlaceOrderResponse placeOrderResponse = binanceRestService.placeOrder(placeOrderRequest);
+		System.out.println(placeOrderResponse);
 	}
 
 }

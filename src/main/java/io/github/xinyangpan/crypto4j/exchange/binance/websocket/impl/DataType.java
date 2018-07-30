@@ -5,9 +5,9 @@ import java.util.regex.Pattern;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import io.github.xinyangpan.crypto4j.exchange.binance.dto.depth.Depth;
 import io.github.xinyangpan.crypto4j.exchange.binance.dto.websocket.Ticker;
 import io.github.xinyangpan.crypto4j.exchange.binance.dto.websocket.common.StreamData;
-import io.github.xinyangpan.crypto4j.exchange.binance.dto.websocket.depth.Depth;
 
 public enum DataType {
 	TICKER("\\w*@ticker", Ticker.class), DEPTH("\\w*@depth(5|10|20)", Depth.class);
@@ -36,14 +36,5 @@ public enum DataType {
 		}
 		return null;
 	}
-
-//	public static JavaType getType(String stream, ObjectMapper objectMapper) {
-//		if (DataType.TICKER.matches(stream)) {
-//			return objectMapper.getTypeFactory().constructParametricType(StreamData.class, Ticker.class);
-//		} else if (DataType.DEPTH.matches(stream)) {
-//			return objectMapper.getTypeFactory().constructParametricType(StreamData.class, Depth.class);
-//		}
-//		return null;
-//	}
 
 }

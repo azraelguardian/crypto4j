@@ -1,4 +1,4 @@
-package io.github.xinyangpan.crypto4j.exchange.binance.dto.websocket.depth;
+package io.github.xinyangpan.crypto4j.exchange.binance.dto.depth;
 
 import java.math.BigDecimal;
 
