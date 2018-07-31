@@ -18,8 +18,8 @@ public class OrderResponse extends RestResponse {
 	private Integer errorCode;
 
 	@Override
-	public OrderResponse throwExeceptionWhenError() {
-		return (OrderResponse) this.throwExeceptionWhenError(String.format("errCode: %s.", errorCode));
+	public OrderResponse throwExceptionWhenError() {
+		return (OrderResponse) this.throwExceptionWhenError(String.format("errCode: %s.", errorCode));
 	}
 
 }

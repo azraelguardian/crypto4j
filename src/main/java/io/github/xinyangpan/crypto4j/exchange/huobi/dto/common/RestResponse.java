@@ -15,7 +15,7 @@ public class RestResponse<T> {
 	private String errMsg;
 	private T data;
 
-	public RestResponse<T> throwExeceptionWhenError() {
+	public RestResponse<T> throwExceptionWhenError() {
 		if (this.isSuccessful()) {
 			return this;
 		}
@@ -23,7 +23,7 @@ public class RestResponse<T> {
 	}
 
 	public T fethData() {
-		return this.throwExeceptionWhenError().data;
+		return this.throwExceptionWhenError().data;
 	}
 
 	public boolean isSuccessful() {

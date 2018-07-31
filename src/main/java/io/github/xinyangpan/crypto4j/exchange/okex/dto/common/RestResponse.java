@@ -7,11 +7,11 @@ public class RestResponse {
 
 	private boolean result;
 
-	public RestResponse throwExeceptionWhenError() {
-		return this.throwExeceptionWhenError(null);
+	public RestResponse throwExceptionWhenError() {
+		return this.throwExceptionWhenError(null);
 	}
 
-	public RestResponse throwExeceptionWhenError(String errMsg) {
+	public RestResponse throwExceptionWhenError(String errMsg) {
 		if (result) {
 			return this;
 		}

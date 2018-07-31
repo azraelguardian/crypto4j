@@ -20,8 +20,8 @@ public class CancelOrderResponse extends RestResponse {
 	private Integer errorCode;
 
 	@Override
-	public RestResponse throwExeceptionWhenError() {
-		return this.throwExeceptionWhenError(String.format("errCode: %s. err-msg: %s", errorCode, error));
+	public RestResponse throwExceptionWhenError() {
+		return this.throwExceptionWhenError(String.format("errCode: %s. err-msg: %s", errorCode, error));
 	}
 
 }

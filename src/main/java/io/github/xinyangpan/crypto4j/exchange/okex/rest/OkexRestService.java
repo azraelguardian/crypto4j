@@ -67,7 +67,7 @@ public class OkexRestService extends BaseOkexRestService {
 	}
 
 	public QueryOrderResponse placeAndQueryOrder(Order order) {
-		OrderResponse orderResponse = this.placeOrder(order).throwExeceptionWhenError();
+		OrderResponse orderResponse = this.placeOrder(order).throwExceptionWhenError();
 		return this.queryOrder(order.getSymbol(), orderResponse.getOrderId());
 	}
 
