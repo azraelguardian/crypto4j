@@ -2,6 +2,7 @@ package io.github.xinyangpan.crypto4j.exchange.okex.dto.trade;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import io.github.xinyangpan.crypto4j.exchange.okex.OkexUtils;
 import io.github.xinyangpan.crypto4j.exchange.okex.dto.common.RestResponse;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -19,7 +20,8 @@ public class OrderResponse extends RestResponse {
 
 	@Override
 	public OrderResponse throwExceptionWhenError() {
-		return (OrderResponse) this.throwExceptionWhenError(String.format("errCode: %s.", errorCode));
+		String errorMessage = OkexUtils.getErrorMessage(errorCode);
+		return (OrderResponse) this.throwExceptionWhenError(String.format("errCode: %s. err-msg: %s", errorCode, errorMessage));
 	}
 
 }

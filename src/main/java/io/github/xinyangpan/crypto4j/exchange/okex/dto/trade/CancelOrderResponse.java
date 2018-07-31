@@ -2,6 +2,7 @@ package io.github.xinyangpan.crypto4j.exchange.okex.dto.trade;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import io.github.xinyangpan.crypto4j.exchange.okex.OkexUtils;
 import io.github.xinyangpan.crypto4j.exchange.okex.dto.common.RestResponse;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -21,7 +22,8 @@ public class CancelOrderResponse extends RestResponse {
 
 	@Override
 	public RestResponse throwExceptionWhenError() {
-		return this.throwExceptionWhenError(String.format("errCode: %s. err-msg: %s", errorCode, error));
+		String errorMessage = OkexUtils.getErrorMessage(errorCode);
+		return this.throwExceptionWhenError(String.format("errCode: %s. err-msg: %s. error: %s", errorCode, errorMessage,error));
 	}
 
 }
