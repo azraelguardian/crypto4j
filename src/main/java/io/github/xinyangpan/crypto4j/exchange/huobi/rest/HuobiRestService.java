@@ -78,6 +78,20 @@ public class HuobiRestService extends BaseHuobiRestService {
 		return restTemplate.exchange(url, HttpMethod.GET, requestEntity, EXECUTION_RESULT).getBody();
 	}
 
+	public RestResponse<List<Execution>> queryExecution(String orderId, int attempt) {
+		RestResponse<List<Execution>> response = null;
+		try {
+			for (int i = 0; i < 3; i++) {
+				response = this.queryExecution(orderId);
+				if (response.isSuccessful()) {
+					return response;
+				}
+				Thread.sleep(1000);
+			}
+		} catch (InterruptedException e) {}
+		return response;
+	}
+
 	public OrderDetail placeAndQueryDetails(Order order) {
 		String orderId = this.placeOrder(order).fethData();
 		return this.queryOrderDetail(orderId);
@@ -89,7 +103,7 @@ public class HuobiRestService extends BaseHuobiRestService {
 		OrderResult orderResult = this.queryOrder(orderId).fethData();
 		orderDetail.setOrderResult(orderResult);
 		if (orderResult.getFieldAmount().compareTo(BigDecimal.ZERO) > 0) {
-			List<Execution> executions = this.queryExecution(orderId).fethData();
+			List<Execution> executions = this.queryExecution(orderId, 3).fethData();
 			orderDetail.setExecutions(executions);
 		}
 		// 

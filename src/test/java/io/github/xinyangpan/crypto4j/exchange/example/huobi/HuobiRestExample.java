@@ -75,9 +75,9 @@ public class HuobiRestExample {
 //		System.out.println(huobiRestService.queryOrder(new QueryOrder(order.getSymbol(), 834593837)));
 //		System.out.println(huobiRestService.cancelOrder(new CancelOrder(order.getSymbol(), 835120964, 835120003)));
 //		System.out.println(huobiRestService.userinfo());
-		placeOrder();
+//		placeOrder();
 //		System.out.println(huobiRestService.queryOrder("8916822336"));
-//		System.out.println(huobiRestService.queryOrderDetail("8915052612"));
+		System.out.println(huobiRestService.queryOrderDetail("8995757032"));
 	}
 
 }
