@@ -11,8 +11,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ErrorCode {
-	private Integer errorCode;
-	private String errorMessage;
+	private Integer code;
+	private String message;
 
 	@JsonCreator
 	public static ErrorCode create(Integer errorCode) {
