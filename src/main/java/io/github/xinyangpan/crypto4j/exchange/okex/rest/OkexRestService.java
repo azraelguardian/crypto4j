@@ -62,9 +62,13 @@ public class OkexRestService extends BaseOkexRestService {
 		return restTemplate.postForObject(url, requestEntity, QueryOrderResponse.class);
 	}
 
+	public QueryOrderResponse queryOrder(String symbol, long orderId) {
+		return this.queryOrder(new QueryOrder(symbol, orderId));
+	}
+
 	public QueryOrderResponse placeAndQueryOrder(Order order) {
 		OrderResponse orderResponse = this.placeOrder(order).throwExeceptionWhenError();
-		return this.queryOrder(new QueryOrder(order.getSymbol(), orderResponse.getOrderId()));
+		return this.queryOrder(order.getSymbol(), orderResponse.getOrderId());
 	}
 
 }
