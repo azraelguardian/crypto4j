@@ -57,7 +57,9 @@ public class OkexRestExample {
 		order.setSymbol(BTCUSDT);
 		order.setType(OrderType.sell_market);
 		// 
-		System.out.println(okexRestService.placeAndQueryOrder(order));
+//		QueryOrderResponse placeAndQueryOrder = okexRestService.placeAndQueryOrder(order);
+//		System.out.println(placeAndQueryOrder);
+		System.out.println(okexRestService.placeOrder(order));
 	}
 	
 	public static void main(String[] args) throws InterruptedException {
