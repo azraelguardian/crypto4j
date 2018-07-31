@@ -54,7 +54,7 @@ public class HuobiRestExample {
 	static void placeOrder() throws InterruptedException {
 		Order order = new Order();
 		order.setAccountId(4275858L);
-		order.setAmount(new BigDecimal("0.01"));
+		order.setAmount(new BigDecimal("0.1"));
 		order.setAmount(new BigDecimal("700"));
 //		order.setPrice(new BigDecimal("7800"));
 		order.setSymbol(BTCUSDT);

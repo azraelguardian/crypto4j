@@ -2,10 +2,13 @@ package io.github.xinyangpan.crypto4j.exchange.example.binance;
 
 import java.math.BigDecimal;
 
+import org.springframework.web.client.HttpClientErrorException;
+
 import com.google.common.base.MoreObjects;
 
 import io.github.xinyangpan.crypto4j.exchange.binance.dto.enums.OrderType;
 import io.github.xinyangpan.crypto4j.exchange.binance.dto.enums.Side;
+import io.github.xinyangpan.crypto4j.exchange.binance.dto.enums.TimeInForce;
 import io.github.xinyangpan.crypto4j.exchange.binance.dto.rest.account.QueryTradeRequest;
 import io.github.xinyangpan.crypto4j.exchange.binance.dto.rest.market.BookTicker;
 import io.github.xinyangpan.crypto4j.exchange.binance.dto.rest.order.PlaceOrderRequest;
@@ -35,16 +38,17 @@ public class RestExample {
 	}
 
 	static PlaceOrderRequest placeOrderRequest(BigDecimal price, BigDecimal qty) {
-		price = MoreObjects.firstNonNull(price, new BigDecimal("7700"));
+		price = MoreObjects.firstNonNull(price, new BigDecimal("8100"));
 		qty = MoreObjects.firstNonNull(qty, new BigDecimal("0.01"));
 		//
 		PlaceOrderRequest placeOrderRequest = new PlaceOrderRequest();
 		placeOrderRequest.setSymbol(BTCUSDT);
 		placeOrderRequest.setSide(Side.BUY);
-		placeOrderRequest.setType(OrderType.MARKET);
-//		placeOrderRequest.setTimeInForce(TimeInForce.GTC);
-//		placeOrderRequest.setPrice(price);
+		placeOrderRequest.setType(OrderType.LIMIT);
+		placeOrderRequest.setTimeInForce(TimeInForce.IOC);
+		placeOrderRequest.setPrice(price);
 		placeOrderRequest.setQuantity(qty);
+//		placeOrderRequest.setNewOrderRespType(NewOrderRespType.FULL);
 		return placeOrderRequest;
 	}
 
@@ -66,9 +70,14 @@ public class RestExample {
 	}
 
 	public static void main(String[] args) throws InterruptedException {
-		PlaceOrderRequest placeOrderRequest = placeOrderRequest(null, null);
-		PlaceOrderResponse placeOrderResponse = binanceRestService.placeOrder(placeOrderRequest);
-		System.out.println(placeOrderResponse);
+		try {
+			PlaceOrderRequest placeOrderRequest = placeOrderRequest(null, null);
+			System.out.println(placeOrderRequest);
+			PlaceOrderResponse placeOrderResponse = binanceRestService.placeOrder(placeOrderRequest);
+			System.out.println(placeOrderResponse);
+		} catch (HttpClientErrorException e) {
+			System.out.println(e.getResponseBodyAsString());
+		}
 	}
 
 }

@@ -8,7 +8,6 @@ import io.github.xinyangpan.crypto4j.exchange.okex.dto.enums.OrderType;
 import io.github.xinyangpan.crypto4j.exchange.okex.dto.market.Depth;
 import io.github.xinyangpan.crypto4j.exchange.okex.dto.market.OkexDepthEntry;
 import io.github.xinyangpan.crypto4j.exchange.okex.dto.trade.Order;
-import io.github.xinyangpan.crypto4j.exchange.okex.dto.trade.QueryOrder;
 import io.github.xinyangpan.crypto4j.exchange.okex.dto.trade.QueryOrderResponse;
 import io.github.xinyangpan.crypto4j.exchange.okex.rest.OkexRestService;
 
@@ -53,7 +52,7 @@ public class OkexRestExample {
 	static void placeOrder() {
 		// 
 		Order order = new Order();
-		order.setAmount(new BigDecimal("0.04"));
+		order.setAmount(new BigDecimal("0.4"));
 //		order.setPrice(new BigDecimal("700"));
 		order.setSymbol(BTCUSDT);
 		order.setType(OrderType.sell_market);
@@ -63,7 +62,8 @@ public class OkexRestExample {
 	
 	public static void main(String[] args) throws InterruptedException {
 //		tryPartialFill();
-		System.out.println(okexRestService.queryOrder(new QueryOrder(BTCUSDT, 863266553)));
+		placeOrder();
+		System.out.println();
 	}
 
 }
