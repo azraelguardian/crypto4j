@@ -1,6 +1,7 @@
 package io.github.xinyangpan.crypto4j.exchange.example.binance.util;
 
 import io.github.xinyangpan.crypto4j.common.RestProperties;
+import io.github.xinyangpan.crypto4j.exchange.ExchangeUtils;
 import io.github.xinyangpan.crypto4j.exchange.binance.BinanceProperties;
 import io.github.xinyangpan.crypto4j.exchange.binance.BinanceService;
 import io.github.xinyangpan.crypto4j.exchange.binance.websocket.impl.BinanceSubscriber;
@@ -28,10 +29,10 @@ public class BinanceTestUtils {
 	public static BinanceSubscriber binanceSubscriber() {
 		BinanceSubscriber binanceSubscriber = new BinanceSubscriber();
 		binanceSubscriber.depthAndTicker(5, "btcusdt");
-		binanceSubscriber.setDepthListener(System.out::println);
-		binanceSubscriber.setTickerListener(System.out::println);
-		binanceSubscriber.setAccountInfoListener(System.out::println);
-		binanceSubscriber.setExecutionReportListener(System.out::println);
+		binanceSubscriber.setDepthListener(ExchangeUtils.noOp());
+		binanceSubscriber.setTickerListener(ExchangeUtils.noOp());
+		binanceSubscriber.setAccountInfoListener(ExchangeUtils.noOp());
+		binanceSubscriber.setExecutionReportListener(ExchangeUtils.noOp());
 		return binanceSubscriber;
 	}
 

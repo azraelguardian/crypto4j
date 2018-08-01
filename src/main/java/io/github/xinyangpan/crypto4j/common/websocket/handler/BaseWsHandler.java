@@ -46,6 +46,7 @@ public class BaseWsHandler<T extends WsSubscriber> extends AbstractWebSocketHand
 		log.info("Connection Established[{}].", name);
 		if (wsHeartbeat != null) {
 			wsHeartbeat.start(session);
+			log.info("Hearbeat Started[{}].", name);
 		}
 		this.session = session;
 	}
@@ -92,4 +93,11 @@ public class BaseWsHandler<T extends WsSubscriber> extends AbstractWebSocketHand
 		}
 	}
 
+	protected void onPong(String msg) {
+		log.debug("Pond recieved. msg: {}", msg);
+		if (wsHeartbeat != null) {
+			wsHeartbeat.onPong();
+		}
+	}
+	
 }

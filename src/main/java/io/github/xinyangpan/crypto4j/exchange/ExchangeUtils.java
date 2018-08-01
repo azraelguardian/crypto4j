@@ -25,4 +25,8 @@ public class ExchangeUtils {
 		};
 	}
 
+	public static <T> Consumer<T> noOp() {
+		return (t) -> {};
+	}
+
 }

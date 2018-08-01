@@ -1,14 +1,15 @@
 package io.github.xinyangpan.crypto4j.exchange.example.huobi;
 
+import io.github.xinyangpan.crypto4j.exchange.ExchangeUtils;
 import io.github.xinyangpan.crypto4j.exchange.huobi.websocket.HuobiWsConnector;
 import io.github.xinyangpan.crypto4j.exchange.huobi.websocket.impl.HuobiSubscriber;
 
 public class HuobiConnectExample {
-	
+
 	public static void main(String[] args) throws InterruptedException {
 		HuobiSubscriber huobiSubscriber = new HuobiSubscriber();
-		huobiSubscriber.setDepthListener(System.out::println);
-		huobiSubscriber.setKlineListener(System.out::println);
+		huobiSubscriber.setDepthListener(ExchangeUtils.noOp());
+		huobiSubscriber.setKlineListener(ExchangeUtils.noOp());
 		// 
 		HuobiWsConnector connector = new HuobiWsConnector(huobiSubscriber);
 		connector.connect();
@@ -18,5 +19,5 @@ public class HuobiConnectExample {
 		// 
 		Thread.sleep(Long.MAX_VALUE);
 	}
-	
+
 }

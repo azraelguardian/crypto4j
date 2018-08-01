@@ -47,6 +47,12 @@ public class HuobiWsHandler extends BaseWsHandler<HuobiSubscriber> {
 			onPingMessage(evalNode.asLong());
 			return;
 		}
+		// pong message
+		evalNode = rootNode.at("/pong");
+		if (!evalNode.isMissingNode()) {
+			onPong(jsonMessage);
+			return;
+		}
 		// ack message
 		evalNode = rootNode.at("/subbed");
 		if (!evalNode.isMissingNode()) {
@@ -76,7 +82,7 @@ public class HuobiWsHandler extends BaseWsHandler<HuobiSubscriber> {
 	}
 
 	private void onPingMessage(long pingTs) throws Exception {
-		log.debug("responding ping message: {}", pingTs);
+		log.debug("responding ping message: {}, {}", pingTs, System.currentTimeMillis() - pingTs);
 		session.sendMessage(new TextMessage(String.format("{'pong': %s}", pingTs)));
 	}
 

@@ -39,7 +39,7 @@ public class OkexWsHandler extends BaseWsHandler<OkexWsSubscriber> {
 		// pong
 		JsonNode eventNode = root.findValue("event");
 		if (eventNode != null && "pong".equals(eventNode.asText())) {
-			onPong();
+			onPong(jsonMessage);
 			return;
 		}
 		// channel message
@@ -75,11 +75,6 @@ public class OkexWsHandler extends BaseWsHandler<OkexWsSubscriber> {
 	private <T> JavaType getType(Class<T> clazz) {
 		JavaType type = objectMapper().getTypeFactory().constructParametricType(OkexWsResponse.class, clazz);
 		return objectMapper().getTypeFactory().constructArrayType(type);
-	}
-
-	private void onPong() {
-		log.debug("Pond recieved.");
-		wsHeartbeat.onPong();
 	}
 
 	private void onResultData(OkexWsResponse<ResultData> response) {
