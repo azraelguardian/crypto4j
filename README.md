@@ -1,5 +1,12 @@
 # Crypto4j
 
+## Docs
+
+* [Binance Api](https://github.com/binance-exchange/binance-official-api-docs)
+* [Huobi Api](https://github.com/huobiapi/API_Docs)
+* [Okex Spot Api](https://github.com/okcoin-okex/API-docs-OKEx.com/tree/master/API-For-Spot-CN)
+
+
 ## Order
 
 |         | Has IOC | Has User Data Websocket | Has Execution/Trade Details | Comment                          |
