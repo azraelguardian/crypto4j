@@ -4,9 +4,9 @@
 
 	<groupId>io.github.xinyang-pan</groupId>
 	<artifactId>crypto4j</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.1.0-SNAPSHOT</version>
 	<!-- <version>0.1.1</version> -->
-	<packaging>jar</packaging>
+	<packaging>pom</packaging>
 
 	<name>crypto4j</name>
 	<description>Crypto Gw for java</description>
