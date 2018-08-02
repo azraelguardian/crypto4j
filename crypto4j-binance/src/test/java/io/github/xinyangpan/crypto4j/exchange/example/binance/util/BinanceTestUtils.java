@@ -5,7 +5,7 @@ import io.github.xinyangpan.crypto4j.exchange.ExchangeUtils;
 import io.github.xinyangpan.crypto4j.exchange.binance.BinanceProperties;
 import io.github.xinyangpan.crypto4j.exchange.binance.BinanceService;
 import io.github.xinyangpan.crypto4j.exchange.binance.websocket.impl.BinanceSubscriber;
-import io.github.xinyangpan.crypto4j.exchange.example.Crypto4jUtils;
+import io.github.xinyangpan.crypto4j.Crypto4jUtils;
 
 public class BinanceTestUtils {
 

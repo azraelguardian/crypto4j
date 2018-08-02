@@ -71,10 +71,7 @@ public class RestExample {
 
 	public static void main(String[] args) throws InterruptedException {
 		try {
-			PlaceOrderRequest placeOrderRequest = placeOrderRequest(null, null);
-			System.out.println(placeOrderRequest);
-			PlaceOrderResponse placeOrderResponse = binanceRestService.placeOrder(placeOrderRequest);
-			System.out.println(placeOrderResponse);
+			System.out.println(binanceRestService.account());
 		} catch (HttpClientErrorException e) {
 			System.out.println(e.getResponseBodyAsString());
 		}
