@@ -6,15 +6,15 @@ import org.springframework.web.client.HttpClientErrorException;
 
 import com.google.common.base.MoreObjects;
 
-import io.github.xinyangpan.crypto4j.exchange.binance.dto.enums.OrderType;
-import io.github.xinyangpan.crypto4j.exchange.binance.dto.enums.Side;
-import io.github.xinyangpan.crypto4j.exchange.binance.dto.enums.TimeInForce;
-import io.github.xinyangpan.crypto4j.exchange.binance.dto.rest.account.QueryTradeRequest;
-import io.github.xinyangpan.crypto4j.exchange.binance.dto.rest.market.BookTicker;
-import io.github.xinyangpan.crypto4j.exchange.binance.dto.rest.order.PlaceOrderRequest;
-import io.github.xinyangpan.crypto4j.exchange.binance.dto.rest.order.PlaceOrderResponse;
-import io.github.xinyangpan.crypto4j.exchange.binance.dto.rest.order.QueryOrderRequest;
-import io.github.xinyangpan.crypto4j.exchange.binance.rest.BinanceRestService;
+import io.github.xinyangpan.crypto4j.binance.dto.enums.OrderType;
+import io.github.xinyangpan.crypto4j.binance.dto.enums.Side;
+import io.github.xinyangpan.crypto4j.binance.dto.enums.TimeInForce;
+import io.github.xinyangpan.crypto4j.binance.dto.rest.account.QueryTradeRequest;
+import io.github.xinyangpan.crypto4j.binance.dto.rest.market.BookTicker;
+import io.github.xinyangpan.crypto4j.binance.dto.rest.order.PlaceOrderRequest;
+import io.github.xinyangpan.crypto4j.binance.dto.rest.order.PlaceOrderResponse;
+import io.github.xinyangpan.crypto4j.binance.dto.rest.order.QueryOrderRequest;
+import io.github.xinyangpan.crypto4j.binance.rest.BinanceRestService;
 import io.github.xinyangpan.crypto4j.exchange.example.binance.util.BinanceTestUtils;
 
 public class RestExample {

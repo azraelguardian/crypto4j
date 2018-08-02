@@ -2,14 +2,14 @@ package io.github.xinyangpan.crypto4j.exchange.example.okex;
 
 import java.math.BigDecimal;
 
-import io.github.xinyangpan.crypto4j.common.RestProperties;
+import io.github.xinyangpan.crypto4j.core.RestProperties;
 import io.github.xinyangpan.crypto4j.exchange.example.Crypto4jUtils;
-import io.github.xinyangpan.crypto4j.exchange.okex.dto.enums.OrderType;
-import io.github.xinyangpan.crypto4j.exchange.okex.dto.market.Depth;
-import io.github.xinyangpan.crypto4j.exchange.okex.dto.market.OkexDepthEntry;
-import io.github.xinyangpan.crypto4j.exchange.okex.dto.trade.Order;
-import io.github.xinyangpan.crypto4j.exchange.okex.dto.trade.QueryOrderResponse;
-import io.github.xinyangpan.crypto4j.exchange.okex.rest.OkexRestService;
+import io.github.xinyangpan.crypto4j.okex.dto.enums.OrderType;
+import io.github.xinyangpan.crypto4j.okex.dto.market.Depth;
+import io.github.xinyangpan.crypto4j.okex.dto.market.OkexDepthEntry;
+import io.github.xinyangpan.crypto4j.okex.dto.trade.Order;
+import io.github.xinyangpan.crypto4j.okex.dto.trade.QueryOrderResponse;
+import io.github.xinyangpan.crypto4j.okex.rest.OkexRestService;
 
 public class OkexRestExample {
 	private static final String BTCUSDT = "btc_usdt";

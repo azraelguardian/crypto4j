@@ -1,11 +1,11 @@
 package io.github.xinyangpan.crypto4j.exchange.example.binance.util;
 
-import io.github.xinyangpan.crypto4j.common.RestProperties;
-import io.github.xinyangpan.crypto4j.exchange.ExchangeUtils;
-import io.github.xinyangpan.crypto4j.exchange.binance.BinanceProperties;
-import io.github.xinyangpan.crypto4j.exchange.binance.BinanceService;
-import io.github.xinyangpan.crypto4j.exchange.binance.websocket.impl.BinanceSubscriber;
-import io.github.xinyangpan.crypto4j.Crypto4jUtils;
+import io.github.xinyangpan.crypto4j.binance.BinanceProperties;
+import io.github.xinyangpan.crypto4j.binance.BinanceService;
+import io.github.xinyangpan.crypto4j.binance.websocket.impl.BinanceSubscriber;
+import io.github.xinyangpan.crypto4j.core.Crypto4jUtils;
+import io.github.xinyangpan.crypto4j.core.ExchangeUtils;
+import io.github.xinyangpan.crypto4j.core.RestProperties;
 
 public class BinanceTestUtils {
 

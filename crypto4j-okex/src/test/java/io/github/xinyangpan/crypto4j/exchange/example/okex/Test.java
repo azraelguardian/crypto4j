@@ -6,9 +6,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
-import io.github.xinyangpan.crypto4j.exchange.ExchangeUtils;
-import io.github.xinyangpan.crypto4j.exchange.okex.dto.enums.OrderType;
-import io.github.xinyangpan.crypto4j.exchange.okex.dto.trade.Order;
+import io.github.xinyangpan.crypto4j.core.ExchangeUtils;
+import io.github.xinyangpan.crypto4j.okex.dto.enums.OrderType;
+import io.github.xinyangpan.crypto4j.okex.dto.trade.Order;
 
 public class Test {
 
