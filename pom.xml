@@ -33,6 +33,13 @@
 		<tag>HEAD</tag>
 	</scm>
 
+	<modules>
+		<module>crypto4j-core</module>
+		<module>crypto4j-binance</module>
+		<module>crypto4j-huobi</module>
+		<module>crypto4j-okex</module>
+	</modules>
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -71,7 +78,7 @@
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 		</dependency>
-		
+
 		<!-- provided or optional -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
@@ -206,4 +213,5 @@
 		</repository>
 	</distributionManagement>
 
-	</project>
+
+</project>
