@@ -15,21 +15,14 @@ import org.springframework.web.socket.WebSocketSession;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.util.ByteBufferBackedInputStream;
 
-import io.github.xinyangpan.crypto4j.core.websocket.handler.BaseWsHandler;
+import io.github.xinyangpan.crypto4j.core.websocket.Handler;
 import io.github.xinyangpan.crypto4j.huobi.dto.common.HuobiWsAck;
 import io.github.xinyangpan.crypto4j.huobi.dto.market.depth.DepthData;
 import io.github.xinyangpan.crypto4j.huobi.dto.market.kline.KlineData;
-import lombok.AccessLevel;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Getter(AccessLevel.PACKAGE)
-public class HuobiWsHandler extends BaseWsHandler<HuobiSubscriber> {
-
-	public HuobiWsHandler(HuobiSubscriber huobiSubscriber) {
-		super("huobi", huobiSubscriber);
-	}
+public class HuobiHandler extends Handler {
 
 	@Override
 	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
@@ -39,6 +32,7 @@ public class HuobiWsHandler extends BaseWsHandler<HuobiSubscriber> {
 	@Override
 	protected void handleBinaryMessage(WebSocketSession session, BinaryMessage message) throws Exception {
 		String jsonMessage = getTextMessage(message.getPayload());
+		HuobiSubscriber subscriber = (HuobiSubscriber)webSocketManager.getSubscriber();
 		log.debug("handling message: {}", jsonMessage);
 		JsonNode rootNode = objectMapper().readTree(jsonMessage);
 		// ping message
@@ -62,17 +56,17 @@ public class HuobiWsHandler extends BaseWsHandler<HuobiSubscriber> {
 		// market depth message
 		evalNode = rootNode.at("/tick/bids");
 		if (!evalNode.isMissingNode()) {
-			wsSubscriber.onDepthData(objectMapper().readValue(jsonMessage, DepthData.class));
+			subscriber.onDepthData(objectMapper().readValue(jsonMessage, DepthData.class));
 			return;
 		}
 		// kline message
 		evalNode = rootNode.at("/tick/open");
 		if (!evalNode.isMissingNode()) {
-			wsSubscriber.onKlineData(objectMapper().readValue(jsonMessage, KlineData.class));
+			subscriber.onKlineData(objectMapper().readValue(jsonMessage, KlineData.class));
 			return;
 		}
 		// 
-		wsSubscriber.unhandledMessage(jsonMessage);
+		subscriber.unhandledMessage(jsonMessage);
 	}
 
 	private String getTextMessage(ByteBuffer payload) throws IOException {

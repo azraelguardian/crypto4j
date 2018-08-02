@@ -4,13 +4,11 @@ import java.io.IOException;
 
 import org.springframework.web.socket.WebSocketSession;
 
-import io.github.xinyangpan.crypto4j.core.websocket.failurehandler.FailureHandler;
-import io.github.xinyangpan.crypto4j.core.websocket.heartbeat.WsHeartbeat;
+import io.github.xinyangpan.crypto4j.core.websocket.Heartbeat;
 
-public class BinanceWsHeartBeat extends WsHeartbeat {
+public class BinanceHeartBeat extends Heartbeat {
 
-	public BinanceWsHeartBeat(FailureHandler failureHandler) {
-		super(failureHandler);
+	public BinanceHeartBeat() {
 		this.setTimeout(10);
 	}
 

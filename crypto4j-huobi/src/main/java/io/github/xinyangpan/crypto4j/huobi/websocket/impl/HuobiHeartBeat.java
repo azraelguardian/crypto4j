@@ -5,13 +5,11 @@ import java.io.IOException;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
-import io.github.xinyangpan.crypto4j.core.websocket.failurehandler.FailureHandler;
-import io.github.xinyangpan.crypto4j.core.websocket.heartbeat.WsHeartbeat;
+import io.github.xinyangpan.crypto4j.core.websocket.Heartbeat;
 
-public class HuobiWsHeartBeat extends WsHeartbeat {
+public class HuobiHeartBeat extends Heartbeat {
 
-	public HuobiWsHeartBeat(FailureHandler failureHandler) {
-		super(failureHandler);
+	public HuobiHeartBeat() {
 		this.setTimeout(10);
 	}
 

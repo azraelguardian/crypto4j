@@ -15,18 +15,14 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 import io.github.xinyangpan.crypto4j.binance.dto.websocket.userstream.AccountInfo;
 import io.github.xinyangpan.crypto4j.binance.dto.websocket.userstream.ExecutionReport;
-import io.github.xinyangpan.crypto4j.core.websocket.handler.BaseWsHandler;
+import io.github.xinyangpan.crypto4j.core.websocket.Handler;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Getter(AccessLevel.PACKAGE)
-public class BinanceWsHandler extends BaseWsHandler<BinanceSubscriber> {
-
-	public BinanceWsHandler(BinanceSubscriber binanceSubscriber) {
-		super("binance", binanceSubscriber);
-	}
+public class BinanceHandler extends Handler {
 
 	@Override
 	protected void handleBinaryMessage(WebSocketSession session, BinaryMessage message) throws Exception {
@@ -49,20 +45,21 @@ public class BinanceWsHandler extends BaseWsHandler<BinanceSubscriber> {
 			marketStream(jsonMessage, streamNode);
 			return;
 		}
-		wsSubscriber.unhandledMessage(jsonMessage);
+		this.getSubscriber().unhandledMessage(jsonMessage);
 	}
 
 	private void userStream(String jsonMessage, JsonNode eventTypeNode) throws IOException, JsonParseException, JsonMappingException {
 		String eventType = eventTypeNode.asText();
+		BinanceSubscriber subscriber = this.getSubscriber();
 		switch (eventType) {
 		case "outboundAccountInfo":
-			wsSubscriber.getAccountInfoListener().accept(objectMapper().readValue(jsonMessage, AccountInfo.class));
+			subscriber.onAccountInfo(objectMapper().readValue(jsonMessage, AccountInfo.class));
 			return;
 		case "executionReport":
-			wsSubscriber.getExecutionReportListener().accept(objectMapper().readValue(jsonMessage, ExecutionReport.class));
+			subscriber.onExecutionReport(objectMapper().readValue(jsonMessage, ExecutionReport.class));
 			return;
 		default:
-			wsSubscriber.unhandledMessage(jsonMessage);
+			subscriber.unhandledMessage(jsonMessage);
 			return;
 		}
 	}
@@ -70,22 +67,27 @@ public class BinanceWsHandler extends BaseWsHandler<BinanceSubscriber> {
 	private void marketStream(String jsonMessage, JsonNode streamNode) throws IOException, JsonParseException, JsonMappingException {
 		String stream = streamNode.asText();
 		DataType dataType = DataType.getDataType(stream);
+		BinanceSubscriber subscriber = this.getSubscriber();
 		if (dataType == null) {
-			wsSubscriber.unhandledMessage(jsonMessage);
+			subscriber.unhandledMessage(jsonMessage);
 			return;
 		}
 		JavaType javaType = dataType.getJavaType(objectMapper());
 		switch (dataType) {
 		case TICKER:
-			wsSubscriber.onTicker(objectMapper().readValue(jsonMessage, javaType));
+			subscriber.onTicker(objectMapper().readValue(jsonMessage, javaType));
 			return;
 		case DEPTH:
-			wsSubscriber.onDepth(objectMapper().readValue(jsonMessage, javaType));
+			subscriber.onDepth(objectMapper().readValue(jsonMessage, javaType));
 			return;
 		default:
-			wsSubscriber.unhandledMessage(jsonMessage);
+			subscriber.unhandledMessage(jsonMessage);
 			return;
 		}
 	}
 
+	private BinanceSubscriber getSubscriber() {
+		return (BinanceSubscriber)this.webSocketManager.getSubscriber();
+	}
+	
 }

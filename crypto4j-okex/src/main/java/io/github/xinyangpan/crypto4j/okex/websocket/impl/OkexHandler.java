@@ -9,22 +9,15 @@ import org.springframework.web.socket.WebSocketSession;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
 
-import io.github.xinyangpan.crypto4j.core.websocket.handler.BaseWsHandler;
+import io.github.xinyangpan.crypto4j.core.websocket.Handler;
 import io.github.xinyangpan.crypto4j.okex.dto.common.OkexWsResponse;
 import io.github.xinyangpan.crypto4j.okex.dto.common.ResultData;
 import io.github.xinyangpan.crypto4j.okex.dto.market.Depth;
 import io.github.xinyangpan.crypto4j.okex.dto.market.TickerData;
-import lombok.AccessLevel;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Getter(AccessLevel.PACKAGE)
-public class OkexWsHandler extends BaseWsHandler<OkexWsSubscriber> {
-
-	public OkexWsHandler(OkexWsSubscriber okexWsSubscriber) {
-		super("okex", okexWsSubscriber);
-	}
+public class OkexHandler extends Handler {
 
 	@Override
 	protected void handleBinaryMessage(WebSocketSession session, BinaryMessage message) throws Exception {
@@ -34,6 +27,7 @@ public class OkexWsHandler extends BaseWsHandler<OkexWsSubscriber> {
 	@Override
 	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
 		String jsonMessage = message.getPayload();
+		OkexSubscriber subscriber = (OkexSubscriber) this.webSocketManager.getSubscriber();
 		log.debug("handling message: {}", jsonMessage);
 		JsonNode root = objectMapper().readTree(jsonMessage);
 		// pong
@@ -47,13 +41,13 @@ public class OkexWsHandler extends BaseWsHandler<OkexWsSubscriber> {
 		if (channel.contains("ticker")) {
 			OkexWsResponse<TickerData>[] responses = this.parse(jsonMessage, TickerData.class);
 			for (OkexWsResponse<TickerData> response : responses) {
-				onTickerData(response);
+				subscriber.onTickerData(response);
 			}
 			return;
 		} else if (channel.contains("depth")) {
 			OkexWsResponse<Depth>[] responses = this.parse(jsonMessage, Depth.class);
 			for (OkexWsResponse<Depth> response : responses) {
-				onDepthData(response);
+				subscriber.onDepthData(response);
 			}
 			return;
 		} else if (channel.contains("addChannel")) {
@@ -64,7 +58,7 @@ public class OkexWsHandler extends BaseWsHandler<OkexWsSubscriber> {
 			return;
 		}
 		// 
-		wsSubscriber.unhandledMessage(jsonMessage);
+		subscriber.unhandledMessage(jsonMessage);
 	}
 
 	private <T> OkexWsResponse<T>[] parse(String payload, Class<T> clazz) throws Exception {
@@ -79,14 +73,6 @@ public class OkexWsHandler extends BaseWsHandler<OkexWsSubscriber> {
 
 	private void onResultData(OkexWsResponse<ResultData> response) {
 		log.info("Result: {}", response);
-	}
-
-	private void onTickerData(OkexWsResponse<TickerData> response) {
-		wsSubscriber.getTickerListener().accept(response);
-	}
-
-	private void onDepthData(OkexWsResponse<Depth> response) {
-		wsSubscriber.getDepthListener().accept(response);
 	}
 
 }

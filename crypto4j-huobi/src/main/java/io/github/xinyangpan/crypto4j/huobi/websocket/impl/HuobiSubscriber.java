@@ -5,7 +5,7 @@ import java.util.function.Consumer;
 import com.google.common.base.Preconditions;
 
 import io.github.xinyangpan.crypto4j.core.Crypto4jUtils;
-import io.github.xinyangpan.crypto4j.core.websocket.subscriber.BaseDynamicWsSubscriber;
+import io.github.xinyangpan.crypto4j.core.websocket.Subscriber;
 import io.github.xinyangpan.crypto4j.huobi.dto.common.HuobiWsRequest;
 import io.github.xinyangpan.crypto4j.huobi.dto.market.depth.DepthData;
 import io.github.xinyangpan.crypto4j.huobi.dto.market.kline.KlineData;
@@ -13,12 +13,10 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
-@Getter
-@Setter
 @Slf4j
-public class HuobiSubscriber extends BaseDynamicWsSubscriber {
-	private Consumer<DepthData> depthListener = Crypto4jUtils.logConsumer();
-	private Consumer<KlineData> klineListener = Crypto4jUtils.logConsumer();
+public class HuobiSubscriber extends Subscriber {
+	private @Getter @Setter Consumer<DepthData> depthListener = Crypto4jUtils.logConsumer();
+	private @Getter @Setter Consumer<KlineData> klineListener = Crypto4jUtils.logConsumer();
 
 	public void depth(String symbol, String type) {
 		// 
@@ -28,7 +26,7 @@ public class HuobiSubscriber extends BaseDynamicWsSubscriber {
 		log.info("Subscribing marketDepth. symbol={}, type={}.", symbol, type);
 		String sub = String.format("market.%s.depth.%s", symbol, type);
 		String id = sub;
-		this.sendTextMessage(new HuobiWsRequest(id, sub));
+		this.subscribe(new HuobiWsRequest(id, sub));
 	}
 
 	public void kline(String symbol, String period) {
@@ -39,7 +37,7 @@ public class HuobiSubscriber extends BaseDynamicWsSubscriber {
 		log.info("Subscribing kline. symbol={}, type={}.", symbol, period);
 		String sub = String.format("market.%s.kline.%s", symbol, period);
 		String id = sub;
-		this.sendTextMessage(new HuobiWsRequest(id, sub));
+		this.subscribe(new HuobiWsRequest(id, sub));
 	}
 
 	public void onDepthData(DepthData depthData) {

@@ -13,13 +13,13 @@ import io.github.xinyangpan.crypto4j.binance.dto.websocket.common.StreamData;
 import io.github.xinyangpan.crypto4j.binance.dto.websocket.userstream.AccountInfo;
 import io.github.xinyangpan.crypto4j.binance.dto.websocket.userstream.ExecutionReport;
 import io.github.xinyangpan.crypto4j.core.Crypto4jUtils;
-import io.github.xinyangpan.crypto4j.core.websocket.subscriber.BaseWsSubscriber;
+import io.github.xinyangpan.crypto4j.core.websocket.Subscriber;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class BinanceSubscriber extends BaseWsSubscriber {
+public class BinanceSubscriber extends Subscriber {
 	private final List<String> streamNames = new ArrayList<>();
 	private Consumer<StreamData<Depth>> depthListener = Crypto4jUtils.logConsumer();
 	private Consumer<StreamData<Ticker>> tickerListener = Crypto4jUtils.logConsumer();
@@ -61,7 +61,11 @@ public class BinanceSubscriber extends BaseWsSubscriber {
 		}
 		return this;
 	}
-
+	
+	public String getUrl(String websocketMarketBaseUrl) {
+		return websocketMarketBaseUrl + this.getUrlParameter();
+	}
+	
 	public String getUrlParameter() {
 		return Joiner.on('/').join(streamNames);
 	}
@@ -72,6 +76,14 @@ public class BinanceSubscriber extends BaseWsSubscriber {
 
 	public void onDepth(StreamData<Depth> data) {
 		depthListener.accept(data);
+	}
+
+	public void onAccountInfo(AccountInfo data) {
+		accountInfoListener.accept(data);
+	}
+
+	public void onExecutionReport(ExecutionReport data) {
+		executionReportListener.accept(data);
 	}
 
 }

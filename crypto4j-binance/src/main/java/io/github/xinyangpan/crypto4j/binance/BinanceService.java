@@ -1,8 +1,8 @@
 package io.github.xinyangpan.crypto4j.binance;
 
 import io.github.xinyangpan.crypto4j.binance.rest.BinanceRestService;
-import io.github.xinyangpan.crypto4j.binance.websocket.BinanceMarketStreamWsConnector;
-import io.github.xinyangpan.crypto4j.binance.websocket.BinanceUserStreamWsConnector;
+import io.github.xinyangpan.crypto4j.binance.websocket.BinanceMarketManager;
+import io.github.xinyangpan.crypto4j.binance.websocket.BinanceUserManager;
 import io.github.xinyangpan.crypto4j.binance.websocket.impl.BinanceSubscriber;
 import lombok.Data;
 
@@ -11,8 +11,8 @@ public class BinanceService {
 	private final BinanceSubscriber binanceSubscriber;
 	private final BinanceProperties binanceProperties;
 	private final BinanceRestService binanceRestService;
-	private final BinanceUserStreamWsConnector binanceUserStreamWsConnector;
-	private final BinanceMarketStreamWsConnector binanceMarketStreamWsConnector;
+	private final BinanceUserManager binanceUserManager;
+	private final BinanceMarketManager binanceMarketManager;
 
 	public BinanceService(BinanceSubscriber binanceSubscriber, BinanceProperties binanceProperties) {
 		this(binanceSubscriber, binanceProperties, true);
@@ -22,11 +22,14 @@ public class BinanceService {
 		this.binanceSubscriber = binanceSubscriber;
 		this.binanceProperties = binanceProperties;
 		this.binanceRestService = new BinanceRestService(binanceProperties.getRestProperties());
-		this.binanceMarketStreamWsConnector = new BinanceMarketStreamWsConnector(binanceSubscriber, binanceProperties);
+		this.binanceMarketManager = new BinanceMarketManager();
+		this.binanceMarketManager.setUrl(binanceSubscriber.getUrl(binanceProperties.getWebsocketMarketBaseUrl()));
+		this.binanceMarketManager.setSubscriber(binanceSubscriber);
 		if (useUserStream) {
-			this.binanceUserStreamWsConnector = new BinanceUserStreamWsConnector(binanceSubscriber, binanceProperties);
+			this.binanceUserManager = new BinanceUserManager(binanceProperties);
+			this.binanceUserManager.setSubscriber(binanceSubscriber);
 		} else {
-			this.binanceUserStreamWsConnector = null;
+			this.binanceUserManager = null;
 		}
 	}
 
@@ -34,26 +37,26 @@ public class BinanceService {
 		return binanceRestService;
 	}
 
-	public BinanceUserStreamWsConnector userStream() {
-		return binanceUserStreamWsConnector;
+	public BinanceUserManager userStream() {
+		return binanceUserManager;
 	}
 
-	public BinanceMarketStreamWsConnector marketStream() {
-		return binanceMarketStreamWsConnector;
+	public BinanceMarketManager marketStream() {
+		return binanceMarketManager;
 	}
 
 	public void start() {
-		if (this.binanceUserStreamWsConnector != null) {
-			binanceUserStreamWsConnector.connect();
+		if (this.binanceUserManager != null) {
+			binanceUserManager.connect();
 		}
-		binanceMarketStreamWsConnector.connect();
+		binanceMarketManager.connect();
 	}
 
 	public void stop() {
-		if (this.binanceUserStreamWsConnector != null) {
-			binanceUserStreamWsConnector.disconnect();
+		if (this.binanceUserManager != null) {
+			binanceUserManager.disconnect();
 		}
-		binanceMarketStreamWsConnector.disconnect();
+		binanceMarketManager.disconnect();
 	}
 
 }

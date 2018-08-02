@@ -1,4 +1,4 @@
-package io.github.xinyangpan.crypto4j.core.websocket.heartbeat;
+package io.github.xinyangpan.crypto4j.core.websocket;
 
 import java.io.IOException;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -9,17 +9,14 @@ import org.springframework.web.socket.WebSocketSession;
 
 import com.google.common.base.Preconditions;
 
-import io.github.xinyangpan.crypto4j.core.websocket.BaseWsConnector;
-import io.github.xinyangpan.crypto4j.core.websocket.failurehandler.FailureHandler;
-import io.github.xinyangpan.crypto4j.core.websocket.failurehandler.FailureReconnect;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class WsHeartbeat {
+public class Heartbeat {
 	// 
-	private @Setter FailureHandler failureHandler;
+	private @Getter @Setter WebSocketManager webSocketManager;
 	private WebSocketSession session;
 	private Thread thread;
 	// 
@@ -28,15 +25,8 @@ public class WsHeartbeat {
 	// 
 	private final LinkedBlockingQueue<Long> queue = new LinkedBlockingQueue<>();
 
-	public WsHeartbeat(FailureHandler failureHandler) {
-		this.failureHandler = failureHandler;
-	}
-
-	public WsHeartbeat(BaseWsConnector<?> wsConnector) {
-		this(new FailureReconnect(wsConnector));
-	}
-
 	public void start(WebSocketSession session) {
+		Preconditions.checkNotNull(webSocketManager);
 		Preconditions.checkNotNull(session);
 		Preconditions.checkState(session.isOpen());
 		this.session = session;
@@ -64,9 +54,7 @@ public class WsHeartbeat {
 					log.debug("Ping responded in {} ms", ts - start);
 				} else {
 					log.error("Ping timeout {}", System.currentTimeMillis() - start);
-					if (failureHandler != null) {
-						failureHandler.pingTimeout();
-					}
+					webSocketManager.getSubscriber().onPingTimeout(session);
 				}
 			} catch (InterruptedException e) {
 				// return when interrupt, which means stop 
