@@ -4,7 +4,6 @@ import io.github.xinyangpan.crypto4j.binance.BinanceProperties;
 import io.github.xinyangpan.crypto4j.binance.BinanceService;
 import io.github.xinyangpan.crypto4j.binance.websocket.impl.BinanceSubscriber;
 import io.github.xinyangpan.crypto4j.core.Crypto4jUtils;
-import io.github.xinyangpan.crypto4j.core.ExchangeUtils;
 import io.github.xinyangpan.crypto4j.core.RestProperties;
 
 public class BinanceTestUtils {
@@ -29,10 +28,10 @@ public class BinanceTestUtils {
 	public static BinanceSubscriber binanceSubscriber() {
 		BinanceSubscriber binanceSubscriber = new BinanceSubscriber();
 		binanceSubscriber.depthAndTicker(5, "btcusdt");
-		binanceSubscriber.setDepthListener(ExchangeUtils.noOp());
-		binanceSubscriber.setTickerListener(ExchangeUtils.noOp());
-		binanceSubscriber.setAccountInfoListener(ExchangeUtils.noOp());
-		binanceSubscriber.setExecutionReportListener(ExchangeUtils.noOp());
+		binanceSubscriber.setDepthListener(Crypto4jUtils.noOp());
+		binanceSubscriber.setTickerListener(Crypto4jUtils.noOp());
+		binanceSubscriber.setAccountInfoListener(Crypto4jUtils.noOp());
+		binanceSubscriber.setExecutionReportListener(Crypto4jUtils.noOp());
 		return binanceSubscriber;
 	}
 

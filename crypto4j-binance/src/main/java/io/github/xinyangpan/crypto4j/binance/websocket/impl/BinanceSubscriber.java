@@ -12,7 +12,7 @@ import io.github.xinyangpan.crypto4j.binance.dto.websocket.Ticker;
 import io.github.xinyangpan.crypto4j.binance.dto.websocket.common.StreamData;
 import io.github.xinyangpan.crypto4j.binance.dto.websocket.userstream.AccountInfo;
 import io.github.xinyangpan.crypto4j.binance.dto.websocket.userstream.ExecutionReport;
-import io.github.xinyangpan.crypto4j.core.ExchangeUtils;
+import io.github.xinyangpan.crypto4j.core.Crypto4jUtils;
 import io.github.xinyangpan.crypto4j.core.websocket.subscriber.BaseWsSubscriber;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,10 +21,10 @@ import lombok.Setter;
 @Setter
 public class BinanceSubscriber extends BaseWsSubscriber {
 	private final List<String> streamNames = new ArrayList<>();
-	private Consumer<StreamData<Depth>> depthListener = ExchangeUtils.logConsumer();
-	private Consumer<StreamData<Ticker>> tickerListener = ExchangeUtils.logConsumer();
-	private Consumer<AccountInfo> accountInfoListener = ExchangeUtils.logConsumer();
-	private Consumer<ExecutionReport> executionReportListener = ExchangeUtils.logConsumer();
+	private Consumer<StreamData<Depth>> depthListener = Crypto4jUtils.logConsumer();
+	private Consumer<StreamData<Ticker>> tickerListener = Crypto4jUtils.logConsumer();
+	private Consumer<AccountInfo> accountInfoListener = Crypto4jUtils.logConsumer();
+	private Consumer<ExecutionReport> executionReportListener = Crypto4jUtils.logConsumer();
 
 	public BinanceSubscriber depthListener(Consumer<StreamData<Depth>> depthListener) {
 		this.depthListener = depthListener;

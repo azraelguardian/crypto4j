@@ -1,6 +1,6 @@
 package io.github.xinyangpan.crypto4j.binance.websocket.impl;
 
-import static io.github.xinyangpan.crypto4j.core.ExchangeUtils.objectMapper;
+import static io.github.xinyangpan.crypto4j.core.Crypto4jUtils.objectMapper;
 
 import java.io.IOException;
 

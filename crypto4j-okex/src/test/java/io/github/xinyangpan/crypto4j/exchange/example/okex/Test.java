@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
-import io.github.xinyangpan.crypto4j.core.ExchangeUtils;
+import io.github.xinyangpan.crypto4j.core.Crypto4jUtils;
 import io.github.xinyangpan.crypto4j.okex.dto.enums.OrderType;
 import io.github.xinyangpan.crypto4j.okex.dto.trade.Order;
 
@@ -20,7 +20,7 @@ public class Test {
 		order.setSymbol("btc_usdt");
 		order.setType(OrderType.buy);
 		// 
-		Map<String, Object> value = (Map<String, Object>) ExchangeUtils.objectMapper().convertValue(order, Map.class);
+		Map<String, Object> value = (Map<String, Object>) Crypto4jUtils.objectMapper().convertValue(order, Map.class);
 		value.put("api_key", "c821db84-6fbd-11e4-a9e3-c86000d26d7c");
 		// 
 		String param = value.entrySet().stream()//

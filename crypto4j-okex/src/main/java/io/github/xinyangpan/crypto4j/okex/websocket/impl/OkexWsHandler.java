@@ -1,6 +1,6 @@
 package io.github.xinyangpan.crypto4j.okex.websocket.impl;
 
-import static io.github.xinyangpan.crypto4j.core.ExchangeUtils.objectMapper;
+import static io.github.xinyangpan.crypto4j.core.Crypto4jUtils.objectMapper;
 
 import org.springframework.web.socket.BinaryMessage;
 import org.springframework.web.socket.TextMessage;

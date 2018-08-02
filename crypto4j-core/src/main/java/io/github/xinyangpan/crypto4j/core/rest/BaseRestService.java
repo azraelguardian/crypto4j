@@ -13,12 +13,12 @@ import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import io.github.xinyangpan.crypto4j.core.ExchangeUtils;
+import io.github.xinyangpan.crypto4j.core.Crypto4jUtils;
 
 public class BaseRestService {
 	// 
-	protected final RestTemplate restTemplate = ExchangeUtils.restTemplate();
-	protected final ObjectMapper objectMapper = ExchangeUtils.objectMapper();
+	protected final RestTemplate restTemplate = Crypto4jUtils.restTemplate();
+	protected final ObjectMapper objectMapper = Crypto4jUtils.objectMapper();
 
 	public <T> String urlEncode(String text) {
 		try {
@@ -53,7 +53,7 @@ public class BaseRestService {
 		} else if (object instanceof Map) {
 			value = new HashMap<>((Map<String, Object>) object);
 		} else {
-			value = (Map<String, Object>) ExchangeUtils.objectMapper().convertValue(object, Map.class);
+			value = (Map<String, Object>) Crypto4jUtils.objectMapper().convertValue(object, Map.class);
 		}
 		// 
 		String param = value.entrySet().stream()//

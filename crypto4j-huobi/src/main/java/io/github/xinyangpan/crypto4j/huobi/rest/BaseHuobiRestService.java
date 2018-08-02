@@ -24,7 +24,7 @@ import com.google.common.collect.Lists;
 import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
 
-import io.github.xinyangpan.crypto4j.core.ExchangeUtils;
+import io.github.xinyangpan.crypto4j.core.Crypto4jUtils;
 import io.github.xinyangpan.crypto4j.core.RestProperties;
 import io.github.xinyangpan.crypto4j.core.rest.BaseRestService;
 
@@ -50,7 +50,7 @@ public class BaseHuobiRestService extends BaseRestService {
 		} else if (object instanceof Map) {
 			value = new HashMap<>((Map<String, Object>) object);
 		} else {
-			value = (Map<String, Object>) ExchangeUtils.objectMapper().convertValue(object, Map.class);
+			value = (Map<String, Object>) Crypto4jUtils.objectMapper().convertValue(object, Map.class);
 		}
 		value.put("AccessKeyId", restProperties.getRestKey());
 		value.put("SignatureMethod", "HmacSHA256");
@@ -121,7 +121,7 @@ public class BaseHuobiRestService extends BaseRestService {
 
 	protected <T> T readValue(String body, TypeReference<T> typeReference) {
 		try {
-			return ExchangeUtils.objectMapper().readValue(body, typeReference);
+			return Crypto4jUtils.objectMapper().readValue(body, typeReference);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
