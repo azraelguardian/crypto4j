@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class Heartbeat extends AbstractHeartbeat {
 	// 
-	protected @Getter @Setter WebSocketManager webSocketManager;
+	protected @Getter @Setter WebSocketManager<?> webSocketManager;
 	protected WebSocketSession session;
 	
 	@Override

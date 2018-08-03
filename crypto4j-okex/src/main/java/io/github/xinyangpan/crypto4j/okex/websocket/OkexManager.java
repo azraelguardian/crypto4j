@@ -3,8 +3,9 @@ package io.github.xinyangpan.crypto4j.okex.websocket;
 import io.github.xinyangpan.crypto4j.core.websocket.WebSocketManager;
 import io.github.xinyangpan.crypto4j.okex.websocket.impl.OkexHandler;
 import io.github.xinyangpan.crypto4j.okex.websocket.impl.OkexHeartBeat;
+import io.github.xinyangpan.crypto4j.okex.websocket.impl.OkexSubscriber;
 
-public class OkexManager extends WebSocketManager {
+public class OkexManager extends WebSocketManager<OkexSubscriber> {
 	private static String DEFAULT_URL = "wss://real.okex.com:10441/websocket";
 
 	public OkexManager() {

@@ -14,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Data
 public class Subscriber {
-	protected WebSocketManager webSocketManager;
+	protected WebSocketManager<?> webSocketManager;
 	protected Consumer<WebSocketSession> connectedListener = Crypto4jUtils.noOp();
 	protected Consumer<WebSocketSession> pingTimeoutListener = Crypto4jUtils.noOp();
 	protected Consumer<CloseStatus> abnormalConnectionClosedListener = Crypto4jUtils.noOp();

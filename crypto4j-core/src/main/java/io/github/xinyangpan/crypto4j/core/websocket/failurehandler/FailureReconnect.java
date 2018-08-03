@@ -6,9 +6,9 @@ import org.springframework.web.socket.WebSocketSession;
 import io.github.xinyangpan.crypto4j.core.websocket.WebSocketManager;
 
 public class FailureReconnect implements FailureHandler {
-	private final WebSocketManager wsConnector;
+	private final WebSocketManager<?> wsConnector;
 
-	public FailureReconnect(WebSocketManager wsConnector) {
+	public FailureReconnect(WebSocketManager<?> wsConnector) {
 		this.wsConnector = wsConnector;
 	}
 

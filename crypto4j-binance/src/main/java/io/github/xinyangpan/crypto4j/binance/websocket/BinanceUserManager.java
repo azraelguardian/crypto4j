@@ -5,9 +5,10 @@ import io.github.xinyangpan.crypto4j.binance.dto.rest.common.ListenKey;
 import io.github.xinyangpan.crypto4j.binance.rest.BinanceUserStreamService;
 import io.github.xinyangpan.crypto4j.binance.websocket.impl.BinanceHandler;
 import io.github.xinyangpan.crypto4j.binance.websocket.impl.BinanceHeartBeat;
+import io.github.xinyangpan.crypto4j.binance.websocket.impl.BinanceSubscriber;
 import io.github.xinyangpan.crypto4j.core.websocket.WebSocketManager;
 
-public class BinanceUserManager extends WebSocketManager {
+public class BinanceUserManager extends WebSocketManager<BinanceSubscriber> {
 	private final BinanceProperties binanceProperties;
 	private final BinanceUserStreamService binanceUserStreamService;
 	private Thread keeplive;

@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class Handler extends AbstractWebSocketHandler {
 	protected @Getter WebSocketSession session;
-	protected @Setter WebSocketManager webSocketManager;
+	protected @Setter WebSocketManager<?> webSocketManager;
 
 	@Override
 	public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws Exception {

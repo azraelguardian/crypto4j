@@ -16,13 +16,13 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public abstract class WebSocketManager {
+public abstract class WebSocketManager<S extends Subscriber> {
 	private WebSocketConnectionManager manager;
 	protected @Getter @Setter String url;
 	protected @Getter @Setter String name;
 	protected Handler handler;
 	protected @Getter @Setter Heartbeat heartbeat;
-	protected @Getter @Setter Subscriber subscriber;
+	protected @Getter @Setter S subscriber;
 
 	public void connect() {
 		Preconditions.checkNotNull(handler);
