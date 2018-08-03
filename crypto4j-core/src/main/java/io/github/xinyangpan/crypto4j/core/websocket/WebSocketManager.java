@@ -39,11 +39,6 @@ public abstract class WebSocketManager {
 		manager.start();
 	}
 
-	public void connectSync() {
-		this.connect();
-		handler.getSessionUtilReady();
-	}
-
 	public void disconnect() {
 		if (manager == null) {
 			return;
@@ -63,7 +58,7 @@ public abstract class WebSocketManager {
 		this.connect();
 	}
 
-	protected WebSocketConnectionManager createConnectionManager(String url, Handler wsHandler) {
+	private WebSocketConnectionManager createConnectionManager(String url, Handler wsHandler) {
 		StandardWebSocketClient client = new StandardWebSocketClient();
 		return new WebSocketConnectionManager(client, wsHandler, url);
 	}

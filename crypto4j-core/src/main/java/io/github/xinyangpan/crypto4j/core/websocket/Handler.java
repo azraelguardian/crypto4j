@@ -58,24 +58,6 @@ public class Handler extends AbstractWebSocketHandler {
 		log.error("Transport Error[{}].", this.getName(), exception);
 	}
 
-	public final WebSocketSession getSessionUtilReady() {
-		return this.getSessionUtilReady(3, 3);
-	}
-
-	public final WebSocketSession getSessionUtilReady(int attempt, long retryInterval) {
-		try {
-			for (int i = 0; i < attempt; i++) {
-				if (session != null && session.isOpen()) {
-					return session;
-				}
-				Thread.sleep(retryInterval * 1000);
-			}
-			throw new RuntimeException("Timeout.");
-		} catch (InterruptedException e) {
-			return null;
-		}
-	}
-
 	protected void onPong(String msg) {
 		log.debug("Pond recieved. msg: {}", msg);
 		Heartbeat heartbeat = webSocketManager.getHeartbeat();
