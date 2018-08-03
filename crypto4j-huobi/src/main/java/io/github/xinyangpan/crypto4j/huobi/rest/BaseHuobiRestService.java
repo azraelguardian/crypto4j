@@ -24,9 +24,9 @@ import com.google.common.collect.Lists;
 import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
 
-import io.github.xinyangpan.crypto4j.core.Crypto4jUtils;
 import io.github.xinyangpan.crypto4j.core.RestProperties;
 import io.github.xinyangpan.crypto4j.core.rest.BaseRestService;
+import io.github.xinyangpan.crypto4j.core.util.Crypto4jUtils;
 
 public class BaseHuobiRestService extends BaseRestService {
 	private static final Logger log = LoggerFactory.getLogger(BaseHuobiRestService.class);

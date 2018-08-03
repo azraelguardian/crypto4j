@@ -1,4 +1,4 @@
-package io.github.xinyangpan.crypto4j.core;
+package io.github.xinyangpan.crypto4j.core.util;
 
 import java.io.FileInputStream;
 import java.nio.charset.Charset;

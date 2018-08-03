@@ -12,7 +12,7 @@ import io.github.xinyangpan.crypto4j.binance.dto.websocket.Ticker;
 import io.github.xinyangpan.crypto4j.binance.dto.websocket.common.StreamData;
 import io.github.xinyangpan.crypto4j.binance.dto.websocket.userstream.AccountInfo;
 import io.github.xinyangpan.crypto4j.binance.dto.websocket.userstream.ExecutionReport;
-import io.github.xinyangpan.crypto4j.core.Crypto4jUtils;
+import io.github.xinyangpan.crypto4j.core.util.Crypto4jUtils;
 import io.github.xinyangpan.crypto4j.core.websocket.Subscriber;
 import lombok.Getter;
 import lombok.Setter;

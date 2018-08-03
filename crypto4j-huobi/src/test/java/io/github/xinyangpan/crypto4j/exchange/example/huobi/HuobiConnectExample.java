@@ -1,6 +1,6 @@
 package io.github.xinyangpan.crypto4j.exchange.example.huobi;
 
-import io.github.xinyangpan.crypto4j.core.Crypto4jUtils;
+import io.github.xinyangpan.crypto4j.core.util.Crypto4jUtils;
 import io.github.xinyangpan.crypto4j.huobi.websocket.HuobiManager;
 import io.github.xinyangpan.crypto4j.huobi.websocket.impl.HuobiSubscriber;
 

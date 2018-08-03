@@ -1,76 +1,52 @@
 package io.github.xinyangpan.crypto4j.core.websocket;
 
 import java.io.IOException;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.TimeUnit;
 
 import org.springframework.web.socket.PingMessage;
 import org.springframework.web.socket.WebSocketSession;
 
 import com.google.common.base.Preconditions;
 
+import io.github.xinyangpan.crypto4j.core.util.AbstractHeartbeat;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class Heartbeat {
+public class Heartbeat extends AbstractHeartbeat {
 	// 
-	private @Getter @Setter WebSocketManager webSocketManager;
-	private WebSocketSession session;
-	private Thread thread;
-	// 
-	private @Getter @Setter long interval = 30; // s
-	private @Getter @Setter long timeout = 3; // s
-	// 
-	private final LinkedBlockingQueue<Long> queue = new LinkedBlockingQueue<>();
-
-	public void start(WebSocketSession session) {
+	protected @Getter @Setter WebSocketManager webSocketManager;
+	protected WebSocketSession session;
+	
+	@Override
+	public void start() {
 		Preconditions.checkNotNull(webSocketManager);
 		Preconditions.checkNotNull(session);
 		Preconditions.checkState(session.isOpen());
+		super.start();
+	}
+	
+	public void start(WebSocketSession session) {
 		this.session = session;
-		// 
-		thread = new Thread(this::run);
-		thread.start();
+		this.start();
 	}
 
 	public void stop() {
-		this.thread.interrupt();
+		super.stop();
 		this.session = null;
-		this.thread = null;
 	}
 
-	private void run() {
-		while (!Thread.interrupted() && session != null && session.isOpen()) {
-			try {
-				Thread.sleep(interval * 1000);
-				this.queue.clear();
-				long start = System.currentTimeMillis();
-				log.debug("Sending ping. sessionId={}", session.getId());
-				this.sendPing(session);
-				Long ts = this.queue.poll(timeout, TimeUnit.SECONDS);
-				if (ts != null) {
-					log.debug("Ping responded in {} ms", ts - start);
-				} else {
-					log.error("Ping timeout {}", System.currentTimeMillis() - start);
-					webSocketManager.getSubscriber().onPingTimeout(session);
-				}
-			} catch (InterruptedException e) {
-				// return when interrupt, which means stop 
-				return;
-			} catch (Exception e) {
-				log.error("Error while pinging.", e);
-			}
-		}
+	protected boolean keepLoop() {
+		return session != null && session.isOpen();
 	}
 
-	public void onPong() {
-		queue.add(System.currentTimeMillis());
+	protected void pingTimeout() {
+		webSocketManager.getSubscriber().onPingTimeout(session);
 	}
 
 	// standard Ping, can be override for none standard. refer to okex
-	protected void sendPing(WebSocketSession session) throws IOException {
+	protected void sendPing() throws IOException {
+		log.info("Sending Stardard ping message.");
 		session.sendMessage(new PingMessage());
 	}
 

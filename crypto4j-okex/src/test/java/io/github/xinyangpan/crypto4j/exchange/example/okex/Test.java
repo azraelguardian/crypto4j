@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
-import io.github.xinyangpan.crypto4j.core.Crypto4jUtils;
+import io.github.xinyangpan.crypto4j.core.util.Crypto4jUtils;
 import io.github.xinyangpan.crypto4j.okex.dto.enums.OrderType;
 import io.github.xinyangpan.crypto4j.okex.dto.trade.Order;
 

@@ -2,8 +2,6 @@ package io.github.xinyangpan.crypto4j.binance.websocket.impl;
 
 import java.io.IOException;
 
-import org.springframework.web.socket.WebSocketSession;
-
 import io.github.xinyangpan.crypto4j.core.websocket.Heartbeat;
 
 public class BinanceHeartBeat extends Heartbeat {
@@ -13,7 +11,7 @@ public class BinanceHeartBeat extends Heartbeat {
 	}
 
 	@Override
-	protected void sendPing(WebSocketSession session) throws IOException {
+	protected void sendPing() throws IOException {
 		// no op since binance does not support heatbeat message
 	}
 

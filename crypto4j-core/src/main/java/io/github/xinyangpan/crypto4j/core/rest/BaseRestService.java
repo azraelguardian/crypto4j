@@ -13,7 +13,7 @@ import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import io.github.xinyangpan.crypto4j.core.Crypto4jUtils;
+import io.github.xinyangpan.crypto4j.core.util.Crypto4jUtils;
 
 public class BaseRestService {
 	// 

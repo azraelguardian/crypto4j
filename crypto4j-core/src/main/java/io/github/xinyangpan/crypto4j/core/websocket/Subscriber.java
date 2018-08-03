@@ -7,7 +7,7 @@ import java.util.function.Consumer;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.WebSocketSession;
 
-import io.github.xinyangpan.crypto4j.core.Crypto4jUtils;
+import io.github.xinyangpan.crypto4j.core.util.Crypto4jUtils;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 

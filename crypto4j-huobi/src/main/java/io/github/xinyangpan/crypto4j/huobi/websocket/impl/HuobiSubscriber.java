@@ -4,7 +4,7 @@ import java.util.function.Consumer;
 
 import com.google.common.base.Preconditions;
 
-import io.github.xinyangpan.crypto4j.core.Crypto4jUtils;
+import io.github.xinyangpan.crypto4j.core.util.Crypto4jUtils;
 import io.github.xinyangpan.crypto4j.core.websocket.Subscriber;
 import io.github.xinyangpan.crypto4j.huobi.dto.common.HuobiWsRequest;
 import io.github.xinyangpan.crypto4j.huobi.dto.market.depth.DepthData;
