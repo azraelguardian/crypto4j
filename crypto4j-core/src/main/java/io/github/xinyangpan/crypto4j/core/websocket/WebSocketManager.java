@@ -20,21 +20,17 @@ public abstract class WebSocketManager<S extends Subscriber> {
 	private WebSocketConnectionManager manager;
 	protected @Getter @Setter String url;
 	protected @Getter @Setter String name;
-	protected Handler handler;
 	protected @Getter @Setter Heartbeat heartbeat;
 	protected @Getter @Setter S subscriber;
 
 	public void connect() {
-		Preconditions.checkNotNull(handler);
 		Preconditions.checkNotNull(subscriber);
-		// 
-		handler.setWebSocketManager(this);
 		subscriber.setWebSocketManager(this);
 		if (heartbeat != null) {
 			heartbeat.setWebSocketManager(this);
 		}
 		// 
-		this.manager = createConnectionManager(url, handler);
+		this.manager = createConnectionManager(url, subscriber);
 		log.info("WebSocketManager[{}] is connecting to {}.", name, url);
 		manager.start();
 	}
@@ -48,8 +44,8 @@ public abstract class WebSocketManager<S extends Subscriber> {
 	}
 
 	public boolean isConnected() {
-		WebSocketSession session = handler.getSession();
-		return session != null && handler.getSession().isOpen();
+		WebSocketSession session = subscriber.getSession();
+		return session != null && subscriber.getSession().isOpen();
 	}
 
 	public void reconnect() {
@@ -58,14 +54,14 @@ public abstract class WebSocketManager<S extends Subscriber> {
 		this.connect();
 	}
 
-	private WebSocketConnectionManager createConnectionManager(String url, Handler wsHandler) {
+	private WebSocketConnectionManager createConnectionManager(String url, S wsHandler) {
 		StandardWebSocketClient client = new StandardWebSocketClient();
 		return new WebSocketConnectionManager(client, wsHandler, url);
 	}
 
 	public void sendInJson(Object message) {
 		try {
-			WebSocketSession webSocketSession = this.handler.getSession();
+			WebSocketSession webSocketSession = this.subscriber.getSession();
 			Assert.state(webSocketSession != null, "Session is null.");
 			webSocketSession.sendMessage(new TextMessage(objectMapper().writeValueAsString(message)));
 		} catch (Exception e) {

@@ -1,9 +1,19 @@
 package io.github.xinyangpan.crypto4j.binance.websocket.impl;
 
+import static io.github.xinyangpan.crypto4j.core.util.Crypto4jUtils.objectMapper;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+import org.springframework.web.socket.TextMessage;
+import org.springframework.web.socket.WebSocketSession;
+
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
 
@@ -17,6 +27,7 @@ import io.github.xinyangpan.crypto4j.core.websocket.Subscriber;
 import lombok.Getter;
 import lombok.Setter;
 
+
 @Getter
 @Setter
 public class BinanceSubscriber extends Subscriber {
@@ -26,6 +37,61 @@ public class BinanceSubscriber extends Subscriber {
 	private Consumer<AccountInfo> accountInfoListener = Crypto4jUtils.logConsumer();
 	private Consumer<ExecutionReport> executionReportListener = Crypto4jUtils.logConsumer();
 
+	@Override
+	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
+		String jsonMessage = message.getPayload();
+		log.debug("handling message: {}", jsonMessage);
+		this.onPong("Other Msg");
+		JsonNode rootNode = objectMapper().readTree(jsonMessage);
+		JsonNode eventTypeNode = rootNode.at("/e");
+		if (!eventTypeNode.isMissingNode()) {
+			userStream(jsonMessage, eventTypeNode);
+			return;
+		}
+		JsonNode streamNode = rootNode.at("/stream");
+		if (!streamNode.isMissingNode()) {
+			marketStream(jsonMessage, streamNode);
+			return;
+		}
+		this.unhandledMessage(jsonMessage);
+	}
+
+	private void userStream(String jsonMessage, JsonNode eventTypeNode) throws IOException, JsonParseException, JsonMappingException {
+		String eventType = eventTypeNode.asText();
+		switch (eventType) {
+		case "outboundAccountInfo":
+			accountInfoListener.accept(objectMapper().readValue(jsonMessage, AccountInfo.class));
+			return;
+		case "executionReport":
+			executionReportListener.accept(objectMapper().readValue(jsonMessage, ExecutionReport.class));
+			return;
+		default:
+			this.unhandledMessage(jsonMessage);
+			return;
+		}
+	}
+
+	private void marketStream(String jsonMessage, JsonNode streamNode) throws IOException, JsonParseException, JsonMappingException {
+		String stream = streamNode.asText();
+		DataType dataType = DataType.getDataType(stream);
+		if (dataType == null) {
+			this.unhandledMessage(jsonMessage);
+			return;
+		}
+		JavaType javaType = dataType.getJavaType(objectMapper());
+		switch (dataType) {
+		case TICKER:
+			tickerListener.accept(objectMapper().readValue(jsonMessage, javaType));
+			return;
+		case DEPTH:
+			depthListener.accept(objectMapper().readValue(jsonMessage, javaType));
+			return;
+		default:
+			this.unhandledMessage(jsonMessage);
+			return;
+		}
+	}
+	
 	public BinanceSubscriber depthListener(Consumer<StreamData<Depth>> depthListener) {
 		this.depthListener = depthListener;
 		return this;
@@ -68,22 +134,6 @@ public class BinanceSubscriber extends Subscriber {
 	
 	public String getUrlParameter() {
 		return Joiner.on('/').join(streamNames);
-	}
-
-	public void onTicker(StreamData<Ticker> data) {
-		tickerListener.accept(data);
-	}
-
-	public void onDepth(StreamData<Depth> data) {
-		depthListener.accept(data);
-	}
-
-	public void onAccountInfo(AccountInfo data) {
-		accountInfoListener.accept(data);
-	}
-
-	public void onExecutionReport(ExecutionReport data) {
-		executionReportListener.accept(data);
 	}
 
 }

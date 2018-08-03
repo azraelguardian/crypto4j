@@ -1,7 +1,6 @@
 package io.github.xinyangpan.crypto4j.okex.websocket;
 
 import io.github.xinyangpan.crypto4j.core.websocket.WebSocketManager;
-import io.github.xinyangpan.crypto4j.okex.websocket.impl.OkexHandler;
 import io.github.xinyangpan.crypto4j.okex.websocket.impl.OkexHeartBeat;
 import io.github.xinyangpan.crypto4j.okex.websocket.impl.OkexSubscriber;
 
@@ -11,7 +10,6 @@ public class OkexManager extends WebSocketManager<OkexSubscriber> {
 	public OkexManager() {
 		this.setUrl(DEFAULT_URL);
 		this.setName("Okex");
-		this.handler = new OkexHandler();
 		this.setHeartbeat(new OkexHeartBeat());
 	}
 
