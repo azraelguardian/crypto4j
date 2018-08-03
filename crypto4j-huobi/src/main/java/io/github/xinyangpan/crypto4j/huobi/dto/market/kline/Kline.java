@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 import lombok.Data;
 
 @Data
-public class Tick {
+public class Kline {
 
 	private Long id;
 	private BigDecimal amount;

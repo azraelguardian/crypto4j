@@ -12,17 +12,23 @@ import org.springframework.web.socket.BinaryMessage;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.util.ByteBufferBackedInputStream;
 
 import io.github.xinyangpan.crypto4j.core.websocket.Handler;
 import io.github.xinyangpan.crypto4j.huobi.dto.common.HuobiWsAck;
-import io.github.xinyangpan.crypto4j.huobi.dto.market.depth.DepthData;
-import io.github.xinyangpan.crypto4j.huobi.dto.market.kline.KlineData;
+import io.github.xinyangpan.crypto4j.huobi.dto.common.HuobiWsResponse;
+import io.github.xinyangpan.crypto4j.huobi.dto.market.depth.Depth;
+import io.github.xinyangpan.crypto4j.huobi.dto.market.kline.Kline;
+import io.github.xinyangpan.crypto4j.huobi.dto.market.tick.Ticker;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class HuobiHandler extends Handler {
+	private final static TypeReference<HuobiWsResponse<Depth>> DEPTH = new TypeReference<HuobiWsResponse<Depth>>() {};
+	private final static TypeReference<HuobiWsResponse<Kline>> KLINE = new TypeReference<HuobiWsResponse<Kline>>() {};
+	private final static TypeReference<HuobiWsResponse<Ticker>> TICK = new TypeReference<HuobiWsResponse<Ticker>>() {};
 
 	@Override
 	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
@@ -32,11 +38,30 @@ public class HuobiHandler extends Handler {
 	@Override
 	protected void handleBinaryMessage(WebSocketSession session, BinaryMessage message) throws Exception {
 		String jsonMessage = getTextMessage(message.getPayload());
-		HuobiSubscriber subscriber = (HuobiSubscriber)webSocketManager.getSubscriber();
+		HuobiSubscriber subscriber = (HuobiSubscriber) webSocketManager.getSubscriber();
 		log.debug("handling message: {}", jsonMessage);
 		JsonNode rootNode = objectMapper().readTree(jsonMessage);
+		// response message
+		JsonNode evalNode = rootNode.at("/ch");
+		if (!evalNode.isMissingNode()) {
+			String ch = evalNode.asText();
+			System.out.println(ch);
+			if (ch.contains("depth")) {
+				// market depth message
+				subscriber.onDepthData(objectMapper().readValue(jsonMessage, DEPTH));
+				return;
+			} else if (ch.contains("kline")) {
+				// kline message
+				subscriber.onKlineData(objectMapper().readValue(jsonMessage, KLINE));
+				return;
+			} else if (ch.contains("detail")) {
+				// tick message
+				subscriber.onTickData(objectMapper().readValue(jsonMessage, TICK));
+				return;
+			}
+		}
 		// ping message
-		JsonNode evalNode = rootNode.at("/ping");
+		evalNode = rootNode.at("/ping");
 		if (!evalNode.isMissingNode()) {
 			onPingMessage(evalNode.asLong());
 			return;
@@ -51,18 +76,6 @@ public class HuobiHandler extends Handler {
 		evalNode = rootNode.at("/subbed");
 		if (!evalNode.isMissingNode()) {
 			onAcknowledge(objectMapper().readValue(jsonMessage, HuobiWsAck.class));
-			return;
-		}
-		// market depth message
-		evalNode = rootNode.at("/tick/bids");
-		if (!evalNode.isMissingNode()) {
-			subscriber.onDepthData(objectMapper().readValue(jsonMessage, DepthData.class));
-			return;
-		}
-		// kline message
-		evalNode = rootNode.at("/tick/open");
-		if (!evalNode.isMissingNode()) {
-			subscriber.onKlineData(objectMapper().readValue(jsonMessage, KlineData.class));
 			return;
 		}
 		// 

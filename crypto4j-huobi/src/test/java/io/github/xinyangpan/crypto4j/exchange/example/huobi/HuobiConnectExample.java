@@ -10,12 +10,14 @@ public class HuobiConnectExample {
 		HuobiSubscriber huobiSubscriber = new HuobiSubscriber();
 		huobiSubscriber.setDepthListener(Crypto4jUtils.noOp());
 		huobiSubscriber.setKlineListener(Crypto4jUtils.noOp());
-		huobiSubscriber.depth("btcusdt", "step0");
-		huobiSubscriber.kline("btcusdt", "1day");
+//		huobiSubscriber.depth("btcusdt", "step0");
+//		huobiSubscriber.kline("btcusdt", "1day");
+		
 		// 
 		HuobiManager connector = new HuobiManager();
 		connector.setSubscriber(huobiSubscriber);
 		connector.connect();
+		huobiSubscriber.ticker("btcusdt");
 		// 
 		Thread.sleep(Long.MAX_VALUE);
 	}
