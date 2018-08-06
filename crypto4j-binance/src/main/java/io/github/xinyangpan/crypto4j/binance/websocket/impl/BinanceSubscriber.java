@@ -41,7 +41,7 @@ public class BinanceSubscriber extends Subscriber {
 	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
 		String jsonMessage = message.getPayload();
 		log.debug("handling message: {}", jsonMessage);
-		this.onPong("Other Msg");
+//		this.onPong("Other Msg");
 		JsonNode rootNode = objectMapper().readTree(jsonMessage);
 		JsonNode eventTypeNode = rootNode.at("/e");
 		if (!eventTypeNode.isMissingNode()) {

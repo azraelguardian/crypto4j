@@ -3,8 +3,8 @@ package io.github.xinyangpan.crypto4j.binance.websocket;
 import io.github.xinyangpan.crypto4j.binance.BinanceProperties;
 import io.github.xinyangpan.crypto4j.binance.dto.rest.common.ListenKey;
 import io.github.xinyangpan.crypto4j.binance.rest.BinanceUserStreamService;
-import io.github.xinyangpan.crypto4j.binance.websocket.impl.BinanceHeartBeat;
 import io.github.xinyangpan.crypto4j.binance.websocket.impl.BinanceSubscriber;
+import io.github.xinyangpan.crypto4j.core.websocket.Heartbeat;
 import io.github.xinyangpan.crypto4j.core.websocket.WebSocketManager;
 
 public class BinanceUserManager extends WebSocketManager<BinanceSubscriber> {
@@ -16,7 +16,7 @@ public class BinanceUserManager extends WebSocketManager<BinanceSubscriber> {
 	public BinanceUserManager(BinanceProperties binanceProperties) {
 		this.binanceProperties = binanceProperties;
 		this.setName("BinanceUser");
-		this.setHeartbeat(new BinanceHeartBeat());
+		this.setHeartbeat(new Heartbeat());
 		this.binanceUserStreamService = new BinanceUserStreamService(binanceProperties.getRestProperties());
 	}
 

@@ -30,6 +30,7 @@ public class BinanceTestUtils {
 		binanceSubscriber.depthAndTicker(5, "btcusdt");
 		binanceSubscriber.setDepthListener(Crypto4jUtils.noOp());
 		binanceSubscriber.setTickerListener(Crypto4jUtils.noOp());
+		binanceSubscriber.setDepthListener(Crypto4jUtils.noOp());
 		binanceSubscriber.setAccountInfoListener(Crypto4jUtils.noOp());
 		binanceSubscriber.setExecutionReportListener(Crypto4jUtils.noOp());
 		return binanceSubscriber;

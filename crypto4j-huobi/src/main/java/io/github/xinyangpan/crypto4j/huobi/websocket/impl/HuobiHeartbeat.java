@@ -6,9 +6,9 @@ import org.springframework.web.socket.TextMessage;
 
 import io.github.xinyangpan.crypto4j.core.websocket.Heartbeat;
 
-public class HuobiHeartBeat extends Heartbeat {
+public class HuobiHeartbeat extends Heartbeat {
 
-	public HuobiHeartBeat() {
+	public HuobiHeartbeat() {
 		this.setTimeout(10);
 	}
 

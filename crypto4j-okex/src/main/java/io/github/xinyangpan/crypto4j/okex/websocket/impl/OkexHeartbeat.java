@@ -6,9 +6,9 @@ import org.springframework.web.socket.TextMessage;
 
 import io.github.xinyangpan.crypto4j.core.websocket.Heartbeat;
 
-public class OkexHeartBeat extends Heartbeat {
+public class OkexHeartbeat extends Heartbeat {
 
-	public OkexHeartBeat() {
+	public OkexHeartbeat() {
 	}
 
 	@Override

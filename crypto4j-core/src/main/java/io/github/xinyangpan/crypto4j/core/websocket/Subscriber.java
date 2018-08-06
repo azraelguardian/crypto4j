@@ -52,6 +52,7 @@ public class Subscriber extends AbstractWebSocketHandler {
 	@Override
 	protected void handlePongMessage(WebSocketSession session, PongMessage message) throws Exception {
 		log.debug("{}: Pond recieved. msg: {}", this.getName(), message);
+		this.onPong("Standard Pong");
 	}
 	
 	@Override
