@@ -48,7 +48,6 @@ public class HuobiSubscriber extends Subscriber {
 		JsonNode evalNode = rootNode.at("/ch");
 		if (!evalNode.isMissingNode()) {
 			String ch = evalNode.asText();
-			System.out.println(ch);
 			if (ch.contains("depth")) {
 				// market depth message
 				depthListener.accept(objectMapper().readValue(jsonMessage, DEPTH));
