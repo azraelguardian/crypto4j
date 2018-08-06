@@ -27,7 +27,6 @@ import io.github.xinyangpan.crypto4j.core.websocket.Subscriber;
 import lombok.Getter;
 import lombok.Setter;
 
-
 @Getter
 @Setter
 public class BinanceSubscriber extends Subscriber {
@@ -41,7 +40,7 @@ public class BinanceSubscriber extends Subscriber {
 	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
 		String jsonMessage = message.getPayload();
 		log.debug("handling message: {}", jsonMessage);
-//		this.onPong("Other Msg");
+		//		this.onPong("Other Msg");
 		JsonNode rootNode = objectMapper().readTree(jsonMessage);
 		JsonNode eventTypeNode = rootNode.at("/e");
 		if (!eventTypeNode.isMissingNode()) {
@@ -91,15 +90,17 @@ public class BinanceSubscriber extends Subscriber {
 			return;
 		}
 	}
-	
-	public BinanceSubscriber depthListener(Consumer<StreamData<Depth>> depthListener) {
-		this.depthListener = depthListener;
-		return this;
+
+	// -----------------------------
+	// ----- Sub
+	// -----------------------------
+
+	public String getUrl(String websocketMarketBaseUrl) {
+		return websocketMarketBaseUrl + this.getUrlParameter();
 	}
 
-	public BinanceSubscriber tickerListener(Consumer<StreamData<Ticker>> tickerListener) {
-		this.tickerListener = tickerListener;
-		return this;
+	private String getUrlParameter() {
+		return Joiner.on('/').join(streamNames);
 	}
 
 	public BinanceSubscriber depthAndTicker(int level, String... symbols) {
@@ -126,14 +127,6 @@ public class BinanceSubscriber extends Subscriber {
 			streamNames.add(String.format("%s@ticker", symbol));
 		}
 		return this;
-	}
-	
-	public String getUrl(String websocketMarketBaseUrl) {
-		return websocketMarketBaseUrl + this.getUrlParameter();
-	}
-	
-	public String getUrlParameter() {
-		return Joiner.on('/').join(streamNames);
 	}
 
 }

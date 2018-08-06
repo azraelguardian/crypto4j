@@ -7,7 +7,7 @@ import java.util.function.Consumer;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
-import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.common.base.Preconditions;
 
@@ -24,6 +24,10 @@ import lombok.Setter;
 @Getter
 @Setter
 public class OkexSubscriber extends Subscriber {
+	private final static TypeReference<OkexWsResponse<TickerData>[]> TICK = new TypeReference<OkexWsResponse<TickerData>[]>() {};
+	private final static TypeReference<OkexWsResponse<Depth>[]> DEPTH = new TypeReference<OkexWsResponse<Depth>[]>() {};
+	private final static TypeReference<OkexWsResponse<ResultData>[]> RESULT = new TypeReference<OkexWsResponse<ResultData>[]>() {};
+	
 	private Consumer<OkexWsResponse<Depth>> depthListener = Crypto4jUtils.logConsumer();
 	private Consumer<OkexWsResponse<TickerData>> tickerListener = Crypto4jUtils.logConsumer();
 
@@ -41,19 +45,19 @@ public class OkexSubscriber extends Subscriber {
 		// channel message
 		String channel = root.findValue("channel").asText();
 		if (channel.contains("ticker")) {
-			OkexWsResponse<TickerData>[] responses = this.parse(jsonMessage, TickerData.class);
+			OkexWsResponse<TickerData>[] responses = objectMapper().readValue(jsonMessage, TICK);
 			for (OkexWsResponse<TickerData> response : responses) {
 				tickerListener.accept(response);
 			}
 			return;
 		} else if (channel.contains("depth")) {
-			OkexWsResponse<Depth>[] responses = this.parse(jsonMessage, Depth.class);
+			OkexWsResponse<Depth>[] responses = objectMapper().readValue(jsonMessage, DEPTH);
 			for (OkexWsResponse<Depth> response : responses) {
 				depthListener.accept(response);
 			}
 			return;
 		} else if (channel.contains("addChannel")) {
-			OkexWsResponse<ResultData>[] responses = this.parse(jsonMessage, ResultData.class);
+			OkexWsResponse<ResultData>[] responses = objectMapper().readValue(jsonMessage, RESULT);
 			for (OkexWsResponse<ResultData> response : responses) {
 				onResultData(response);
 			}
@@ -61,16 +65,6 @@ public class OkexSubscriber extends Subscriber {
 		}
 		// 
 		this.unhandledMessage(jsonMessage);
-	}
-
-	private <T> OkexWsResponse<T>[] parse(String payload, Class<T> clazz) throws Exception {
-		JavaType type = getType(clazz);
-		return objectMapper().readValue(payload, type);
-	}
-
-	private <T> JavaType getType(Class<T> clazz) {
-		JavaType type = objectMapper().getTypeFactory().constructParametricType(OkexWsResponse.class, clazz);
-		return objectMapper().getTypeFactory().constructArrayType(type);
 	}
 
 	private void onResultData(OkexWsResponse<ResultData> response) {

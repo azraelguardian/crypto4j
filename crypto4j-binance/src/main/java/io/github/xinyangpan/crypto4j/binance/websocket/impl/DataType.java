@@ -27,7 +27,7 @@ public enum DataType {
 	public JavaType getJavaType(ObjectMapper objectMapper) {
 		return objectMapper.getTypeFactory().constructParametricType(StreamData.class, dataClass);
 	}
-	
+
 	public static DataType getDataType(String stream) {
 		if (DataType.TICKER.matches(stream)) {
 			return TICKER;
