@@ -71,4 +71,14 @@ public class OkexRestService extends BaseOkexRestService {
 		return this.queryOrder(order.getSymbol(), orderResponse.getOrderId());
 	}
 
+	public QueryOrderResponse simulateIocAndQueryOrder(Order order) {
+		OrderResponse orderResponse = this.placeOrder(order).throwExceptionWhenError();
+		CancelOrderResponse cancelOrderResponse = this.cancelOrder(new CancelOrder(order.getSymbol(), orderResponse.getOrderId()));
+		// 1009 没有订单, filled, throw Exception if not 1009
+		if (1009 != cancelOrderResponse.getErrorCode().getCode()) {
+			cancelOrderResponse.throwExceptionWhenError();
+		}
+		return this.queryOrder(order.getSymbol(), orderResponse.getOrderId());
+	}
+	
 }
