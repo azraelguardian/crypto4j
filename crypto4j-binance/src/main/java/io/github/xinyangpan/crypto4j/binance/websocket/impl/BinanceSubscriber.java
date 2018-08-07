@@ -26,7 +26,9 @@ import io.github.xinyangpan.crypto4j.core.util.Crypto4jUtils;
 import io.github.xinyangpan.crypto4j.core.websocket.Subscriber;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Getter
 @Setter
 public class BinanceSubscriber extends Subscriber {

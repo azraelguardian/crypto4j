@@ -28,16 +28,20 @@ import io.github.xinyangpan.crypto4j.huobi.dto.market.kline.Kline;
 import io.github.xinyangpan.crypto4j.huobi.dto.market.tick.Ticker;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
+@Getter
+@Setter
 public class HuobiSubscriber extends Subscriber {
 	// 
 	private final static TypeReference<HuobiWsResponse<Depth>> DEPTH = new TypeReference<HuobiWsResponse<Depth>>() {};
 	private final static TypeReference<HuobiWsResponse<Kline>> KLINE = new TypeReference<HuobiWsResponse<Kline>>() {};
 	private final static TypeReference<HuobiWsResponse<Ticker>> TICK = new TypeReference<HuobiWsResponse<Ticker>>() {};
 	// 
-	private @Getter @Setter Consumer<HuobiWsResponse<Depth>> depthListener = Crypto4jUtils.logConsumer();
-	private @Getter @Setter Consumer<HuobiWsResponse<Kline>> klineListener = Crypto4jUtils.logConsumer();
-	private @Getter @Setter Consumer<HuobiWsResponse<Ticker>> tickerListener = Crypto4jUtils.logConsumer();
+	private Consumer<HuobiWsResponse<Depth>> depthListener = Crypto4jUtils.logConsumer();
+	private Consumer<HuobiWsResponse<Kline>> klineListener = Crypto4jUtils.logConsumer();
+	private Consumer<HuobiWsResponse<Ticker>> tickerListener = Crypto4jUtils.logConsumer();
 
 	@Override
 	protected void handleBinaryMessage(WebSocketSession session, BinaryMessage message) throws Exception {
@@ -65,7 +69,7 @@ public class HuobiSubscriber extends Subscriber {
 		// ping message
 		evalNode = rootNode.at("/ping");
 		if (!evalNode.isMissingNode()) {
-			onPingMessage(evalNode.asLong());
+			onPingMessage(session, evalNode.asLong());
 			return;
 		}
 		// pong message
@@ -90,7 +94,7 @@ public class HuobiSubscriber extends Subscriber {
 		return json;
 	}
 
-	private void onPingMessage(long pingTs) throws Exception {
+	private void onPingMessage(WebSocketSession session, long pingTs) throws Exception {
 		log.debug("responding ping message: {}, {}", pingTs, System.currentTimeMillis() - pingTs);
 		session.sendMessage(new TextMessage(String.format("{'pong': %s}", pingTs)));
 	}

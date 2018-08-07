@@ -20,7 +20,9 @@ import io.github.xinyangpan.crypto4j.okex.dto.market.Depth;
 import io.github.xinyangpan.crypto4j.okex.dto.market.TickerData;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Getter
 @Setter
 public class OkexSubscriber extends Subscriber {

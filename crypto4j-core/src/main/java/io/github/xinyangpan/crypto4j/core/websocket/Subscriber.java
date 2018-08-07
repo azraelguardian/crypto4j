@@ -20,7 +20,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 public class Subscriber extends AbstractWebSocketHandler {
-	protected final Logger log = LoggerFactory.getLogger(this.getClass());
+	private static final Logger log = LoggerFactory.getLogger(Subscriber.class);
 	// 
 	protected @Setter(AccessLevel.PACKAGE) WebSocketManager<?> webSocketManager;
 	private List<Object> subRequests = new ArrayList<>();
