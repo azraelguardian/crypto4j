@@ -98,6 +98,8 @@ public class Subscriber extends AbstractWebSocketHandler {
 		Heartbeat heartbeat = webSocketManager.getHeartbeat();
 		if (heartbeat != null) {
 			heartbeat.onPong();
+		} else {
+			log.warn("No heartbeat is set. msg: {}", msg);
 		}
 	}
 
