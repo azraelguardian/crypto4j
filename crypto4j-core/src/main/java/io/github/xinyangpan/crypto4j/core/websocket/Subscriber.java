@@ -74,7 +74,10 @@ public class Subscriber extends AbstractWebSocketHandler {
 		if (heartbeat != null) {
 			heartbeat.stop();
 		}
-		this.session = null;
+		if (this.session != null) {
+			this.session.close();
+			this.session = null;
+		}
 		// normal close
 		if (CloseStatus.NORMAL.equalsCode(status)) {
 			log.info("Connection[{}] is normally closed.", this.getName());
