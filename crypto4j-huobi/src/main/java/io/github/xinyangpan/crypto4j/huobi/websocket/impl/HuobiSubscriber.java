@@ -69,7 +69,7 @@ public class HuobiSubscriber extends Subscriber {
 		// ping message
 		evalNode = rootNode.at("/ping");
 		if (!evalNode.isMissingNode()) {
-			onPingMessage(session, evalNode.asLong());
+			onPingMessage(evalNode.asLong());
 			return;
 		}
 		// pong message
@@ -94,9 +94,11 @@ public class HuobiSubscriber extends Subscriber {
 		return json;
 	}
 
-	private void onPingMessage(WebSocketSession session, long pingTs) throws Exception {
+	private void onPingMessage(long pingTs) throws Exception {
 		log.debug("responding ping message: {}, {}", pingTs, System.currentTimeMillis() - pingTs);
-		session.sendMessage(new TextMessage(String.format("{'pong': %s}", pingTs)));
+		if (session != null && session.isOpen()) {
+			session.sendMessage(new TextMessage(String.format("{'pong': %s}", pingTs)));
+		}
 	}
 
 	private void onAcknowledge(HuobiWsAck huobiWsAck) {
