@@ -46,7 +46,7 @@ public class HuobiSubscriber extends Subscriber {
 	@Override
 	protected void handleBinaryMessage(WebSocketSession session, BinaryMessage message) throws Exception {
 		String jsonMessage = getTextMessage(message.getPayload());
-		log.debug("handling message: {}", jsonMessage);
+		log.debug(MSG_TRACK, "{}: handling message: {}", this.getName(), jsonMessage);
 		JsonNode rootNode = objectMapper().readTree(jsonMessage);
 		// response message
 		JsonNode evalNode = rootNode.at("/ch");

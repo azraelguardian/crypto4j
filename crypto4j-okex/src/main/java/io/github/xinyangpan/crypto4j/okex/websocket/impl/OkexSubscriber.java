@@ -36,7 +36,7 @@ public class OkexSubscriber extends Subscriber {
 	@Override
 	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
 		String jsonMessage = message.getPayload();
-		log.debug("{}: Handling message: {}", this.getName(), jsonMessage);
+		log.debug(MSG_TRACK, "{}: Handling message: {}", this.getName(), jsonMessage);
 		JsonNode root = objectMapper().readTree(jsonMessage);
 		// pong
 		JsonNode eventNode = root.findValue("event");

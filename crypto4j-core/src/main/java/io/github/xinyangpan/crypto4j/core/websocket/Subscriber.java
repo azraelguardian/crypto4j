@@ -6,6 +6,8 @@ import java.util.function.Consumer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.Marker;
+import org.slf4j.MarkerFactory;
 import org.springframework.web.socket.BinaryMessage;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.PongMessage;
@@ -21,6 +23,7 @@ import lombok.Setter;
 
 public class Subscriber extends AbstractWebSocketHandler {
 	private static final Logger log = LoggerFactory.getLogger(Subscriber.class);
+	protected static Marker MSG_TRACK = MarkerFactory.getMarker("msg_track");
 	// 
 	protected @Setter(AccessLevel.PACKAGE) WebSocketManager<?> webSocketManager;
 	private List<Object> subRequests = new ArrayList<>();
