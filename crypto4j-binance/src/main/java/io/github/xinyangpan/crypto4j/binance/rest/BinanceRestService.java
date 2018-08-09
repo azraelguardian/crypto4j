@@ -1,5 +1,8 @@
 package io.github.xinyangpan.crypto4j.binance.rest;
 
+import java.util.List;
+
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 
@@ -10,6 +13,8 @@ import io.github.xinyangpan.crypto4j.binance.dto.rest.account.Account;
 import io.github.xinyangpan.crypto4j.binance.dto.rest.account.QueryTradeRequest;
 import io.github.xinyangpan.crypto4j.binance.dto.rest.common.BaseRequest;
 import io.github.xinyangpan.crypto4j.binance.dto.rest.market.BookTicker;
+import io.github.xinyangpan.crypto4j.binance.dto.rest.market.Kline;
+import io.github.xinyangpan.crypto4j.binance.dto.rest.market.KlineParam;
 import io.github.xinyangpan.crypto4j.binance.dto.rest.market.ServerTime;
 import io.github.xinyangpan.crypto4j.binance.dto.rest.order.PlaceOrderRequest;
 import io.github.xinyangpan.crypto4j.binance.dto.rest.order.PlaceOrderResponse;
@@ -19,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class BinanceRestService extends BaseBinanceRestService {
+	private ParameterizedTypeReference<List<Kline>> KLINES = new ParameterizedTypeReference<List<Kline>>() {};
 
 	public BinanceRestService(RestProperties restProperties) {
 		super(restProperties);
@@ -27,6 +33,11 @@ public class BinanceRestService extends BaseBinanceRestService {
 	public ServerTime serverTime() {
 		String url = this.getUrl("/api/v1/time");
 		return restTemplate.getForObject(url, ServerTime.class);
+	}
+
+	public List<Kline> kline(KlineParam klineParam) {
+		String url = this.getUrl("/api/v1/klines?%s", this.toRequestParam(klineParam));
+		return restTemplate.exchange(url, HttpMethod.GET, null, KLINES).getBody();
 	}
 
 	public BookTicker bookTicker(String symbol) {

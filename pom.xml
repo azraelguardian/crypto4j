@@ -38,6 +38,7 @@
 		<module>crypto4j-binance</module>
 		<module>crypto4j-huobi</module>
 		<module>crypto4j-okex</module>
+		<module>crypto4j-demo</module>
 	</modules>
 
 	<properties>
