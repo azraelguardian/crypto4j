@@ -5,6 +5,7 @@ import static io.github.xinyangpan.crypto4j.core.util.Crypto4jUtils.objectMapper
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
+import java.util.List;
 import java.util.function.Consumer;
 import java.util.zip.GZIPInputStream;
 
@@ -20,6 +21,7 @@ import com.google.common.base.Preconditions;
 
 import io.github.xinyangpan.crypto4j.core.util.Crypto4jUtils;
 import io.github.xinyangpan.crypto4j.core.websocket.Subscriber;
+import io.github.xinyangpan.crypto4j.huobi.dto.common.HuobiWsResponse;
 import io.github.xinyangpan.crypto4j.huobi.dto.common.HuobiWsSub;
 import io.github.xinyangpan.crypto4j.huobi.dto.common.HuobiWsSubAck;
 import io.github.xinyangpan.crypto4j.huobi.dto.common.HuobiWsSubMsg;
@@ -39,16 +41,20 @@ public class HuobiSubscriber extends Subscriber {
 	private final static TypeReference<HuobiWsSubMsg<Kline>> KLINE = new TypeReference<HuobiWsSubMsg<Kline>>() {};
 	private final static TypeReference<HuobiWsSubMsg<Ticker>> TICK = new TypeReference<HuobiWsSubMsg<Ticker>>() {};
 	// 
+	private final static TypeReference<HuobiWsResponse<List<Kline>>> KLINE_RESP = new TypeReference<HuobiWsResponse<List<Kline>>>() {};
+	// 
 	private Consumer<HuobiWsSubMsg<Depth>> depthListener = Crypto4jUtils.logConsumer();
 	private Consumer<HuobiWsSubMsg<Kline>> klineListener = Crypto4jUtils.logConsumer();
 	private Consumer<HuobiWsSubMsg<Ticker>> tickerListener = Crypto4jUtils.logConsumer();
+	// 
+	private Consumer<HuobiWsResponse<Kline>> klineResponse = Crypto4jUtils.logConsumer();
 
 	@Override
 	protected void handleBinaryMessage(WebSocketSession session, BinaryMessage message) throws Exception {
 		String jsonMessage = getTextMessage(message.getPayload());
 		log.debug(MSG_TRACK, "{}: handling message: {}", this.getName(), jsonMessage);
 		JsonNode rootNode = objectMapper().readTree(jsonMessage);
-		// response message
+		// sub message
 		JsonNode evalNode = rootNode.at("/ch");
 		if (!evalNode.isMissingNode()) {
 			String ch = evalNode.asText();
@@ -78,10 +84,20 @@ public class HuobiSubscriber extends Subscriber {
 			onPong(jsonMessage);
 			return;
 		}
-		// ack message
+		// sub ack message
 		evalNode = rootNode.at("/subbed");
 		if (!evalNode.isMissingNode()) {
 			onAcknowledge(objectMapper().readValue(jsonMessage, HuobiWsSubAck.class));
+			return;
+		}
+		// reponse
+		evalNode = rootNode.at("/rep");
+		if (!evalNode.isMissingNode()) {
+			String rep = evalNode.asText();
+			if (rep.contains("kline")) {
+				klineResponse.accept(objectMapper().readValue(jsonMessage, KLINE_RESP));
+				return;
+			} 
 			return;
 		}
 		// 
@@ -113,7 +129,7 @@ public class HuobiSubscriber extends Subscriber {
 		log.info("Subscribing marketDepth. symbol={}, type={}.", symbol, type);
 		String sub = String.format("market.%s.depth.%s", symbol, type);
 		String id = sub;
-		this.subscribe(new HuobiWsSub(id, sub));
+		this.send(new HuobiWsSub(id, sub));
 	}
 
 	public void kline(String symbol, String period) {
@@ -124,7 +140,7 @@ public class HuobiSubscriber extends Subscriber {
 		log.info("Subscribing kline. symbol={}, type={}.", symbol, period);
 		String sub = String.format("market.%s.kline.%s", symbol, period);
 		String id = sub;
-		this.subscribe(new HuobiWsSub(id, sub));
+		this.send(new HuobiWsSub(id, sub));
 	}
 
 	public void ticker(String symbol) {
@@ -134,7 +150,7 @@ public class HuobiSubscriber extends Subscriber {
 		log.info("Subscribing ticker. symbol={}.", symbol);
 		String sub = String.format("market.%s.detail", symbol);
 		String id = sub;
-		this.subscribe(new HuobiWsSub(id, sub));
+		this.send(new HuobiWsSub(id, sub));
 	}
 
 }

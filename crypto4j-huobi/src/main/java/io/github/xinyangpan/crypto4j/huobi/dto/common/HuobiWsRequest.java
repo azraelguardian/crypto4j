@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class HuobiWsRequest {
 
-	private String id;
-	private String req;
+	protected String req;
+	protected String id;
 
 }

@@ -63,7 +63,9 @@ public abstract class WebSocketManager<S extends Subscriber> {
 		try {
 			WebSocketSession webSocketSession = this.subscriber.getSession();
 			Assert.state(webSocketSession != null, "Session is null.");
-			webSocketSession.sendMessage(new TextMessage(objectMapper().writeValueAsString(message)));
+			String json = objectMapper().writeValueAsString(message);
+			log.debug("Sending json: {}", json);
+			webSocketSession.sendMessage(new TextMessage(json));
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

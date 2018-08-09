@@ -80,7 +80,7 @@ public class OkexSubscriber extends Subscriber {
 		// 
 		log.info("Subscribing marketDepth. symbol={}, type={}.", symbol, depth);
 		String channel = String.format("ok_sub_spot_%s_depth_%s", symbol, depth);
-		this.subscribe(OkexWsRequest.addChannel(channel));
+		this.send(OkexWsRequest.addChannel(channel));
 	}
 
 	public void ticker(String symbol) {
@@ -89,7 +89,7 @@ public class OkexSubscriber extends Subscriber {
 		// 
 		log.info("Subscribing ticker. symbol={}.", symbol);
 		String channel = String.format("ok_sub_spot_%s_ticker", symbol);
-		this.subscribe(OkexWsRequest.addChannel(channel));
+		this.send(OkexWsRequest.addChannel(channel));
 	}
 
 }

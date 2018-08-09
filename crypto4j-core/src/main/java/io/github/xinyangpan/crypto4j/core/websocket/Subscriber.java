@@ -109,7 +109,7 @@ public class Subscriber extends AbstractWebSocketHandler {
 	
 	public void onConnected(WebSocketSession session) {
 		connectedListener.accept(session);
-		this.sendSubRequests();
+		this.doSend();
 	}
 
 	public void onPingTimeout(WebSocketSession session) {
@@ -126,21 +126,21 @@ public class Subscriber extends AbstractWebSocketHandler {
 		log.warn("Unhandled Message: {}", obj, new RuntimeException());
 	}
 
-	protected void subscribe(Object sub) {
+	public void send(Object sub) {
 		if (webSocketManager != null && webSocketManager.isConnected()) {
-			this.sendSubRequest(sub);
+			this.doSend(sub);
 		} else {
 			this.subRequests.add(sub);
 		}
 	}
 
-	private void sendSubRequests() {
+	private void doSend() {
 		for (Object object : subRequests) {
-			sendSubRequest(object);
+			doSend(object);
 		}
 	}
 
-	private void sendSubRequest(Object object) {
+	private void doSend(Object object) {
 		try {
 			log.info("Sending Sub Request: {}", object);
 			webSocketManager.sendInJson(object);
