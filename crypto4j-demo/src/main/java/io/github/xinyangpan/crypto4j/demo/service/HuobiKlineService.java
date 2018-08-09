@@ -87,7 +87,7 @@ public class HuobiKlineService {
 				})//
 				.collect(Collectors.toList());
 		}).get();
-
+		klineDao.saveAll(klinePos);
 		// 
 		System.out.println(klinePos);
 	}

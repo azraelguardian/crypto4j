@@ -5,8 +5,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.github.xinyangpan.crypto4j.huobi.dto.enums.Status;
 import lombok.Data;
 
+/**
+ * the real data either in data field or in tick field
+ *
+ * @param <T>
+ */
 @Data
-public class RestResponse<T> {
+public class HuobiRestResponse<T> {
 
 	private Status status;
 	@JsonProperty("err-code")
@@ -14,8 +19,9 @@ public class RestResponse<T> {
 	@JsonProperty("err-msg")
 	private String errMsg;
 	private T data;
+	private T tick;
 
-	public RestResponse<T> throwExceptionWhenError() {
+	public HuobiRestResponse<T> throwExceptionWhenError() {
 		if (this.isSuccessful()) {
 			return this;
 		}
@@ -23,7 +29,11 @@ public class RestResponse<T> {
 	}
 
 	public T fethData() {
-		return this.throwExceptionWhenError().data;
+		this.throwExceptionWhenError();
+		if (data != null) {
+			return data;
+		}
+		return tick;
 	}
 
 	public boolean isSuccessful() {

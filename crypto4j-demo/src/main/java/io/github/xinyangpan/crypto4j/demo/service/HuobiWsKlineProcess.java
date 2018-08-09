@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 import io.github.xinyangpan.crypto4j.core.util.Crypto4jUtils;
 import io.github.xinyangpan.crypto4j.demo.core.KlineType;
 import io.github.xinyangpan.crypto4j.demo.persist.KlinePo;
-import io.github.xinyangpan.crypto4j.huobi.dto.common.HuobiWsResponse;
-import io.github.xinyangpan.crypto4j.huobi.dto.common.RestResponse;
+import io.github.xinyangpan.crypto4j.huobi.dto.common.HuobiRestResponse;
+import io.github.xinyangpan.crypto4j.huobi.dto.common.HuobiWsSubMsg;
 import io.github.xinyangpan.crypto4j.huobi.dto.market.Symbol;
 import io.github.xinyangpan.crypto4j.huobi.dto.market.kline.Kline;
 import io.github.xinyangpan.crypto4j.huobi.rest.HuobiRestService;
@@ -31,7 +31,7 @@ public class HuobiWsKlineProcess {
 	}
 
 	private HuobiSubscriber buildSubscriber() {
-		RestResponse<List<Symbol>> response = huobiRestService.symbols();
+		HuobiRestResponse<List<Symbol>> response = huobiRestService.symbols();
 		List<Symbol> symbols = response.getData();
 		HuobiSubscriber huobiSubscriber = new HuobiSubscriber();
 		huobiSubscriber.setDepthListener(Crypto4jUtils.noOp());
@@ -45,7 +45,7 @@ public class HuobiWsKlineProcess {
 		return huobiSubscriber;
 	}
 
-	private void onKline(HuobiWsResponse<Kline> huobiWsResponse) {
+	private void onKline(HuobiWsSubMsg<Kline> huobiWsResponse) {
 		String symbol = huobiWsResponse.toSymbol();
 		KlineType klineType = getKlineType(huobiWsResponse);
 		Kline kline = huobiWsResponse.getTick();
@@ -67,7 +67,7 @@ public class HuobiWsKlineProcess {
 		System.out.println(klinePo);
 	}
 
-	private KlineType getKlineType(HuobiWsResponse<Kline> huobiWsResponse) {
+	private KlineType getKlineType(HuobiWsSubMsg<Kline> huobiWsResponse) {
 		String type = huobiWsResponse.getCh().split("\\.")[3];
 		switch (type) {
 		case "1min":

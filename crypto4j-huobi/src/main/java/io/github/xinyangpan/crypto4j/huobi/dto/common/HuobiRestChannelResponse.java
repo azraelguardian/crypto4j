@@ -7,19 +7,9 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class RestChannelResponse<T> extends RestResponse<T> {
+public class HuobiRestChannelResponse<T> extends HuobiRestResponse<T> {
 
 	private String ch;
 	private Long ts;
-	private T tick;
-
-	@Override
-	public T fethData() {
-		T data = super.fethData();
-		if (data != null) {
-			return data;
-		}
-		return tick;
-	}
 
 }

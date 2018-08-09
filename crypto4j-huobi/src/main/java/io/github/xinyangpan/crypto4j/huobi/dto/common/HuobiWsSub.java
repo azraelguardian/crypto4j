@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class HuobiWsRequest {
+public class HuobiWsSub {
 
 	private String id;
-	private String req;
+	private String sub;
 
 }

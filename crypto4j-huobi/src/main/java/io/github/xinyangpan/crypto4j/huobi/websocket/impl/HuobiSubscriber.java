@@ -20,9 +20,9 @@ import com.google.common.base.Preconditions;
 
 import io.github.xinyangpan.crypto4j.core.util.Crypto4jUtils;
 import io.github.xinyangpan.crypto4j.core.websocket.Subscriber;
-import io.github.xinyangpan.crypto4j.huobi.dto.common.HuobiWsAck;
-import io.github.xinyangpan.crypto4j.huobi.dto.common.HuobiWsRequest;
-import io.github.xinyangpan.crypto4j.huobi.dto.common.HuobiWsResponse;
+import io.github.xinyangpan.crypto4j.huobi.dto.common.HuobiWsSub;
+import io.github.xinyangpan.crypto4j.huobi.dto.common.HuobiWsSubAck;
+import io.github.xinyangpan.crypto4j.huobi.dto.common.HuobiWsSubMsg;
 import io.github.xinyangpan.crypto4j.huobi.dto.market.depth.Depth;
 import io.github.xinyangpan.crypto4j.huobi.dto.market.kline.Kline;
 import io.github.xinyangpan.crypto4j.huobi.dto.market.tick.Ticker;
@@ -35,13 +35,13 @@ import lombok.extern.slf4j.Slf4j;
 @Setter
 public class HuobiSubscriber extends Subscriber {
 	// 
-	private final static TypeReference<HuobiWsResponse<Depth>> DEPTH = new TypeReference<HuobiWsResponse<Depth>>() {};
-	private final static TypeReference<HuobiWsResponse<Kline>> KLINE = new TypeReference<HuobiWsResponse<Kline>>() {};
-	private final static TypeReference<HuobiWsResponse<Ticker>> TICK = new TypeReference<HuobiWsResponse<Ticker>>() {};
+	private final static TypeReference<HuobiWsSubMsg<Depth>> DEPTH = new TypeReference<HuobiWsSubMsg<Depth>>() {};
+	private final static TypeReference<HuobiWsSubMsg<Kline>> KLINE = new TypeReference<HuobiWsSubMsg<Kline>>() {};
+	private final static TypeReference<HuobiWsSubMsg<Ticker>> TICK = new TypeReference<HuobiWsSubMsg<Ticker>>() {};
 	// 
-	private Consumer<HuobiWsResponse<Depth>> depthListener = Crypto4jUtils.logConsumer();
-	private Consumer<HuobiWsResponse<Kline>> klineListener = Crypto4jUtils.logConsumer();
-	private Consumer<HuobiWsResponse<Ticker>> tickerListener = Crypto4jUtils.logConsumer();
+	private Consumer<HuobiWsSubMsg<Depth>> depthListener = Crypto4jUtils.logConsumer();
+	private Consumer<HuobiWsSubMsg<Kline>> klineListener = Crypto4jUtils.logConsumer();
+	private Consumer<HuobiWsSubMsg<Ticker>> tickerListener = Crypto4jUtils.logConsumer();
 
 	@Override
 	protected void handleBinaryMessage(WebSocketSession session, BinaryMessage message) throws Exception {
@@ -81,7 +81,7 @@ public class HuobiSubscriber extends Subscriber {
 		// ack message
 		evalNode = rootNode.at("/subbed");
 		if (!evalNode.isMissingNode()) {
-			onAcknowledge(objectMapper().readValue(jsonMessage, HuobiWsAck.class));
+			onAcknowledge(objectMapper().readValue(jsonMessage, HuobiWsSubAck.class));
 			return;
 		}
 		// 
@@ -101,8 +101,8 @@ public class HuobiSubscriber extends Subscriber {
 		}
 	}
 
-	private void onAcknowledge(HuobiWsAck huobiWsAck) {
-		log.info("onAcknowledge: {}", huobiWsAck);
+	private void onAcknowledge(HuobiWsSubAck huobiWsSubAck) {
+		log.info("onAcknowledge: {}", huobiWsSubAck);
 	}
 
 	public void depth(String symbol, String type) {
@@ -113,7 +113,7 @@ public class HuobiSubscriber extends Subscriber {
 		log.info("Subscribing marketDepth. symbol={}, type={}.", symbol, type);
 		String sub = String.format("market.%s.depth.%s", symbol, type);
 		String id = sub;
-		this.subscribe(new HuobiWsRequest(id, sub));
+		this.subscribe(new HuobiWsSub(id, sub));
 	}
 
 	public void kline(String symbol, String period) {
@@ -124,7 +124,7 @@ public class HuobiSubscriber extends Subscriber {
 		log.info("Subscribing kline. symbol={}, type={}.", symbol, period);
 		String sub = String.format("market.%s.kline.%s", symbol, period);
 		String id = sub;
-		this.subscribe(new HuobiWsRequest(id, sub));
+		this.subscribe(new HuobiWsSub(id, sub));
 	}
 
 	public void ticker(String symbol) {
@@ -134,7 +134,7 @@ public class HuobiSubscriber extends Subscriber {
 		log.info("Subscribing ticker. symbol={}.", symbol);
 		String sub = String.format("market.%s.detail", symbol);
 		String id = sub;
-		this.subscribe(new HuobiWsRequest(id, sub));
+		this.subscribe(new HuobiWsSub(id, sub));
 	}
 
 }
