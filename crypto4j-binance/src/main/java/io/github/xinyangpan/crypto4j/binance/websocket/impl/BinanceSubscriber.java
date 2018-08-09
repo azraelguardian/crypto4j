@@ -130,4 +130,9 @@ public class BinanceSubscriber extends Subscriber {
 		return this;
 	}
 
+	public BinanceSubscriber kline(String symbol, String interval) {
+		streamNames.add(String.format("%s@kline_%s", symbol, interval));
+		return this;
+	}
+
 }

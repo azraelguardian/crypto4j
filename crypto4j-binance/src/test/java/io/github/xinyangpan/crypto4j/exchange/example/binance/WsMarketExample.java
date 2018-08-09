@@ -1,18 +1,29 @@
 package io.github.xinyangpan.crypto4j.exchange.example.binance;
 
 import io.github.xinyangpan.crypto4j.binance.websocket.BinanceMarketManager;
-import io.github.xinyangpan.crypto4j.exchange.example.binance.util.BinanceTestUtils;
+import io.github.xinyangpan.crypto4j.binance.websocket.impl.BinanceSubscriber;
+import io.github.xinyangpan.crypto4j.core.util.Crypto4jUtils;
 
 public class WsMarketExample {
 
-	public static void main(String[] args) throws InterruptedException {
-		// 
-		BinanceMarketManager connector = BinanceTestUtils.binanceService().marketStream();
-		connector.connect();
-//		Thread.sleep(5 * 1000);
-//		connector.reconnect();
-		// 
-		Thread.sleep(Long.MAX_VALUE);
+	public static BinanceSubscriber binanceSubscriber() {
+		BinanceSubscriber binanceSubscriber = new BinanceSubscriber();
+//		binanceSubscriber.depthAndTicker(5, "btcusdt");
+		binanceSubscriber.kline("btcusdt", "1m");
+		binanceSubscriber.setDepthListener(Crypto4jUtils.noOp());
+		binanceSubscriber.setTickerListener(Crypto4jUtils.noOp());
+		binanceSubscriber.setDepthListener(Crypto4jUtils.noOp());
+		binanceSubscriber.setAccountInfoListener(Crypto4jUtils.noOp());
+		binanceSubscriber.setExecutionReportListener(Crypto4jUtils.noOp());
+		return binanceSubscriber;
 	}
 
+	public static void main(String[] args) throws InterruptedException {
+		// 
+		BinanceMarketManager connector = new BinanceMarketManager("wss://stream.binance.com:9443/stream?streams=");
+		connector.setSubscriber(binanceSubscriber());
+		connector.connect();
+		
+		Thread.sleep(Long.MAX_VALUE);
+	}
 }

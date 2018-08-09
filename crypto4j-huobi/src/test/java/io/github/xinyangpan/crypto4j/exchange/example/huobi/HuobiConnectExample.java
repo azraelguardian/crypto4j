@@ -11,7 +11,7 @@ public class HuobiConnectExample {
 		huobiSubscriber.setDepthListener(Crypto4jUtils.noOp());
 		huobiSubscriber.setKlineListener(Crypto4jUtils.noOp());
 		huobiSubscriber.setDepthListener(Crypto4jUtils.noOp());
-//		huobiSubscriber.depth("btcusdt", "step0");
+		huobiSubscriber.depth("btcusdt", "step0");
 //		huobiSubscriber.kline("btcusdt", "1day");
 		
 		// 
@@ -19,7 +19,7 @@ public class HuobiConnectExample {
 		connector.setUrl("wss://api.huobi.pro/ws");
 		connector.setSubscriber(huobiSubscriber);
 		connector.connect();
-		huobiSubscriber.ticker("btcusdt");
+//		huobiSubscriber.kline("btcusdt", "1min");
 		// 
 		Thread.sleep(Long.MAX_VALUE);
 	}

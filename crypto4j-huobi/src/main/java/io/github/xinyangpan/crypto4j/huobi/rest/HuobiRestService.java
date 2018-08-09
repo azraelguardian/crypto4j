@@ -17,7 +17,10 @@ import io.github.xinyangpan.crypto4j.core.RestProperties;
 import io.github.xinyangpan.crypto4j.huobi.dto.account.AccountInfo;
 import io.github.xinyangpan.crypto4j.huobi.dto.common.RestChannelResponse;
 import io.github.xinyangpan.crypto4j.huobi.dto.common.RestResponse;
+import io.github.xinyangpan.crypto4j.huobi.dto.market.Symbol;
 import io.github.xinyangpan.crypto4j.huobi.dto.market.depth.Depth;
+import io.github.xinyangpan.crypto4j.huobi.dto.market.kline.Kline;
+import io.github.xinyangpan.crypto4j.huobi.dto.market.kline.KlineParam;
 import io.github.xinyangpan.crypto4j.huobi.dto.trade.Execution;
 import io.github.xinyangpan.crypto4j.huobi.dto.trade.Order;
 import io.github.xinyangpan.crypto4j.huobi.dto.trade.OrderDetail;
@@ -29,21 +32,36 @@ public class HuobiRestService extends BaseHuobiRestService {
 	private static ParameterizedTypeReference<RestResponse<String>> ORDER_RESPONSE = new ParameterizedTypeReference<RestResponse<String>>() {};
 	private static ParameterizedTypeReference<RestResponse<OrderResult>> ORDER_RESULT = new ParameterizedTypeReference<RestResponse<OrderResult>>() {};
 	private static ParameterizedTypeReference<RestResponse<List<Execution>>> EXECUTION_RESULT = new ParameterizedTypeReference<RestResponse<List<Execution>>>() {};
+	private static ParameterizedTypeReference<RestResponse<List<Symbol>>> SYMBOL_RESULT = new ParameterizedTypeReference<RestResponse<List<Symbol>>>() {};
 	private static TypeReference<RestChannelResponse<Depth>> DEPTH_RESULT = new TypeReference<RestChannelResponse<Depth>>() {};
+	private static TypeReference<RestChannelResponse<List<Kline>>> KLINE_RESULT = new TypeReference<RestChannelResponse<List<Kline>>>() {};
 
 	public HuobiRestService(RestProperties restProperties) {
 		super(restProperties);
 	}
 
-	public RestResponse<Depth> depth(String symbol) {
+	public RestChannelResponse<Depth> depth(String symbol) {
 		return this.depth(symbol, "step0");
 	}
 
-	public RestResponse<Depth> depth(String symbol, String type) {
+	public RestChannelResponse<Depth> depth(String symbol, String type) {
 		String url = this.getUrl("/market/depth?symbol=%s&type=%s", symbol, type);
 		HttpEntity<String> requestEntity = this.requestEntityWithUserAgent();
 		String body = restTemplate.exchange(url, HttpMethod.GET, requestEntity, String.class).getBody();
 		return this.readValue(body, DEPTH_RESULT);
+	}
+
+	public RestChannelResponse<List<Kline>> kline(KlineParam klineParam) {
+		String url = this.getUrl("/market/history/kline?%s", this.toRequestParam(klineParam));
+		HttpEntity<String> requestEntity = this.requestEntityWithUserAgent();
+		String body = restTemplate.exchange(url, HttpMethod.GET, requestEntity, String.class).getBody();
+		return this.readValue(body, KLINE_RESULT);
+	}
+
+	public RestResponse<List<Symbol>> symbols() {
+		String url = this.getUrl("/v1/common/symbols");
+		HttpEntity<String> requestEntity = this.requestEntityWithUserAgent();
+		return restTemplate.exchange(url, HttpMethod.GET, requestEntity, SYMBOL_RESULT).getBody();
 	}
 
 	public String tickers() {

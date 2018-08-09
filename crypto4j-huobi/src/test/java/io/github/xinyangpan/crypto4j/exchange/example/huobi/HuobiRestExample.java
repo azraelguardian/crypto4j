@@ -1,12 +1,17 @@
 package io.github.xinyangpan.crypto4j.exchange.example.huobi;
 
 import java.math.BigDecimal;
+import java.util.List;
+
+import org.springframework.web.client.HttpClientErrorException;
 
 import io.github.xinyangpan.crypto4j.core.RestProperties;
 import io.github.xinyangpan.crypto4j.exchange.example.Crypto4jUtils;
 import io.github.xinyangpan.crypto4j.huobi.dto.enums.OrderType;
 import io.github.xinyangpan.crypto4j.huobi.dto.market.depth.Depth;
 import io.github.xinyangpan.crypto4j.huobi.dto.market.depth.HuobiDepthEntry;
+import io.github.xinyangpan.crypto4j.huobi.dto.market.kline.Kline;
+import io.github.xinyangpan.crypto4j.huobi.dto.market.kline.KlineParam;
 import io.github.xinyangpan.crypto4j.huobi.dto.trade.Order;
 import io.github.xinyangpan.crypto4j.huobi.dto.trade.OrderDetail;
 import io.github.xinyangpan.crypto4j.huobi.rest.HuobiRestService;
@@ -14,9 +19,9 @@ import io.github.xinyangpan.crypto4j.huobi.rest.HuobiRestService;
 public class HuobiRestExample {
 
 	private static final HuobiRestService huobiRestService;
-	
+
 	private static final String BTCUSDT = "btcusdt";
-	
+
 	static {
 		RestProperties restProperties = new RestProperties();
 		restProperties.setRestBaseUrl("https://api.huobi.pro");
@@ -33,17 +38,17 @@ public class HuobiRestExample {
 		order.setPrice(new BigDecimal("7800"));
 		order.setSymbol(BTCUSDT);
 		order.setType(OrderType.BUY_IOC);
-		while(true) {
+		while (true) {
 			Depth depth = huobiRestService.depth(BTCUSDT).fethData();
 			HuobiDepthEntry entry = depth.getAsks().get(0);
-//			BigDecimal amount = entry.getPrice().multiply(entry.getQuantity());
+			//			BigDecimal amount = entry.getPrice().multiply(entry.getQuantity());
 			if (order.getAmount().compareTo(entry.getQuantity()) < 0) {
 				System.out.println("continue ...  " + entry);
-//				Thread.sleep(1000L);
-//				continue;
+				//				Thread.sleep(1000L);
+				//				continue;
 			}
-//			System.out.println(entry);
-//			order.setPrice(entry.getPrice().stripTrailingZeros());
+			//			System.out.println(entry);
+			//			order.setPrice(entry.getPrice().stripTrailingZeros());
 			OrderDetail orderDetail = huobiRestService.placeAndQueryDetails(order);
 			System.out.println(orderDetail);
 			System.out.println(orderDetail.getOrderResult().getState());
@@ -56,29 +61,40 @@ public class HuobiRestExample {
 		order.setAccountId(4275858L);
 		order.setAmount(new BigDecimal("0.1"));
 		order.setAmount(new BigDecimal("700"));
-//		order.setPrice(new BigDecimal("7800"));
+		//		order.setPrice(new BigDecimal("7800"));
 		order.setSymbol(BTCUSDT);
 		order.setType(OrderType.BUY_MARKET);
 		OrderDetail orderDetail = huobiRestService.placeAndQueryDetails(order);
 		System.out.println(orderDetail);
 	}
-	
+
 	public static void main(String[] args) throws InterruptedException {
-		// 
-		// 
-//		System.out.println(huobiRestService.tickers());
-//		System.out.println(huobiRestService.depth(BTCUSDT));
-//		RestResponse<String> restResponse = huobiRestService.placeOrder(order);
-//		System.out.println(restResponse);
-//		System.out.println(huobiRestService.queryOrder(restResponse.getData()));
-//		System.out.println(huobiRestService.queryExecution("8467743061"));
-//		System.out.println(huobiRestService.queryOrder(new QueryOrder(order.getSymbol(), 834593837)));
-//		System.out.println(huobiRestService.cancelOrder(new CancelOrder(order.getSymbol(), 835120964, 835120003)));
-//		System.out.println(huobiRestService.userinfo());
-//		placeOrder();
-//		System.out.println(huobiRestService.queryOrder("8916822336"));
-		System.out.println(huobiRestService.queryOrderDetail("8995757032"));
+		try {
+			//		System.out.println(huobiRestService.tickers());
+			//		System.out.println(huobiRestService.depth(BTCUSDT));
+			//		RestResponse<String> restResponse = huobiRestService.placeOrder(order);
+			//		System.out.println(restResponse);
+			//		System.out.println(huobiRestService.queryOrder(restResponse.getData()));
+			//		System.out.println(huobiRestService.queryExecution("8467743061"));
+			//		System.out.println(huobiRestService.queryOrder(new QueryOrder(order.getSymbol(), 834593837)));
+			//		System.out.println(huobiRestService.cancelOrder(new CancelOrder(order.getSymbol(), 835120964, 835120003)));
+			//		System.out.println(huobiRestService.userinfo());
+			//		placeOrder();
+			//		System.out.println(huobiRestService.queryOrder("8916822336"));
+			//		System.out.println(huobiRestService.queryOrderDetail("8995757032"));
+			//		System.out.println(huobiRestService.symbols().getData().size());
+			KlineParam klineParam = KlineParam.builder()//
+				.symbol(BTCUSDT).period("15min").size(2)//
+				.build();
+			List<Kline> klines = huobiRestService.kline(klineParam).fethData();
+			for (Kline kline : klines) {
+				System.out.println(kline);
+				System.out.println(kline.getOpenTime());
+			}
+		} catch (HttpClientErrorException e) {
+			System.out.println(e.getResponseBodyAsString());
+			e.printStackTrace();
+		}
 	}
 
 }
-	

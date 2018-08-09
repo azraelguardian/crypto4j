@@ -23,5 +23,17 @@
 			<version>${project.version}</version>
 		</dependency>
 		
+		<dependency>
+			<groupId>io.github.xinyang-pan.crypto4j</groupId>
+			<artifactId>crypto4j-huobi</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>io.github.xinyang-pan.crypto4j</groupId>
+			<artifactId>crypto4j-okex</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		
 	</dependencies>
 </project>
