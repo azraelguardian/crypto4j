@@ -1,7 +1,5 @@
 package io.github.xinyangpan.crypto4j.demo;
 
-import java.util.concurrent.ExecutionException;
-
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -12,7 +10,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import io.github.xinyangpan.crypto4j.demo.persist.KlinePo;
-import io.github.xinyangpan.crypto4j.demo.service.HuobiKlineService;
+import io.github.xinyangpan.crypto4j.demo.service.HuobiWsKlineProcess;
 
 @SpringBootApplication
 @EntityScan(basePackageClasses = { KlinePo.class, Jsr310JpaConverters.class })
@@ -21,11 +19,11 @@ import io.github.xinyangpan.crypto4j.demo.service.HuobiKlineService;
 @EnableScheduling
 public class Demo {
 
-	public static void main(String[] args) throws InterruptedException, ExecutionException {
+	public static void main(String[] args) {
 		// 
 		ConfigurableApplicationContext context = SpringApplication.run(Demo.class, args);
-		HuobiKlineService huobiKlineService = context.getBean(HuobiKlineService.class);
-		huobiKlineService.everyMinute();
+		HuobiWsKlineProcess huobiWsKlineProcess = context.getBean(HuobiWsKlineProcess.class);
+		huobiWsKlineProcess.start();
 	}
 
 }

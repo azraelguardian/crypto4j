@@ -6,8 +6,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
 import java.util.stream.Collectors;
 
-import javax.annotation.PostConstruct;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,16 +26,8 @@ public class HuobiKlineService {
 	private HuobiRestService huobiRestService;
 	//
 	private List<String> symbols;
-	
-	@PostConstruct
-	public void init() {
-		symbols = huobiRestService.symbols().fethData().stream()//
-			.map(symbol -> symbol.getSymbol())//
-			.collect(Collectors.toList());
-		System.out.println(symbols);
-	}
 
-//	@Scheduled(cron = "15 * * * * *")
+	//	@Scheduled(cron = "15 * * * * *")
 	public void everyMinute() throws InterruptedException, ExecutionException {
 		List<KlineType> typeTypes = KlineType.getKlineTypeTypes(LocalDateTime.now());
 		for (KlineType klineType : typeTypes) {
@@ -47,24 +37,24 @@ public class HuobiKlineService {
 
 	public void save(KlineType klineType) throws InterruptedException, ExecutionException {
 		Stopwatch stopwatch = Stopwatch.createStarted();
-//		List<KlinePo> klinePos = symbols.stream()//
-//			.map(symbol -> {
-//				try {
-//					KlineParam klineParam = KlineParam.builder()//
-//						.period(klineType.getHuobiCode()).symbol(symbol).size(2)//
-//						.build();
-//					List<Kline> klines = huobiRestService.kline(klineParam).fethData();
-//					Kline kline = klines.get(1);
-//					System.out.println(stopwatch.elapsed());
-//					return buildKlinePo(kline, symbol, klineType);
-//				} catch (Exception e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//					System.err.println(symbol);
-//					return null;
-//				}
-//			})//
-//			.collect(Collectors.toList());
+		//		List<KlinePo> klinePos = symbols.stream()//
+		//			.map(symbol -> {
+		//				try {
+		//					KlineParam klineParam = KlineParam.builder()//
+		//						.period(klineType.getHuobiCode()).symbol(symbol).size(2)//
+		//						.build();
+		//					List<Kline> klines = huobiRestService.kline(klineParam).fethData();
+		//					Kline kline = klines.get(1);
+		//					System.out.println(stopwatch.elapsed());
+		//					return buildKlinePo(kline, symbol, klineType);
+		//				} catch (Exception e) {
+		//					// TODO Auto-generated catch block
+		//					e.printStackTrace();
+		//					System.err.println(symbol);
+		//					return null;
+		//				}
+		//			})//
+		//			.collect(Collectors.toList());
 		// 
 		ForkJoinPool forkJoinPool = new ForkJoinPool(3);
 		List<KlinePo> klinePos = forkJoinPool.submit(() -> {

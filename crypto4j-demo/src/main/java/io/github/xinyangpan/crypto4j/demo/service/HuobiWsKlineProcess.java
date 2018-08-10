@@ -1,53 +1,76 @@
 package io.github.xinyangpan.crypto4j.demo.service;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.socket.WebSocketSession;
 
-import io.github.xinyangpan.crypto4j.core.util.Crypto4jUtils;
 import io.github.xinyangpan.crypto4j.demo.core.KlineType;
 import io.github.xinyangpan.crypto4j.demo.persist.KlinePo;
-import io.github.xinyangpan.crypto4j.huobi.dto.common.HuobiRestResponse;
-import io.github.xinyangpan.crypto4j.huobi.dto.common.HuobiWsSubMsg;
+import io.github.xinyangpan.crypto4j.huobi.dto.common.HuobiWsResponse;
 import io.github.xinyangpan.crypto4j.huobi.dto.market.Symbol;
 import io.github.xinyangpan.crypto4j.huobi.dto.market.kline.Kline;
+import io.github.xinyangpan.crypto4j.huobi.dto.market.kline.KlineRequest;
 import io.github.xinyangpan.crypto4j.huobi.rest.HuobiRestService;
 import io.github.xinyangpan.crypto4j.huobi.websocket.HuobiManager;
 import io.github.xinyangpan.crypto4j.huobi.websocket.impl.HuobiSubscriber;
+import io.github.xinyangpan.crypto4j.huobi.websocket.impl.HuobiSync;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 public class HuobiWsKlineProcess {
 	@Autowired
 	private HuobiRestService huobiRestService;
-	private String[] periods = { "1min", "5min", "15min", "30min" };
-
+//	private String[] periods = { "1min", "5min", "15min", "30min" };
+	private HuobiManager connector;
+	private List<Symbol> symbols;
+	
 	public void start() {
 		// 
-		HuobiManager connector = new HuobiManager();
+		symbols = huobiRestService.symbols().fethData();
+		// 
+		connector = new HuobiManager();
 		connector.setUrl("wss://api.huobi.pro/ws");
 		connector.setSubscriber(this.buildSubscriber());
 		connector.connect();
 	}
 
 	private HuobiSubscriber buildSubscriber() {
-		HuobiRestResponse<List<Symbol>> response = huobiRestService.symbols();
-		List<Symbol> symbols = response.getData();
 		HuobiSubscriber huobiSubscriber = new HuobiSubscriber();
-		huobiSubscriber.setDepthListener(Crypto4jUtils.noOp());
-		huobiSubscriber.setTickerListener(Crypto4jUtils.noOp());
-		huobiSubscriber.setKlineListener(this::onKline);
-		for (Symbol symbol : symbols) {
-			for (String period : periods) {
-				huobiSubscriber.kline(symbol.getSymbol(), period);
-			}
-		}
+		huobiSubscriber.setKlineResponse(this::onKline);
+		huobiSubscriber.setConnectedListener(this::onConnected);
+		huobiSubscriber.setHuobiSync(new HuobiSync());
 		return huobiSubscriber;
 	}
-
-	private void onKline(HuobiWsSubMsg<Kline> huobiWsResponse) {
-		String symbol = huobiWsResponse.toSymbol();
-		KlineType klineType = getKlineType(huobiWsResponse);
+	
+	public void onConnected (WebSocketSession session) {
+		try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		HuobiSubscriber huobiSubscriber = connector.getSubscriber();
+		for (Symbol symbol : symbols) {
+			KlineRequest klineRequest = new KlineRequest(symbol.getSymbol(), "1min");
+			klineRequest.setFrom(ZonedDateTime.now().minusMinutes(2).toEpochSecond());
+			klineRequest.setTo(ZonedDateTime.now().toEpochSecond());
+			try {
+				this.onKline(huobiSubscriber.requestSync(klineRequest));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	private void onKline(HuobiWsResponse<Kline> huobiWsResponse) {
+		log.info("{}", huobiWsResponse);
+		String[] split = huobiWsResponse.getRep().split("\\.");
+		String symbol = split[1];
+		KlineType klineType = getKlineType(split[3]);
 		Kline kline = huobiWsResponse.getTick();
 		//
 		KlinePo klinePo = new KlinePo();
@@ -67,8 +90,7 @@ public class HuobiWsKlineProcess {
 		System.out.println(klinePo);
 	}
 
-	private KlineType getKlineType(HuobiWsSubMsg<Kline> huobiWsResponse) {
-		String type = huobiWsResponse.getCh().split("\\.")[3];
+	private KlineType getKlineType(String type) {
 		switch (type) {
 		case "1min":
 			return KlineType.K1M;

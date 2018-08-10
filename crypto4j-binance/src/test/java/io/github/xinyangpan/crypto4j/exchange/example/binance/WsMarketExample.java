@@ -12,16 +12,17 @@ public class WsMarketExample {
 		binanceSubscriber.kline("btcusdt", "1m");
 		binanceSubscriber.setDepthListener(Crypto4jUtils.noOp());
 		binanceSubscriber.setTickerListener(Crypto4jUtils.noOp());
-		binanceSubscriber.setDepthListener(Crypto4jUtils.noOp());
 		binanceSubscriber.setAccountInfoListener(Crypto4jUtils.noOp());
 		binanceSubscriber.setExecutionReportListener(Crypto4jUtils.noOp());
 		return binanceSubscriber;
 	}
 
 	public static void main(String[] args) throws InterruptedException {
+		BinanceSubscriber binanceSubscriber = binanceSubscriber();
 		// 
-		BinanceMarketManager connector = new BinanceMarketManager("wss://stream.binance.com:9443/stream?streams=");
-		connector.setSubscriber(binanceSubscriber());
+		String url = binanceSubscriber.getUrl("wss://stream.binance.com:9443/stream?streams=");
+		BinanceMarketManager connector = new BinanceMarketManager(url);
+		connector.setSubscriber(binanceSubscriber);
 		connector.connect();
 		
 		Thread.sleep(Long.MAX_VALUE);

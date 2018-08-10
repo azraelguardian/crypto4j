@@ -59,7 +59,7 @@ public abstract class WebSocketManager<S extends Subscriber> {
 		return new WebSocketConnectionManager(client, wsHandler, url);
 	}
 
-	public void sendInJson(Object message) {
+	public synchronized void sendInJson(Object message) {
 		try {
 			WebSocketSession webSocketSession = this.subscriber.getSession();
 			Assert.state(webSocketSession != null, "Session is null.");
