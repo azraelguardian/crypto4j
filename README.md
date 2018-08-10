@@ -6,6 +6,16 @@
 * [Huobi Api](https://github.com/huobiapi/API_Docs)
 * [Okex Spot Api](https://github.com/okcoin-okex/API-docs-OKEx.com/tree/master/API-For-Spot-CN)
 
+## Hosts
+
+```
+54.95.204.136 stream.binance.com
+#54.92.26.88 stream.binance.com
+47.90.109.236 real.okex.com
+104.16.230.188 api.huobi.pro
+52.85.2.55 api.binance.com
+104.25.20.25 www.okex.com
+```
 
 ## Order
 
