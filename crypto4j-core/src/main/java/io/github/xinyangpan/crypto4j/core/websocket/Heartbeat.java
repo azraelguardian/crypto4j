@@ -44,7 +44,7 @@ public class Heartbeat extends AbstractHeartbeat {
 		webSocketManager.getSubscriber().onPingTimeout(session);
 	}
 
-	// standard Ping, can be override for none standard. refer to okex
+	// Standard Ping, can be override for none standard. refer to okex
 	protected void sendPing() throws IOException {
 		log.debug("Sending Stardard ping message.");
 		session.sendMessage(new PingMessage());

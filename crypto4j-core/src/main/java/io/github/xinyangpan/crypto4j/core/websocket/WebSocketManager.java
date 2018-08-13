@@ -1,9 +1,5 @@
 package io.github.xinyangpan.crypto4j.core.websocket;
 
-import static io.github.xinyangpan.crypto4j.core.util.Crypto4jUtils.objectMapper;
-
-import org.springframework.util.Assert;
-import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.client.WebSocketConnectionManager;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
@@ -57,18 +53,6 @@ public abstract class WebSocketManager<S extends Subscriber> {
 	private WebSocketConnectionManager createConnectionManager(String url, S wsHandler) {
 		StandardWebSocketClient client = new StandardWebSocketClient();
 		return new WebSocketConnectionManager(client, wsHandler, url);
-	}
-
-	public synchronized void sendInJson(Object message) {
-		try {
-			WebSocketSession webSocketSession = this.subscriber.getSession();
-			Assert.state(webSocketSession != null, "Session is null.");
-			String json = objectMapper().writeValueAsString(message);
-			log.debug("Sending json: {}", json);
-			webSocketSession.sendMessage(new TextMessage(json));
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
 	}
 
 	public void setFailureHandler(FailureHandler failureHandler) {

@@ -1,5 +1,8 @@
 package io.github.xinyangpan.crypto4j.core.websocket;
 
+import static io.github.xinyangpan.crypto4j.core.util.Crypto4jUtils.objectMapper;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -16,6 +19,8 @@ import org.springframework.web.socket.WebSocketMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.AbstractWebSocketHandler;
 
+import com.google.common.base.Preconditions;
+
 import io.github.xinyangpan.crypto4j.core.util.Crypto4jUtils;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -26,12 +31,62 @@ public class Subscriber extends AbstractWebSocketHandler {
 	protected static Marker MSG_TRACK = MarkerFactory.getMarker("msg_track");
 	// 
 	protected @Setter(AccessLevel.PACKAGE) WebSocketManager<?> webSocketManager;
-	private List<Object> subRequests = new ArrayList<>();
 	protected @Getter WebSocketSession session;
+	private List<WebSocketMessage<?>> messages = new ArrayList<>();
 	// 
 	protected @Getter @Setter Consumer<WebSocketSession> connectedListener = Crypto4jUtils.noOp();
 	protected @Getter @Setter Consumer<WebSocketSession> pingTimeoutListener = Crypto4jUtils.noOp();
 	protected @Getter @Setter Consumer<CloseStatus> abnormalConnectionClosedListener = Crypto4jUtils.noOp();
+
+	protected String getName() {
+		return this.webSocketManager.getName();
+	}
+
+	// -----------------------------
+	// ----- INBOUND
+	// -----------------------------
+
+	public void send(Object message) {
+		try {
+			String json = objectMapper().writeValueAsString(message);
+			log.debug("Sending json: {}", json);
+			this.sendMessage(new TextMessage(json));
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	public void sendMessage(WebSocketMessage<?> message) throws IOException {
+		this.sendMessage(message, false);
+	}
+
+	public synchronized void sendMessage(WebSocketMessage<?> message, boolean direct) throws IOException {
+		if (direct) {
+			Preconditions.checkNotNull(session, "Session is null.");
+			Preconditions.checkArgument(session.isOpen(), "Session is closed.");
+			session.sendMessage(message);
+			return;
+		}
+		if (session != null && session.isOpen()) {
+			session.sendMessage(message);
+		} else {
+			messages.add(message);
+		}
+	}
+
+	private void sendCacheMessage() {
+		for (WebSocketMessage<?> webSocketMessage : messages) {
+			try {
+				this.sendMessage(webSocketMessage, true);
+			} catch (IOException e) {
+				log.error("Error when sending msg, will not propagate.", e);
+			}
+		}
+	}
+
+	// -----------------------------
+	// ----- OUTBOUND
+	// -----------------------------
 
 	@Override
 	public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws Exception {
@@ -51,13 +106,13 @@ public class Subscriber extends AbstractWebSocketHandler {
 	protected void handleBinaryMessage(WebSocketSession session, BinaryMessage message) throws Exception {
 		throw new UnsupportedOperationException();
 	}
-	
+
 	@Override
 	protected void handlePongMessage(WebSocketSession session, PongMessage message) throws Exception {
 		log.debug("{}: Pond recieved. msg: {}", this.getName(), message);
 		this.onPong("Standard Pong");
 	}
-	
+
 	@Override
 	public final void afterConnectionEstablished(WebSocketSession session) throws Exception {
 		log.info("Connection Established[{}].", this.getName());
@@ -67,7 +122,8 @@ public class Subscriber extends AbstractWebSocketHandler {
 			heartbeat.start(session);
 			log.info("Hearbeat Started[{}].", this.getName());
 		}
-		webSocketManager.getSubscriber().onConnected(session);;
+		this.sendCacheMessage();
+		connectedListener.accept(session);
 	}
 
 	@Override
@@ -85,7 +141,7 @@ public class Subscriber extends AbstractWebSocketHandler {
 		}
 		// abnormal close
 		log.error("Connection[{}] is abnormally closed, CloseStatus={}.", this.getName(), status);
-		webSocketManager.getSubscriber().onAbnormalConnectionClosed(status);
+		abnormalConnectionClosedListener.accept(status);
 	}
 
 	@Override
@@ -103,50 +159,13 @@ public class Subscriber extends AbstractWebSocketHandler {
 		}
 	}
 
-	protected String getName() {
-		return this.webSocketManager.getName();
-	}
-	
-	public void onConnected(WebSocketSession session) {
-		connectedListener.accept(session);
-		this.doSend();
-	}
-
-	public void onPingTimeout(WebSocketSession session) {
+	protected void onPingTimeout(WebSocketSession session) {
 		log.error("pingTimeout");
 		pingTimeoutListener.accept(session);
 	}
 
-	public void onAbnormalConnectionClosed(CloseStatus status) {
-		log.error("onAbnormalConnectionClosed: {}", status);
-		abnormalConnectionClosedListener.accept(status);
-	}
-
-	public void unhandledMessage(Object obj) {
+	protected void unhandledMessage(Object obj) {
 		log.warn("Unhandled Message: {}", obj, new RuntimeException());
-	}
-
-	public void send(Object sub) {
-		if (webSocketManager != null && webSocketManager.isConnected()) {
-			this.doSend(sub);
-		} else {
-			this.subRequests.add(sub);
-		}
-	}
-
-	private void doSend() {
-		for (Object object : subRequests) {
-			doSend(object);
-		}
-	}
-
-	private void doSend(Object object) {
-		try {
-			log.info("Sending Sub Request: {}", object);
-			webSocketManager.sendInJson(object);
-		} catch (Exception e) {
-			log.error("Error when sending: {}", object, e);
-		}
 	}
 
 }

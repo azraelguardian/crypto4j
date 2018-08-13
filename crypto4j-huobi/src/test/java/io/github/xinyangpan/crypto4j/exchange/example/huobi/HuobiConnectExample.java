@@ -68,6 +68,7 @@ public class HuobiConnectExample {
 			executorService.execute(() -> {
 				try {
 					CompletableFuture<HuobiWsResponse<?>> request = huobiSubscriber.request(klineRequest);
+					request.whenComplete((t, e) -> System.out.println(t));
 //					HuobiWsResponse<?> huobiWsResponse = request.get();
 //					System.out.println(huobiWsResponse);
 				} catch (InterruptedException | ExecutionException e) {
