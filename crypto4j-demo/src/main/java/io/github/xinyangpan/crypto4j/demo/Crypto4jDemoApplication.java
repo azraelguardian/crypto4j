@@ -17,11 +17,11 @@ import io.github.xinyangpan.crypto4j.demo.service.HuobiWsKlineProcess;
 @EnableJpaRepositories
 @EnableTransactionManagement
 @EnableScheduling
-public class Demo {
+public class Crypto4jDemoApplication {
 
 	public static void main(String[] args) {
 		// 
-		ConfigurableApplicationContext context = SpringApplication.run(Demo.class, args);
+		ConfigurableApplicationContext context = SpringApplication.run(Crypto4jDemoApplication.class, args);
 		HuobiWsKlineProcess huobiWsKlineProcess = context.getBean(HuobiWsKlineProcess.class);
 		huobiWsKlineProcess.start();
 	}
