@@ -41,12 +41,6 @@
 			<version>${project.version}</version>
 		</dependency>
 
-		<dependency>
-			<groupId>io.github.xinyang-pan.crypto4j</groupId>
-			<artifactId>crypto4j-okex</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-
 		<!-- provided or optional -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
