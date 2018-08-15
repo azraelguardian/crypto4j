@@ -37,7 +37,12 @@ public class BaseHuobiRestService extends BaseRestService {
 
 	public BaseHuobiRestService(RestProperties restProperties) {
 		this.restProperties = restProperties;
-		HASHING = Hashing.hmacSha256(restProperties.getRestSecret().getBytes());
+		String restSecret = restProperties.getRestSecret();
+		if (restSecret != null) {
+			HASHING = Hashing.hmacSha256(restSecret.getBytes());
+		} else {
+			HASHING = null;
+		}
 		builderFactory = new DefaultUriBuilderFactory();
 		builderFactory.setEncodingMode(EncodingMode.NONE);
 	}
