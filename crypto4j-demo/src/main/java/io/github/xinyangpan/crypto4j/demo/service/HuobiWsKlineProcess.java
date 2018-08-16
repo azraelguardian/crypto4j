@@ -21,11 +21,14 @@ public class HuobiWsKlineProcess {
 	private HuobiManager connector;
 
 	public void start() {
+		HuobiSubscriber huobiSubscriber = this.buildSubscriber();
 		// 
 		connector = new HuobiManager();
 		connector.setUrl("wss://api.huobi.pro/ws");
-		connector.setSubscriber(this.buildSubscriber());
+		connector.setSubscriber(huobiSubscriber);
 		connector.connect();
+		// 
+		huobiSubscriber.setAbnormalConnectionClosedListener(closeStatus -> connector.reconnect());
 	}
 
 	private HuobiSubscriber buildSubscriber() {
