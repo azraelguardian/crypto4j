@@ -68,7 +68,7 @@ public class KlinePersistService implements Lifecycle {
 			this.wait(1000 * 5);
 		} catch (InterruptedException e) {}
 		if (klinePos.isEmpty()) {
-			log.info("Persisting: Cache is empty.");
+			log.debug("Persisting: Cache is empty.");
 			return;
 		}
 		log.info("Persisting: {} records.", klinePos.size());
