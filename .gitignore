@@ -19,3 +19,4 @@ out/
 .springBeans
 *.secret
 *.key
+pom.xml.versionsBackup
