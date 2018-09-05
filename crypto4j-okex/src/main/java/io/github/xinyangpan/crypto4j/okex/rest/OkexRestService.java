@@ -1,9 +1,13 @@
 package io.github.xinyangpan.crypto4j.okex.rest;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
+
+import com.google.common.base.Preconditions;
 
 import io.github.xinyangpan.crypto4j.core.RestProperties;
 import io.github.xinyangpan.crypto4j.okex.dto.account.UserInfo;
@@ -13,6 +17,7 @@ import io.github.xinyangpan.crypto4j.okex.dto.trade.CancelOrder;
 import io.github.xinyangpan.crypto4j.okex.dto.trade.CancelOrderResponse;
 import io.github.xinyangpan.crypto4j.okex.dto.trade.Order;
 import io.github.xinyangpan.crypto4j.okex.dto.trade.OrderResponse;
+import io.github.xinyangpan.crypto4j.okex.dto.trade.OrderResult;
 import io.github.xinyangpan.crypto4j.okex.dto.trade.QueryOrder;
 import io.github.xinyangpan.crypto4j.okex.dto.trade.QueryOrderResponse;
 
@@ -56,24 +61,33 @@ public class OkexRestService extends BaseOkexRestService {
 		return restTemplate.postForObject(url, requestEntity, CancelOrderResponse.class);
 	}
 
-	public QueryOrderResponse queryOrder(QueryOrder queryOrder) {
+	public OrderResult queryOrder(QueryOrder queryOrder) {
 		log.debug("{}", queryOrder);
 		String url = this.getUrl("/api/v1/order_info.do");
 		HttpEntity<String> requestEntity = this.buildSignedRequestEntity(queryOrder);
-		return restTemplate.postForObject(url, requestEntity, QueryOrderResponse.class);
+		return this.getOrderResult(restTemplate.postForObject(url, requestEntity, QueryOrderResponse.class));
 	}
 
-	public QueryOrderResponse queryOrder(String symbol, long orderId) {
+	public OrderResult queryOrder(String symbol, long orderId) {
 		return this.queryOrder(new QueryOrder(symbol, orderId));
 	}
 
-	public QueryOrderResponse placeAndQueryOrder(Order order) {
+	private OrderResult getOrderResult(QueryOrderResponse queryOrderResponse) {
+		queryOrderResponse.throwExceptionWhenError();
+		List<OrderResult> orders = queryOrderResponse.getOrders();
+		Preconditions.checkState(orders != null && orders.size() == 1);
+		OrderResult orderResult = orders.get(0);
+		return orderResult;
+	}
+
+	public OrderResult placeAndQueryOrder(Order order) {
 		OrderResponse orderResponse = this.placeOrder(order).throwExceptionWhenError();
 		return this.queryOrder(order.getSymbol(), orderResponse.getOrderId());
 	}
 
-	public QueryOrderResponse simulateIocAndQueryOrder(Order order) {
+	public OrderResult simulateIocAndQueryOrder(Order order) {
 		OrderResponse orderResponse = this.placeOrder(order).throwExceptionWhenError();
+
 		CancelOrderResponse cancelOrderResponse = this.cancelOrder(new CancelOrder(order.getSymbol(), orderResponse.getOrderId()));
 		log.debug("{}", cancelOrderResponse);
 		// 1009 没有订单, filled, throw Exception if not 1009

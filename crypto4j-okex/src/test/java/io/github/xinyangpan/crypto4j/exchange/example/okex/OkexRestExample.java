@@ -8,7 +8,6 @@ import io.github.xinyangpan.crypto4j.okex.dto.enums.OrderType;
 import io.github.xinyangpan.crypto4j.okex.dto.market.Depth;
 import io.github.xinyangpan.crypto4j.okex.dto.market.OkexDepthEntry;
 import io.github.xinyangpan.crypto4j.okex.dto.trade.Order;
-import io.github.xinyangpan.crypto4j.okex.dto.trade.QueryOrderResponse;
 import io.github.xinyangpan.crypto4j.okex.rest.OkexRestService;
 
 public class OkexRestExample {
@@ -43,8 +42,7 @@ public class OkexRestExample {
 			}
 			System.out.println(entry);
 			order.setPrice(entry.getPrice().stripTrailingZeros());
-			QueryOrderResponse orderResponse = okexRestService.placeAndQueryOrder(order);
-			System.out.println(orderResponse);
+			System.out.println(okexRestService.placeAndQueryOrder(order));
 			break;
 		}
 	}
