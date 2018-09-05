@@ -51,11 +51,17 @@ public class OkexRestExample {
 	
 	static void placeOrder() {
 		// 
+//		Order order = new Order();
+//		order.setAmount(new BigDecimal("0.001"));
+//		order.setPrice(new BigDecimal("7000"));
+//		order.setSymbol(BTCUSDT);
+//		order.setType(OrderType.sell);
+		
 		Order order = new Order();
-		order.setAmount(new BigDecimal("0.001"));
+//		order.setAmount(new BigDecimal("0.001"));
 		order.setPrice(new BigDecimal("7000"));
 		order.setSymbol(BTCUSDT);
-		order.setType(OrderType.sell);
+		order.setType(OrderType.buy_market);
 		// 
 		System.out.println(okexRestService.simulateIocAndQueryOrder(order));
 	}
