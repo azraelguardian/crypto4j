@@ -128,6 +128,7 @@ public class HuobiRestService extends BaseHuobiRestService {
 		OrderDetail orderDetail = null;
 		for (int i = 0; i < 3; i++) {
 			orderDetail = this.queryOrderDetail(orderId);
+			log.debug("orderDetail[{}]: {}", i, orderDetail);
 			OrderType orderType = orderDetail.getOrderResult().getType();
 			switch (orderType) {
 			case BUY_IOC:
