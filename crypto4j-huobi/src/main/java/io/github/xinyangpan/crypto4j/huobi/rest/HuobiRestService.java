@@ -117,14 +117,18 @@ public class HuobiRestService extends BaseHuobiRestService {
 		return response;
 	}
 
-	@SneakyThrows
 	public OrderDetail placeAndQueryDetails(Order order) {
 		String orderId = this.placeOrder(order).fethData();
+		return queryOrderDetailLoop(orderId);
+	}
+
+	@SneakyThrows
+	public OrderDetail queryOrderDetailLoop(String orderId) {
 		Thread.sleep(50);
 		OrderDetail orderDetail = null;
 		for (int i = 0; i < 3; i++) {
 			orderDetail = this.queryOrderDetail(orderId);
-			OrderType orderType = order.getType();
+			OrderType orderType = orderDetail.getOrderResult().getType();
 			switch (orderType) {
 			case BUY_IOC:
 			case SELL_IOC:
@@ -143,7 +147,7 @@ public class HuobiRestService extends BaseHuobiRestService {
 		}
 		return orderDetail;
 	}
-
+	
 	public OrderDetail queryOrderDetail(String orderId) {
 		OrderDetail orderDetail = new OrderDetail();
 		orderDetail.setOrderId(orderId);
