@@ -1,17 +1,12 @@
 package io.github.xinyangpan.crypto4j.exchange.example.huobi;
 
 import java.math.BigDecimal;
-import java.util.List;
-
-import org.springframework.web.client.HttpClientErrorException;
 
 import io.github.xinyangpan.crypto4j.core.RestProperties;
 import io.github.xinyangpan.crypto4j.exchange.example.Crypto4jUtils;
 import io.github.xinyangpan.crypto4j.huobi.dto.enums.OrderType;
 import io.github.xinyangpan.crypto4j.huobi.dto.market.depth.Depth;
 import io.github.xinyangpan.crypto4j.huobi.dto.market.depth.HuobiDepthEntry;
-import io.github.xinyangpan.crypto4j.huobi.dto.market.kline.Kline;
-import io.github.xinyangpan.crypto4j.huobi.dto.market.kline.KlineParam;
 import io.github.xinyangpan.crypto4j.huobi.dto.trade.Order;
 import io.github.xinyangpan.crypto4j.huobi.dto.trade.OrderDetail;
 import io.github.xinyangpan.crypto4j.huobi.rest.HuobiRestService;
@@ -69,32 +64,7 @@ public class HuobiRestExample {
 	}
 
 	public static void main(String[] args) throws InterruptedException {
-		try {
-			//		System.out.println(huobiRestService.tickers());
-			//		System.out.println(huobiRestService.depth(BTCUSDT));
-			//		RestResponse<String> restResponse = huobiRestService.placeOrder(order);
-			//		System.out.println(restResponse);
-			//		System.out.println(huobiRestService.queryOrder(restResponse.getData()));
-			//		System.out.println(huobiRestService.queryExecution("8467743061"));
-			//		System.out.println(huobiRestService.queryOrder(new QueryOrder(order.getSymbol(), 834593837)));
-			//		System.out.println(huobiRestService.cancelOrder(new CancelOrder(order.getSymbol(), 835120964, 835120003)));
-			//		System.out.println(huobiRestService.userinfo());
-			//		placeOrder();
-			//		System.out.println(huobiRestService.queryOrder("8916822336"));
-			//		System.out.println(huobiRestService.queryOrderDetail("8995757032"));
-			//		System.out.println(huobiRestService.symbols().getData().size());
-			KlineParam klineParam = KlineParam.builder()//
-				.symbol(BTCUSDT).period("15min").size(2)//
-				.build();
-			List<Kline> klines = huobiRestService.kline(klineParam).fethData();
-			for (Kline kline : klines) {
-				System.out.println(kline);
-				System.out.println(kline.getOpenTime());
-			}
-		} catch (HttpClientErrorException e) {
-			System.out.println(e.getResponseBodyAsString());
-			e.printStackTrace();
-		}
+		System.out.println(huobiRestService.queryExecution("11732153458"));
 	}
 
 }

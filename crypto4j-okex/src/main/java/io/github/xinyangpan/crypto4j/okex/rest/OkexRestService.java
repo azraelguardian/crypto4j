@@ -12,6 +12,8 @@ import com.google.common.base.Preconditions;
 import io.github.xinyangpan.crypto4j.core.RestProperties;
 import io.github.xinyangpan.crypto4j.okex.dto.account.UserInfo;
 import io.github.xinyangpan.crypto4j.okex.dto.common.ErrorCode;
+import io.github.xinyangpan.crypto4j.okex.dto.enums.OrderStatus;
+import io.github.xinyangpan.crypto4j.okex.dto.enums.OrderType;
 import io.github.xinyangpan.crypto4j.okex.dto.market.Depth;
 import io.github.xinyangpan.crypto4j.okex.dto.trade.CancelOrder;
 import io.github.xinyangpan.crypto4j.okex.dto.trade.CancelOrderResponse;
@@ -20,6 +22,7 @@ import io.github.xinyangpan.crypto4j.okex.dto.trade.OrderResponse;
 import io.github.xinyangpan.crypto4j.okex.dto.trade.OrderResult;
 import io.github.xinyangpan.crypto4j.okex.dto.trade.QueryOrder;
 import io.github.xinyangpan.crypto4j.okex.dto.trade.QueryOrderResponse;
+import lombok.SneakyThrows;
 
 public class OkexRestService extends BaseOkexRestService {
 	private static final Logger log = LoggerFactory.getLogger(OkexRestService.class);
@@ -61,15 +64,29 @@ public class OkexRestService extends BaseOkexRestService {
 		return restTemplate.postForObject(url, requestEntity, CancelOrderResponse.class);
 	}
 
-	public OrderResult queryOrder(QueryOrder queryOrder) {
+	public OrderResult queryOrder(String symbol, long orderId) {
+		QueryOrder queryOrder = new QueryOrder(symbol, orderId);
 		log.debug("{}", queryOrder);
 		String url = this.getUrl("/api/v1/order_info.do");
 		HttpEntity<String> requestEntity = this.buildSignedRequestEntity(queryOrder);
 		return this.getOrderResult(restTemplate.postForObject(url, requestEntity, QueryOrderResponse.class));
 	}
 
-	public OrderResult queryOrder(String symbol, long orderId) {
-		return this.queryOrder(new QueryOrder(symbol, orderId));
+	@SneakyThrows
+	public OrderResult queryOrderForFinalStatus(String symbol, long orderId) {
+		Thread.sleep(50);
+		OrderResult orderResult = null;
+		for (int i = 0; i < 3; i++) {
+			orderResult = this.queryOrder(symbol, orderId);
+			OrderStatus orderStatus = orderResult.getStatus();
+			if (orderStatus == OrderStatus.NEW || orderStatus == OrderStatus.PENDING_CANCEL) {
+				Thread.sleep(100);
+				continue;
+			} else {
+				return orderResult;
+			}
+		}
+		return orderResult;
 	}
 
 	private OrderResult getOrderResult(QueryOrderResponse queryOrderResponse) {
@@ -82,7 +99,12 @@ public class OkexRestService extends BaseOkexRestService {
 
 	public OrderResult placeAndQueryOrder(Order order) {
 		OrderResponse orderResponse = this.placeOrder(order).throwExceptionWhenError();
-		return this.queryOrder(order.getSymbol(), orderResponse.getOrderId());
+		OrderType orderType = order.getType();
+		if (orderType == OrderType.buy_market || orderType == OrderType.sell_market) {
+			return this.queryOrderForFinalStatus(order.getSymbol(), orderResponse.getOrderId());
+		} else {
+			return this.queryOrder(order.getSymbol(), orderResponse.getOrderId());
+		}
 	}
 
 	public OrderResult simulateIocAndQueryOrder(Order order) {
@@ -100,7 +122,7 @@ public class OkexRestService extends BaseOkexRestService {
 				cancelOrderResponse.throwExceptionWhenError();
 			}
 		}
-		return this.queryOrder(order.getSymbol(), orderResponse.getOrderId());
+		return this.queryOrderForFinalStatus(order.getSymbol(), orderResponse.getOrderId());
 	}
 
 }

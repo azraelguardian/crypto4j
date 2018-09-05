@@ -18,7 +18,6 @@ import io.github.xinyangpan.crypto4j.huobi.dto.account.AccountInfo;
 import io.github.xinyangpan.crypto4j.huobi.dto.common.HuobiRestChannelResponse;
 import io.github.xinyangpan.crypto4j.huobi.dto.common.HuobiRestResponse;
 import io.github.xinyangpan.crypto4j.huobi.dto.enums.OrderState;
-import io.github.xinyangpan.crypto4j.huobi.dto.enums.OrderType;
 import io.github.xinyangpan.crypto4j.huobi.dto.market.Symbol;
 import io.github.xinyangpan.crypto4j.huobi.dto.market.depth.Depth;
 import io.github.xinyangpan.crypto4j.huobi.dto.market.kline.Kline;
@@ -103,7 +102,7 @@ public class HuobiRestService extends BaseHuobiRestService {
 	public HuobiRestResponse<List<Execution>> queryExecution(String orderId, int attempt) {
 		HuobiRestResponse<List<Execution>> response = null;
 		try {
-			for (int i = 0; i < 3; i++) {
+			for (int i = 0; i < attempt; i++) {
 				response = this.queryExecution(orderId);
 				if (response.isSuccessful()) {
 					return response;
@@ -119,43 +118,42 @@ public class HuobiRestService extends BaseHuobiRestService {
 
 	public OrderDetail placeAndQueryDetails(Order order) {
 		String orderId = this.placeOrder(order).fethData();
-		return queryOrderDetailLoop(orderId);
+		switch (order.getType()) {
+		case BUY_IOC:
+		case SELL_IOC:
+		case BUY_MARKET:
+		case SELL_MARKET:
+			return queryOrderDetailForFinalState(orderId);
+		default:
+			return this.queryOrderDetail(orderId);
+		}
 	}
 
 	@SneakyThrows
-	public OrderDetail queryOrderDetailLoop(String orderId) {
+	public OrderDetail queryOrderDetailForFinalState(String orderId) {
 		Thread.sleep(50);
 		OrderDetail orderDetail = null;
 		for (int i = 0; i < 3; i++) {
 			orderDetail = this.queryOrderDetail(orderId);
 			log.debug("orderDetail[{}]: {}", i, orderDetail);
-			OrderType orderType = orderDetail.getOrderResult().getType();
-			switch (orderType) {
-			case BUY_IOC:
-			case SELL_IOC:
-			case BUY_MARKET:
-			case SELL_MARKET:
-				OrderState orderState = orderDetail.getOrderResult().getState();
-				if (orderState == OrderState.SUBMITTING || orderState == OrderState.SUBMITTED) {
-					Thread.sleep(100);
-					continue;
-				} else {
-					return orderDetail;
-				}
-			default:
+			OrderState orderState = orderDetail.getOrderResult().getState();
+			if (orderState == OrderState.SUBMITTING || orderState == OrderState.SUBMITTED) {
+				Thread.sleep(100);
+				continue;
+			} else {
 				return orderDetail;
 			}
 		}
 		return orderDetail;
 	}
-	
+
 	public OrderDetail queryOrderDetail(String orderId) {
 		OrderDetail orderDetail = new OrderDetail();
 		orderDetail.setOrderId(orderId);
 		OrderResult orderResult = this.queryOrder(orderId).fethData();
 		orderDetail.setOrderResult(orderResult);
 		if (orderResult.getFieldAmount().compareTo(BigDecimal.ZERO) > 0) {
-			List<Execution> executions = this.queryExecution(orderId, 3).fethData();
+			List<Execution> executions = this.queryExecution(orderId, 5).fethData();
 			orderDetail.setExecutions(executions);
 		}
 		// 
