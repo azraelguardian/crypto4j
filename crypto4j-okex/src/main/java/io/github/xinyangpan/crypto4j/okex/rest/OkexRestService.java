@@ -74,6 +74,7 @@ public class OkexRestService extends BaseOkexRestService {
 	public QueryOrderResponse simulateIocAndQueryOrder(Order order) {
 		OrderResponse orderResponse = this.placeOrder(order).throwExceptionWhenError();
 		CancelOrderResponse cancelOrderResponse = this.cancelOrder(new CancelOrder(order.getSymbol(), orderResponse.getOrderId()));
+		log.debug("{}", cancelOrderResponse);
 		// 1009 没有订单, filled, throw Exception if not 1009
 		Integer code = cancelOrderResponse.getErrorCode().getCode();
 		if (code != 1009 && code != 1051) {
