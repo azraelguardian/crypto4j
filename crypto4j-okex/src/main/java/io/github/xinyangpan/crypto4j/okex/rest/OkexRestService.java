@@ -78,10 +78,11 @@ public class OkexRestService extends BaseOkexRestService {
 		log.debug("{}", cancelOrderResponse);
 		// 1009 没有订单, filled, throw Exception if not 1009
 		// 1051	订单已完成交易
+		// 1019	撤销订单失败
 		ErrorCode errorCode = cancelOrderResponse.getErrorCode();
 		if (errorCode != null) {
 			Integer code = errorCode.getCode();
-			if (code != null && code != 1009 && code != 1051) {
+			if (code != null && code != 1009 && code != 1019 && code != 1051) {
 				cancelOrderResponse.throwExceptionWhenError();
 			}
 		}
