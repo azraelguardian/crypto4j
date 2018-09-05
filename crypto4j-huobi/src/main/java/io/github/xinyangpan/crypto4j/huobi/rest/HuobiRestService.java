@@ -17,6 +17,8 @@ import io.github.xinyangpan.crypto4j.core.RestProperties;
 import io.github.xinyangpan.crypto4j.huobi.dto.account.AccountInfo;
 import io.github.xinyangpan.crypto4j.huobi.dto.common.HuobiRestChannelResponse;
 import io.github.xinyangpan.crypto4j.huobi.dto.common.HuobiRestResponse;
+import io.github.xinyangpan.crypto4j.huobi.dto.enums.OrderState;
+import io.github.xinyangpan.crypto4j.huobi.dto.enums.OrderType;
 import io.github.xinyangpan.crypto4j.huobi.dto.market.Symbol;
 import io.github.xinyangpan.crypto4j.huobi.dto.market.depth.Depth;
 import io.github.xinyangpan.crypto4j.huobi.dto.market.kline.Kline;
@@ -25,6 +27,7 @@ import io.github.xinyangpan.crypto4j.huobi.dto.trade.Execution;
 import io.github.xinyangpan.crypto4j.huobi.dto.trade.Order;
 import io.github.xinyangpan.crypto4j.huobi.dto.trade.OrderDetail;
 import io.github.xinyangpan.crypto4j.huobi.dto.trade.OrderResult;
+import lombok.SneakyThrows;
 
 public class HuobiRestService extends BaseHuobiRestService {
 	private static final Logger log = LoggerFactory.getLogger(HuobiRestService.class);
@@ -114,9 +117,31 @@ public class HuobiRestService extends BaseHuobiRestService {
 		return response;
 	}
 
+	@SneakyThrows
 	public OrderDetail placeAndQueryDetails(Order order) {
 		String orderId = this.placeOrder(order).fethData();
-		return this.queryOrderDetail(orderId);
+		Thread.sleep(50);
+		OrderDetail orderDetail = null;
+		for (int i = 0; i < 3; i++) {
+			orderDetail = this.queryOrderDetail(orderId);
+			OrderType orderType = order.getType();
+			switch (orderType) {
+			case BUY_IOC:
+			case SELL_IOC:
+			case BUY_MARKET:
+			case SELL_MARKET:
+				OrderState orderState = orderDetail.getOrderResult().getState();
+				if (orderState == OrderState.SUBMITTING || orderState == OrderState.SUBMITTED) {
+					Thread.sleep(100);
+					continue;
+				} else {
+					return orderDetail;
+				}
+			default:
+				return orderDetail;
+			}
+		}
+		return orderDetail;
 	}
 
 	public OrderDetail queryOrderDetail(String orderId) {
