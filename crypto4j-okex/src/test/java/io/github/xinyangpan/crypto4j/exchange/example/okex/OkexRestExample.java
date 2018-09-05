@@ -52,14 +52,12 @@ public class OkexRestExample {
 	static void placeOrder() {
 		// 
 		Order order = new Order();
-		order.setAmount(new BigDecimal("0.4"));
-//		order.setPrice(new BigDecimal("700"));
+		order.setAmount(new BigDecimal("0.001"));
+		order.setPrice(new BigDecimal("7000"));
 		order.setSymbol(BTCUSDT);
-		order.setType(OrderType.sell_market);
+		order.setType(OrderType.sell);
 		// 
-//		QueryOrderResponse placeAndQueryOrder = okexRestService.placeAndQueryOrder(order);
-//		System.out.println(placeAndQueryOrder);
-		System.out.println(okexRestService.placeOrder(order));
+		System.out.println(okexRestService.simulateIocAndQueryOrder(order));
 	}
 	
 	public static void main(String[] args) throws InterruptedException {
