@@ -78,6 +78,7 @@ public class OkexRestService extends BaseOkexRestService {
 		OrderResult orderResult = null;
 		for (int i = 0; i < 3; i++) {
 			orderResult = this.queryOrder(symbol, orderId);
+			log.debug("orderDetail[{}]: {}", i, orderResult);
 			OrderStatus orderStatus = orderResult.getStatus();
 			if (orderStatus == OrderStatus.NEW || orderStatus == OrderStatus.PENDING_CANCEL) {
 				Thread.sleep(100);

@@ -107,7 +107,7 @@ public class HuobiRestService extends BaseHuobiRestService {
 				if (response.isSuccessful()) {
 					return response;
 				}
-				log.debug("retry ... RestResponse: {}", response);
+				log.debug("retry ... RestResponse[{}]: {}", i, response);
 				Thread.sleep(1000);
 			}
 		} catch (InterruptedException e) {}
