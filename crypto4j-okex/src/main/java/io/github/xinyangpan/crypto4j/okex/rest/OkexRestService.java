@@ -7,6 +7,7 @@ import org.springframework.http.HttpMethod;
 
 import io.github.xinyangpan.crypto4j.core.RestProperties;
 import io.github.xinyangpan.crypto4j.okex.dto.account.UserInfo;
+import io.github.xinyangpan.crypto4j.okex.dto.common.ErrorCode;
 import io.github.xinyangpan.crypto4j.okex.dto.market.Depth;
 import io.github.xinyangpan.crypto4j.okex.dto.trade.CancelOrder;
 import io.github.xinyangpan.crypto4j.okex.dto.trade.CancelOrderResponse;
@@ -76,9 +77,13 @@ public class OkexRestService extends BaseOkexRestService {
 		CancelOrderResponse cancelOrderResponse = this.cancelOrder(new CancelOrder(order.getSymbol(), orderResponse.getOrderId()));
 		log.debug("{}", cancelOrderResponse);
 		// 1009 没有订单, filled, throw Exception if not 1009
-		Integer code = cancelOrderResponse.getErrorCode().getCode();
-		if (code != 1009 && code != 1051) {
-			cancelOrderResponse.throwExceptionWhenError();
+		// 1051	订单已完成交易
+		ErrorCode errorCode = cancelOrderResponse.getErrorCode();
+		if (errorCode != null) {
+			Integer code = errorCode.getCode();
+			if (code != null && code != 1009 && code != 1051) {
+				cancelOrderResponse.throwExceptionWhenError();
+			}
 		}
 		return this.queryOrder(order.getSymbol(), orderResponse.getOrderId());
 	}
