@@ -17,17 +17,14 @@ import com.google.common.hash.Hashing;
 import io.github.xinyangpan.crypto4j.core.RestProperties;
 import io.github.xinyangpan.crypto4j.core.rest.BaseRestService;
 import io.github.xinyangpan.crypto4j.core.util.Crypto4jUtils;
-import lombok.Getter;
 
 public class BaseOkexRestService extends BaseRestService {
 	// 
-	@Getter
-	protected final RestProperties restProperties;
 	private final HashFunction HASHING;
 
 	@SuppressWarnings("deprecation")
 	public BaseOkexRestService(RestProperties restProperties) {
-		this.restProperties = restProperties;
+		super(restProperties);
 		HASHING = Hashing.md5();
 	}
 

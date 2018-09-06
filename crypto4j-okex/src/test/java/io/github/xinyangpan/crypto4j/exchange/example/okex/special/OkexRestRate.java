@@ -1,5 +1,6 @@
 package io.github.xinyangpan.crypto4j.exchange.example.okex.special;
 
+import java.io.PrintStream;
 import java.time.LocalDateTime;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -47,13 +48,16 @@ public class OkexRestRate {
 				OkexRestService okexRestService = okexRestServices[j % 3];
 				String key = okexRestService.getRestProperties().getRestKey();
 				Object message;
+				PrintStream out;
 				try {
 					message = okexRestService.userinfo();
+					out = System.out;
 				} catch (Exception e) {
 					message = e.getMessage();
 					e.printStackTrace();
+					out = System.err;
 				}
-				System.out.println(String.format("%s [%s/%s] - %s", j + 1, LocalDateTime.now(), key, message));
+				out.println(String.format("%s [%s/%s] - %s", j + 1, LocalDateTime.now(), key, message));
 			});
 		}
 		executorService.shutdown();

@@ -31,12 +31,11 @@ import io.github.xinyangpan.crypto4j.core.util.Crypto4jUtils;
 public class BaseHuobiRestService extends BaseRestService {
 	private static final Logger log = LoggerFactory.getLogger(BaseHuobiRestService.class);
 	// 
-	protected final RestProperties restProperties;
 	private final HashFunction HASHING;
 	private final DefaultUriBuilderFactory builderFactory;
 
 	public BaseHuobiRestService(RestProperties restProperties) {
-		this.restProperties = restProperties;
+		super(restProperties);
 		String restSecret = restProperties.getRestSecret();
 		if (restSecret != null) {
 			HASHING = Hashing.hmacSha256(restSecret.getBytes());

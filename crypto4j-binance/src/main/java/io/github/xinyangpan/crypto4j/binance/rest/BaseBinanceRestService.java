@@ -10,12 +10,10 @@ import io.github.xinyangpan.crypto4j.core.RestProperties;
 import io.github.xinyangpan.crypto4j.core.rest.BaseRestService;
 
 public class BaseBinanceRestService extends BaseRestService {
-	private final RestProperties restProperties;
 	private final HashFunction HASHING;
 
 	public BaseBinanceRestService(RestProperties restProperties) {
-		super();
-		this.restProperties = restProperties;
+		super(restProperties);
 		HASHING = Hashing.hmacSha256(restProperties.getRestSecret().getBytes());
 	}
 
