@@ -123,22 +123,21 @@ public class HuobiRestService extends BaseHuobiRestService {
 		case SELL_IOC:
 		case BUY_MARKET:
 		case SELL_MARKET:
-			return queryOrderDetailForFinalState(orderId);
+			return queryOrderDetailForFinalState(orderId, 3);
 		default:
 			return this.queryOrderDetail(orderId);
 		}
 	}
 
 	@SneakyThrows
-	public OrderDetail queryOrderDetailForFinalState(String orderId) {
-		Thread.sleep(50);
+	public OrderDetail queryOrderDetailForFinalState(String orderId, int attempt) {
 		OrderDetail orderDetail = null;
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < attempt; i++) {
+			Thread.sleep(100 * (i + 1));
 			orderDetail = this.queryOrderDetail(orderId);
 			log.debug("orderDetail[{}]: {}", i, orderDetail);
 			OrderState orderState = orderDetail.getOrderResult().getState();
 			if (orderState == OrderState.SUBMITTING || orderState == OrderState.SUBMITTED) {
-				Thread.sleep(100);
 				continue;
 			} else {
 				return orderDetail;

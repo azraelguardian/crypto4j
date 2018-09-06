@@ -73,15 +73,14 @@ public class OkexRestService extends BaseOkexRestService {
 	}
 
 	@SneakyThrows
-	public OrderResult queryOrderForFinalStatus(String symbol, long orderId) {
-		Thread.sleep(50);
+	public OrderResult queryOrderForFinalStatus(String symbol, long orderId, int attempt) {
 		OrderResult orderResult = null;
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < attempt; i++) {
+			Thread.sleep(100 * (i + 1));
 			orderResult = this.queryOrder(symbol, orderId);
 			log.debug("orderDetail[{}]: {}", i, orderResult);
 			OrderStatus orderStatus = orderResult.getStatus();
 			if (orderStatus == OrderStatus.NEW || orderStatus == OrderStatus.PENDING_CANCEL) {
-				Thread.sleep(100);
 				continue;
 			} else {
 				return orderResult;
@@ -102,15 +101,16 @@ public class OkexRestService extends BaseOkexRestService {
 		OrderResponse orderResponse = this.placeOrder(order).throwExceptionWhenError();
 		OrderType orderType = order.getType();
 		if (orderType == OrderType.buy_market || orderType == OrderType.sell_market) {
-			return this.queryOrderForFinalStatus(order.getSymbol(), orderResponse.getOrderId());
+			return this.queryOrderForFinalStatus(order.getSymbol(), orderResponse.getOrderId(), 3);
 		} else {
 			return this.queryOrder(order.getSymbol(), orderResponse.getOrderId());
 		}
 	}
 
 	public OrderResult simulateIocAndQueryOrder(Order order) {
+		// Place Order
 		OrderResponse orderResponse = this.placeOrder(order).throwExceptionWhenError();
-
+		// Cancel Order
 		CancelOrderResponse cancelOrderResponse = this.cancelOrder(new CancelOrder(order.getSymbol(), orderResponse.getOrderId()));
 		log.debug("{}", cancelOrderResponse);
 		// 1009 没有订单, filled, throw Exception if not 1009
@@ -123,7 +123,7 @@ public class OkexRestService extends BaseOkexRestService {
 				cancelOrderResponse.throwExceptionWhenError();
 			}
 		}
-		return this.queryOrderForFinalStatus(order.getSymbol(), orderResponse.getOrderId());
+		return this.queryOrderForFinalStatus(order.getSymbol(), orderResponse.getOrderId(), 3);
 	}
 
 }
