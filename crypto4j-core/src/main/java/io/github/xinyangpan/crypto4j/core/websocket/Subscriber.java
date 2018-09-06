@@ -55,7 +55,7 @@ public class Subscriber extends AbstractWebSocketHandler {
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 	public void sendMessage(WebSocketMessage<?> message) throws IOException {
 		this.sendMessage(message, false);
 	}
@@ -119,7 +119,7 @@ public class Subscriber extends AbstractWebSocketHandler {
 		this.session = session;
 		Heartbeat heartbeat = webSocketManager.getHeartbeat();
 		if (heartbeat != null) {
-			heartbeat.start(session);
+			heartbeat.start(this);
 			log.info("Hearbeat Started[{}].", this.getName());
 		}
 		this.sendCacheMessage();

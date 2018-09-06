@@ -34,6 +34,9 @@ public class RestExample {
 					message = e.getMessage();
 					e.printStackTrace();
 					out = System.err;
+//					if (e.getStatusCode().value() == 418) {
+//						throw e;
+//					}
 				} catch (Exception e) {
 					message = e.getMessage();
 					e.printStackTrace();

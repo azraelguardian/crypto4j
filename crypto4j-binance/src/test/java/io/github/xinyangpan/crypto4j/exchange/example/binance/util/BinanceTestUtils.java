@@ -15,8 +15,8 @@ public class BinanceTestUtils {
 	public static BinanceProperties binanceProperties() {
 		RestProperties restProperties = new RestProperties();
 		restProperties.setRestBaseUrl("https://api.binance.com");
-		restProperties.setRestKey(Crypto4jUtils.getSecret("binance1.key"));
-		restProperties.setRestSecret(Crypto4jUtils.getSecret("binance1.secret"));
+		restProperties.setRestKey(Crypto4jUtils.getSecret("binance.key"));
+		restProperties.setRestSecret(Crypto4jUtils.getSecret("binance.secret"));
 		// 
 		BinanceProperties binanceProperties = new BinanceProperties();
 		binanceProperties.setWebsocketMarketBaseUrl("wss://stream.binance.com:9443/stream?streams=");

@@ -15,7 +15,7 @@ public class HuobiHeartbeat extends Heartbeat {
 	@Override
 	protected void sendPing() throws IOException {
 		String pingMsg = String.format("{\"ping\": %s}", System.currentTimeMillis());
-		session.sendMessage(new TextMessage(pingMsg));
+		subscriber.sendMessage(new TextMessage(pingMsg));
 	}
 
 }
