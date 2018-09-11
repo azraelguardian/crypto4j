@@ -39,7 +39,7 @@ public class RestExample {
 
 	static PlaceOrderRequest placeOrderRequest(BigDecimal price, BigDecimal qty) {
 		price = MoreObjects.firstNonNull(price, new BigDecimal("6300"));
-		qty = MoreObjects.firstNonNull(qty, new BigDecimal("0.01"));
+		qty = MoreObjects.firstNonNull(qty, new BigDecimal("0.0001"));
 		//
 		PlaceOrderRequest placeOrderRequest = new PlaceOrderRequest();
 		placeOrderRequest.setSymbol(BTCUSDT);
@@ -74,7 +74,7 @@ public class RestExample {
 		//		klineParam.setSymbol("BTCUSDT");
 		//		klineParam.setInterval("1m");
 		try {
-			System.out.println(binanceRestService.queryOrder("BTCUSDT", 162341957));
+			System.out.println(binanceRestService.queryOrder("BTCUSDT1", 162341957));
 		} catch (HttpClientErrorException e) {
 			// TODO Auto-generated catch block
 			System.out.println(e.getResponseBodyAsString());
