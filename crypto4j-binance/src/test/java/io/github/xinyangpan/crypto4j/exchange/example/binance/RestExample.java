@@ -2,6 +2,8 @@ package io.github.xinyangpan.crypto4j.exchange.example.binance;
 
 import java.math.BigDecimal;
 
+import org.springframework.web.client.HttpClientErrorException;
+
 import com.google.common.base.MoreObjects;
 
 import io.github.xinyangpan.crypto4j.binance.dto.enums.OrderType;
@@ -9,7 +11,6 @@ import io.github.xinyangpan.crypto4j.binance.dto.enums.Side;
 import io.github.xinyangpan.crypto4j.binance.dto.enums.TimeInForce;
 import io.github.xinyangpan.crypto4j.binance.dto.rest.account.QueryTradeRequest;
 import io.github.xinyangpan.crypto4j.binance.dto.rest.market.BookTicker;
-import io.github.xinyangpan.crypto4j.binance.dto.rest.market.KlineParam;
 import io.github.xinyangpan.crypto4j.binance.dto.rest.order.PlaceOrderRequest;
 import io.github.xinyangpan.crypto4j.binance.dto.rest.order.PlaceOrderResponse;
 import io.github.xinyangpan.crypto4j.binance.dto.rest.order.QueryOrderRequest;
@@ -37,12 +38,12 @@ public class RestExample {
 	}
 
 	static PlaceOrderRequest placeOrderRequest(BigDecimal price, BigDecimal qty) {
-		price = MoreObjects.firstNonNull(price, new BigDecimal("8100"));
+		price = MoreObjects.firstNonNull(price, new BigDecimal("6300"));
 		qty = MoreObjects.firstNonNull(qty, new BigDecimal("0.01"));
 		//
 		PlaceOrderRequest placeOrderRequest = new PlaceOrderRequest();
 		placeOrderRequest.setSymbol(BTCUSDT);
-		placeOrderRequest.setSide(Side.BUY);
+		placeOrderRequest.setSide(Side.SELL);
 		placeOrderRequest.setType(OrderType.LIMIT);
 		placeOrderRequest.setTimeInForce(TimeInForce.IOC);
 		placeOrderRequest.setPrice(price);
@@ -69,10 +70,16 @@ public class RestExample {
 	}
 
 	public static void main(String[] args) throws InterruptedException {
-		KlineParam klineParam = new KlineParam();
-		klineParam.setSymbol("BTCUSDT");
-		klineParam.setInterval("1m");
-		System.out.println(binanceRestService.kline(klineParam));
+		//		KlineParam klineParam = new KlineParam();
+		//		klineParam.setSymbol("BTCUSDT");
+		//		klineParam.setInterval("1m");
+		try {
+			System.out.println(binanceRestService.queryOrder("BTCUSDT", 162341957));
+		} catch (HttpClientErrorException e) {
+			// TODO Auto-generated catch block
+			System.out.println(e.getResponseBodyAsString());
+			e.printStackTrace();
+		}
 	}
 
 }

@@ -19,6 +19,7 @@ import io.github.xinyangpan.crypto4j.binance.dto.rest.market.ServerTime;
 import io.github.xinyangpan.crypto4j.binance.dto.rest.order.PlaceOrderRequest;
 import io.github.xinyangpan.crypto4j.binance.dto.rest.order.PlaceOrderResponse;
 import io.github.xinyangpan.crypto4j.binance.dto.rest.order.QueryOrderRequest;
+import io.github.xinyangpan.crypto4j.binance.dto.rest.order.QueryOrderResponse;
 import io.github.xinyangpan.crypto4j.core.RestProperties;
 import lombok.extern.slf4j.Slf4j;
 
@@ -65,11 +66,18 @@ public class BinanceRestService extends BaseBinanceRestService {
 		return restTemplate.postForObject(url, requestEntity, PlaceOrderResponse.class);
 	}
 
-	public String queryOrder(QueryOrderRequest queryOrderRequest) {
+	public QueryOrderResponse queryOrder(QueryOrderRequest queryOrderRequest) {
 		log.debug("{}", queryOrderRequest);
 		String url = this.getUrl("/api/v3/order?%s", this.toSignedRequestParam(queryOrderRequest));
 		HttpEntity<String> requestEntity = this.buildRequestEntity(null, false);
-		return restTemplate.exchange(url, HttpMethod.GET, requestEntity, String.class).getBody();
+		return restTemplate.exchange(url, HttpMethod.GET, requestEntity, QueryOrderResponse.class).getBody();
+	}
+
+	public QueryOrderResponse queryOrder(String symbol, long orderId) {
+		QueryOrderRequest queryOrderRequest = new QueryOrderRequest();
+		queryOrderRequest.setSymbol(symbol);
+		queryOrderRequest.setOrderId(orderId);
+		return this.queryOrder(queryOrderRequest);
 	}
 
 	public String queryTrade(QueryTradeRequest queryTradeRequest) {
