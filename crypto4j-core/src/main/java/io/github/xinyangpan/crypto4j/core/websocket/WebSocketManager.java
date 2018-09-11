@@ -40,13 +40,13 @@ public abstract class WebSocketManager<S extends Subscriber> {
 			Thread.sleep(5 * 1000);
 			WebSocketSession session = subscriber.getSession();
 			if (session != null && session.isOpen()) {
-				log.info("Session check passed.");
+				log.info("Session[{}] check passed.", name);
 				return;
 			}
-			log.error("Session check failed.");
+			log.error("Session[{}] check failed.", name);
 			new Thread(this::reconnect).start();
 		} catch (InterruptedException e) {
-			log.info("Session check Interrupted.");
+			log.info("Session[{}] check Interrupted.", name);
 		}
 	}
 
