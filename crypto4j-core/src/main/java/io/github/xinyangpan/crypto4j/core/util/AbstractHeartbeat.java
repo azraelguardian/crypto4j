@@ -10,7 +10,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 public abstract class AbstractHeartbeat {
-	private final Logger log = LoggerFactory.getLogger(this.getClass());
+	private static final Logger log = LoggerFactory.getLogger(AbstractHeartbeat.class);
 
 	// 
 	private Thread thread;
