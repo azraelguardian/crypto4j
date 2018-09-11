@@ -18,6 +18,7 @@ public abstract class WebSocketManager<S extends Subscriber> {
 	protected @Getter @Setter String name;
 	protected @Getter @Setter Heartbeat heartbeat;
 	protected @Getter @Setter S subscriber;
+	private Thread sessionChecker;
 
 	public void connect() {
 		Preconditions.checkNotNull(subscriber);
@@ -29,9 +30,29 @@ public abstract class WebSocketManager<S extends Subscriber> {
 		this.manager = createConnectionManager(url, subscriber);
 		log.info("WebSocketManager[{}] is connecting to {}.", name, url);
 		manager.start();
+		sessionChecker = new Thread(this::checkSession);
+		sessionChecker.start();
+	}
+
+	private void checkSession() {
+		try {
+			Thread.sleep(5 * 1000);
+			WebSocketSession session = subscriber.getSession();
+			if (session != null && session.isOpen()) {
+				log.info("Session check passed.");
+				return;
+			}
+			log.error("Session check failed.");
+			new Thread(this::reconnect).start();
+		} catch (InterruptedException e) {
+			log.info("Session check Interrupted.");
+		}
 	}
 
 	public void disconnect() {
+		if (sessionChecker != null) {
+			sessionChecker.interrupt();
+		}
 		if (manager == null) {
 			return;
 		}
