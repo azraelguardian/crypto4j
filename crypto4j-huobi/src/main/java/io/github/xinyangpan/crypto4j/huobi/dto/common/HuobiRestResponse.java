@@ -2,6 +2,7 @@ package io.github.xinyangpan.crypto4j.huobi.dto.common;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import io.github.xinyangpan.crypto4j.core.ResultErrorException;
 import io.github.xinyangpan.crypto4j.huobi.dto.enums.Status;
 import lombok.Data;
 
@@ -25,7 +26,7 @@ public class HuobiRestResponse<T> {
 		if (this.isSuccessful()) {
 			return this;
 		}
-		throw new RuntimeException(String.format("errCode: %s. err-msg: %s", errCode, errMsg));
+		throw new ResultErrorException(String.format("errCode: %s. err-msg: %s", errCode, errMsg));
 	}
 
 	public T fethData() {
