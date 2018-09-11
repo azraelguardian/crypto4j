@@ -92,6 +92,10 @@ public class OkexRestService extends BaseOkexRestService {
 	private OrderResult getOrderResult(QueryOrderResponse queryOrderResponse) {
 		queryOrderResponse.throwExceptionWhenError();
 		List<OrderResult> orders = queryOrderResponse.getOrders();
+		if (orders == null || orders.isEmpty()) {
+			return null;
+		}
+		log.debug("OrderResults: {}", orders);
 		Preconditions.checkState(orders != null && orders.size() == 1);
 		OrderResult orderResult = orders.get(0);
 		return orderResult;
