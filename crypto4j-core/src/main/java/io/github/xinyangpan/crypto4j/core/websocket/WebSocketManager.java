@@ -31,6 +31,7 @@ public abstract class WebSocketManager<S extends Subscriber> {
 		log.info("WebSocketManager[{}] is connecting to {}.", name, url);
 		manager.start();
 		sessionChecker = new Thread(this::checkSession);
+		sessionChecker.setDaemon(true);
 		sessionChecker.start();
 	}
 
