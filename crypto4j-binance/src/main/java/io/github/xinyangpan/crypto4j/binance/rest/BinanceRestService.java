@@ -56,21 +56,27 @@ public class BinanceRestService extends BaseBinanceRestService {
 		log.debug("account");
 		String url = this.getUrl("/api/v3/account?%s", this.toSignedRequestParam(new BaseRequest()));
 		HttpEntity<String> requestEntity = this.buildRequestEntity(null, false);
-		return restTemplate.exchange(url, HttpMethod.GET, requestEntity, Account.class).getBody();
+		Account response = restTemplate.exchange(url, HttpMethod.GET, requestEntity, Account.class).getBody();
+		log.debug("{}", response);
+		return response;
 	}
 
 	public PlaceOrderResponse placeOrder(PlaceOrderRequest placeOrderRequest) {
 		log.debug("{}", placeOrderRequest);
 		String url = this.getUrl("/api/v3/order");
 		HttpEntity<String> requestEntity = this.buildSignedRequestEntity(placeOrderRequest);
-		return restTemplate.postForObject(url, requestEntity, PlaceOrderResponse.class);
+		PlaceOrderResponse response = restTemplate.postForObject(url, requestEntity, PlaceOrderResponse.class);
+		log.debug("{}", response);
+		return response;
 	}
 
 	public QueryOrderResponse queryOrder(QueryOrderRequest queryOrderRequest) {
 		log.debug("{}", queryOrderRequest);
 		String url = this.getUrl("/api/v3/order?%s", this.toSignedRequestParam(queryOrderRequest));
 		HttpEntity<String> requestEntity = this.buildRequestEntity(null, false);
-		return restTemplate.exchange(url, HttpMethod.GET, requestEntity, QueryOrderResponse.class).getBody();
+		QueryOrderResponse response = restTemplate.exchange(url, HttpMethod.GET, requestEntity, QueryOrderResponse.class).getBody();
+		log.debug("{}", response);
+		return response;
 	}
 
 	public QueryOrderResponse queryOrder(String symbol, long orderId) {
@@ -84,7 +90,9 @@ public class BinanceRestService extends BaseBinanceRestService {
 		log.debug("{}", queryTradeRequest);
 		String url = this.getUrl("/api/v3/myTrades?%s", this.toSignedRequestParam(queryTradeRequest));
 		HttpEntity<String> requestEntity = this.buildRequestEntity(null, false);
-		return restTemplate.exchange(url, HttpMethod.GET, requestEntity, String.class).getBody();
+		String response = restTemplate.exchange(url, HttpMethod.GET, requestEntity, String.class).getBody();
+		log.debug("{}", response);
+		return response;
 	}
 
 }

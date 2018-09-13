@@ -57,6 +57,7 @@ public class HuobiRestService extends BaseHuobiRestService {
 		String url = this.getUrl("/market/history/kline?%s", this.toRequestParam(klineParam));
 		HttpEntity<String> requestEntity = this.requestEntityWithUserAgent();
 		String body = restTemplate.exchange(url, HttpMethod.GET, requestEntity, String.class).getBody();
+		log.debug("{}", body);
 		return this.readValue(body, KLINE_RESULT);
 	}
 
@@ -75,28 +76,36 @@ public class HuobiRestService extends BaseHuobiRestService {
 	public HuobiRestResponse<List<AccountInfo>> accounts() {
 		URI uri = this.getUrlWithSignature("/v1/account/accounts", RequestType.GET, null);
 		HttpEntity<String> requestEntity = this.requestEntityWithUserAgent();
-		return restTemplate.exchange(uri, HttpMethod.GET, requestEntity, ACCOUNT_INFO).getBody();
+		HuobiRestResponse<List<AccountInfo>> response = restTemplate.exchange(uri, HttpMethod.GET, requestEntity, ACCOUNT_INFO).getBody();
+		log.debug("{}", response);
+		return response;
 	}
 
 	public HuobiRestResponse<String> placeOrder(Order order) {
 		log.debug("{}", order);
 		URI url = this.getUrlWithSignature("/v1/order/orders/place", RequestType.POST, null);
 		HttpEntity<String> requestEntity = this.buildPostRequestEntity(order);
-		return restTemplate.exchange(url, HttpMethod.POST, requestEntity, ORDER_RESPONSE).getBody();
+		HuobiRestResponse<String> response = restTemplate.exchange(url, HttpMethod.POST, requestEntity, ORDER_RESPONSE).getBody();
+		log.debug("{}", response);
+		return response;
 	}
 
 	public HuobiRestResponse<OrderResult> queryOrder(String orderId) {
 		log.debug("{}", orderId);
 		URI url = this.getUrlWithSignature("/v1/order/orders/" + orderId, RequestType.GET, null);
 		HttpEntity<String> requestEntity = this.requestEntityWithUserAgent();
-		return restTemplate.exchange(url, HttpMethod.GET, requestEntity, ORDER_RESULT).getBody();
+		HuobiRestResponse<OrderResult> response = restTemplate.exchange(url, HttpMethod.GET, requestEntity, ORDER_RESULT).getBody();
+		log.debug("{}", response);
+		return response;
 	}
 
 	public HuobiRestResponse<List<Execution>> queryExecution(String orderId) {
 		log.debug("{}", orderId);
 		URI url = this.getUrlWithSignature(String.format("/v1/order/orders/%s/matchresults", orderId), RequestType.GET, null);
 		HttpEntity<String> requestEntity = this.requestEntityWithUserAgent();
-		return restTemplate.exchange(url, HttpMethod.GET, requestEntity, EXECUTION_RESULT).getBody();
+		HuobiRestResponse<List<Execution>> response = restTemplate.exchange(url, HttpMethod.GET, requestEntity, EXECUTION_RESULT).getBody();
+		log.debug("{}", response);
+		return response;
 	}
 
 	public HuobiRestResponse<List<Execution>> queryExecution(String orderId, int attempt) {
