@@ -56,18 +56,18 @@ public class OkexRestExample {
 //		order.setType(OrderType.sell);
 		
 		Order order = new Order();
-//		order.setAmount(new BigDecimal("0.001"));
-		order.setPrice(new BigDecimal("7000"));
+		order.setAmount(new BigDecimal("0.001"));
+//		order.setPrice(new BigDecimal("6000"));
 		order.setSymbol(BTCUSDT);
-		order.setType(OrderType.buy_market);
+		order.setType(OrderType.sell_market);
 		// 
 		System.out.println(okexRestService.simulateIocAndQueryOrder(order));
 	}
 	
 	public static void main(String[] args) throws InterruptedException {
 //		tryPartialFill();
-//		placeOrder();
-		System.out.println(okexRestService.queryOrder(BTCUSDT, 953875412L));
+		placeOrder();
+//		System.out.println(okexRestService.queryOrder(BTCUSDT, 953875412L));
 	}
 
 }
