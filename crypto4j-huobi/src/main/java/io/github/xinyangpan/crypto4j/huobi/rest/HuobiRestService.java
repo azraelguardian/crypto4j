@@ -18,10 +18,11 @@ import io.github.xinyangpan.crypto4j.huobi.dto.account.AccountInfo;
 import io.github.xinyangpan.crypto4j.huobi.dto.common.HuobiRestChannelResponse;
 import io.github.xinyangpan.crypto4j.huobi.dto.common.HuobiRestResponse;
 import io.github.xinyangpan.crypto4j.huobi.dto.enums.OrderState;
-import io.github.xinyangpan.crypto4j.huobi.dto.market.Symbol;
 import io.github.xinyangpan.crypto4j.huobi.dto.market.depth.Depth;
 import io.github.xinyangpan.crypto4j.huobi.dto.market.kline.Kline;
 import io.github.xinyangpan.crypto4j.huobi.dto.market.kline.KlineParam;
+import io.github.xinyangpan.crypto4j.huobi.dto.market.rest.Symbol;
+import io.github.xinyangpan.crypto4j.huobi.dto.market.rest.Ticker;
 import io.github.xinyangpan.crypto4j.huobi.dto.trade.Execution;
 import io.github.xinyangpan.crypto4j.huobi.dto.trade.Order;
 import io.github.xinyangpan.crypto4j.huobi.dto.trade.OrderDetail;
@@ -35,6 +36,7 @@ public class HuobiRestService extends BaseHuobiRestService {
 	private static ParameterizedTypeReference<HuobiRestResponse<OrderResult>> ORDER_RESULT = new ParameterizedTypeReference<HuobiRestResponse<OrderResult>>() {};
 	private static ParameterizedTypeReference<HuobiRestResponse<List<Execution>>> EXECUTION_RESULT = new ParameterizedTypeReference<HuobiRestResponse<List<Execution>>>() {};
 	private static ParameterizedTypeReference<HuobiRestResponse<List<Symbol>>> SYMBOL_RESULT = new ParameterizedTypeReference<HuobiRestResponse<List<Symbol>>>() {};
+	private static ParameterizedTypeReference<HuobiRestResponse<List<Ticker>>> TICKER_RESULT = new ParameterizedTypeReference<HuobiRestResponse<List<Ticker>>>() {};
 	private static TypeReference<HuobiRestChannelResponse<Depth>> DEPTH_RESULT = new TypeReference<HuobiRestChannelResponse<Depth>>() {};
 	private static TypeReference<HuobiRestChannelResponse<List<Kline>>> KLINE_RESULT = new TypeReference<HuobiRestChannelResponse<List<Kline>>>() {};
 
@@ -67,10 +69,10 @@ public class HuobiRestService extends BaseHuobiRestService {
 		return restTemplate.exchange(url, HttpMethod.GET, requestEntity, SYMBOL_RESULT).getBody();
 	}
 
-	public String tickers() {
+	public HuobiRestResponse<List<Ticker>> tickers() {
 		String url = this.getUrl("/market/tickers");
 		HttpEntity<String> requestEntity = this.requestEntityWithUserAgent();
-		return restTemplate.exchange(url, HttpMethod.GET, requestEntity, String.class).getBody();
+		return restTemplate.exchange(url, HttpMethod.GET, requestEntity, TICKER_RESULT).getBody();
 	}
 
 	public HuobiRestResponse<List<AccountInfo>> accounts() {

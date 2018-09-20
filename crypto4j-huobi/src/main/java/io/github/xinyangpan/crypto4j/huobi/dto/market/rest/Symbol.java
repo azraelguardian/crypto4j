@@ -1,4 +1,4 @@
-package io.github.xinyangpan.crypto4j.huobi.dto.market;
+package io.github.xinyangpan.crypto4j.huobi.dto.market.rest;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

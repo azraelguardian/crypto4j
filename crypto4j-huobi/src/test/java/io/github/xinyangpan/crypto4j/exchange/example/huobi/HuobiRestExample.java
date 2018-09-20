@@ -64,7 +64,7 @@ public class HuobiRestExample {
 	}
 
 	public static void main(String[] args) throws InterruptedException {
-		System.out.println(huobiRestService.queryExecution("117321534581"));
+		System.out.println(huobiRestService.tickers());
 	}
 
 }
