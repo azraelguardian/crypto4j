@@ -66,5 +66,5 @@ public class HuobiRestExample {
 	public static void main(String[] args) throws InterruptedException {
 		System.out.println(huobiRestService.tickers());
 	}
-
+	
 }
