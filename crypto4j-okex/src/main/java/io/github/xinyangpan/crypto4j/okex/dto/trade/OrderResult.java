@@ -18,7 +18,7 @@ public class OrderResult {
 	@JsonProperty("create_date")
 	private Long createDate;
 	@JsonProperty("deal_amount")
-	private Long dealAmount;
+	private BigDecimal dealAmount;
 	@JsonProperty("order_id")
 	private Long orderId;
 	@JsonProperty("orders_id")

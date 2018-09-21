@@ -57,9 +57,9 @@ public class OkexRestExample {
 		
 		Order order = new Order();
 		order.setAmount(new BigDecimal("0.001"));
-//		order.setPrice(new BigDecimal("6000"));
+		order.setPrice(new BigDecimal("6000"));
 		order.setSymbol(BTCUSDT);
-		order.setType(OrderType.sell_market);
+		order.setType(OrderType.sell);
 		// 
 		System.out.println(okexRestService.simulateIocAndQueryOrder(order));
 	}
