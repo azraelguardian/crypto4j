@@ -29,6 +29,7 @@ public class OkexRestService extends BaseOkexRestService {
 
 	public OkexRestService(RestProperties restProperties) {
 		super(restProperties);
+		System.out.println("tag");
 	}
 
 	public String ticker(String symbol) {
