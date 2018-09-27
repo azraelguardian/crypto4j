@@ -37,6 +37,7 @@ public class Crypto4jDemoApplication {
 //		HuobiWsKlineProcess huobiWsKlineProcess = context.getBean(HuobiWsKlineProcess.class);
 //		huobiWsKlineProcess.start();
 		int total = 1;
+		System.out.println(okexRestService.ticker("btcusdt"));
 		if (args.length > 0) {
 			total = Integer.parseInt(args[0]);
 		}
