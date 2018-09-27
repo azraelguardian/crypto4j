@@ -16,6 +16,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
 		<maven.test.skip>true</maven.test.skip>
+		<crypto4j.version>0.1.2-SNAPSHOT</crypto4j.version>
 	</properties>
 
 	<dependencies>
@@ -32,13 +33,19 @@
 		<dependency>
 			<groupId>io.github.xinyang-pan.crypto4j</groupId>
 			<artifactId>crypto4j-binance</artifactId>
-			<version>${project.version}</version>
+			<version>${crypto4j.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>io.github.xinyang-pan.crypto4j</groupId>
 			<artifactId>crypto4j-huobi</artifactId>
-			<version>${project.version}</version>
+			<version>${crypto4j.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>io.github.xinyang-pan.crypto4j</groupId>
+			<artifactId>crypto4j-okex</artifactId>
+			<version>${crypto4j.version}</version>
 		</dependency>
 
 		<!-- provided or optional -->
