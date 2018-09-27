@@ -28,6 +28,8 @@ public class Crypto4jDemoApplication {
 		restProperties.setRestKey(Crypto4jUtils.getSecret("/home/panxy/okex.key"));
 		restProperties.setRestSecret(Crypto4jUtils.getSecret("/home/panxy/okex.secret"));
 		//  
+		System.out.println(String.format("`%s`", restProperties.getRestKey()));
+		System.out.println(String.format("`%s`", restProperties.getRestSecret()));
 		okexRestService = new OkexRestService(restProperties);
 	}
 	
