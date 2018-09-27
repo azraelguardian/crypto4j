@@ -16,7 +16,7 @@ public class ModuleSample1ApplicationTests {
 		restProperties.setRestBaseUrl("https://www.okex.com");
 		restProperties.setRestKey(Crypto4jUtils.getSecret("/home/panxy/okex.key"));
 		restProperties.setRestSecret(Crypto4jUtils.getSecret("/home/panxy/okex.secret"));
-		// 
+		//  
 		okexRestService = new OkexRestService(restProperties);
 	}
 	
