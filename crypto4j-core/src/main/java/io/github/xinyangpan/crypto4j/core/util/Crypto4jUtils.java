@@ -34,7 +34,7 @@ public class Crypto4jUtils {
 
 	public static String getSecret(String secretFilePath) {
 		try {
-			return IOUtils.toString(new FileInputStream(secretFilePath), Charset.defaultCharset());
+			return IOUtils.toString(new FileInputStream(secretFilePath), Charset.defaultCharset()).trim();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
