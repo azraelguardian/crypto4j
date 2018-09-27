@@ -24,7 +24,7 @@ public class Crypto4jDemoApplication {
 	public static OkexRestService okexRestService;
 	static {
 		RestProperties restProperties = new RestProperties();
-		restProperties.setRestBaseUrl("https://104.25.20.25");
+		restProperties.setRestBaseUrl("https://www.okex.com");
 		restProperties.setRestKey(Crypto4jUtils.getSecret("/home/panxy/okex.key"));
 		restProperties.setRestSecret(Crypto4jUtils.getSecret("/home/panxy/okex.secret"));
 		//  
