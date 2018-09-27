@@ -36,7 +36,8 @@ public class Crypto4jDemoApplication {
 //		ConfigurableApplicationContext context = SpringApplication.run(Crypto4jDemoApplication.class, args);
 //		HuobiWsKlineProcess huobiWsKlineProcess = context.getBean(HuobiWsKlineProcess.class);
 //		huobiWsKlineProcess.start();
-		for (int i = 0; i < 6; i++) {
+		int total = Integer.parseInt(args[0]);
+		for (int i = 0; i < total; i++) {
 			System.out.println(LocalDateTime.now() + " - " + okexRestService.userinfo());
 		}
 	}
