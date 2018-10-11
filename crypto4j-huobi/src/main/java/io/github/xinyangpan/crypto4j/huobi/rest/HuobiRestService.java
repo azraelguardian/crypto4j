@@ -81,6 +81,7 @@ public class HuobiRestService extends BaseHuobiRestService {
 	public HuobiRestResponse<List<AccountInfo>> accounts() {
 		URI uri = this.getUrlWithSignature("/v1/account/accounts", RequestType.GET, null);
 		HttpEntity<String> requestEntity = this.requestEntityWithUserAgent();
+		log.debug("requesting uri: {}", uri);
 		HuobiRestResponse<List<AccountInfo>> response = restTemplate.exchange(uri, HttpMethod.GET, requestEntity, ACCOUNT_INFO).getBody();
 		log.debug("{}", response);
 		return response;

@@ -56,6 +56,7 @@ public class BinanceRestService extends BaseBinanceRestService {
 		log.debug("account");
 		String url = this.getUrl("/api/v3/account?%s", this.toSignedRequestParam(new BaseRequest()));
 		HttpEntity<String> requestEntity = this.buildRequestEntity(null, false);
+		log.debug("requesting url: {}", url);
 		Account response = restTemplate.exchange(url, HttpMethod.GET, requestEntity, Account.class).getBody();
 		log.debug("{}", response);
 		return response;
