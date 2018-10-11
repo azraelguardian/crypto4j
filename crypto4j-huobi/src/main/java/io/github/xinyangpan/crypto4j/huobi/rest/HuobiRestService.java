@@ -14,6 +14,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.base.Preconditions;
 
 import io.github.xinyangpan.crypto4j.core.RestProperties;
+import io.github.xinyangpan.crypto4j.core.UnknownOrderException;
 import io.github.xinyangpan.crypto4j.huobi.dto.account.AccountInfo;
 import io.github.xinyangpan.crypto4j.huobi.dto.common.HuobiRestChannelResponse;
 import io.github.xinyangpan.crypto4j.huobi.dto.common.HuobiRestResponse;
@@ -154,7 +155,7 @@ public class HuobiRestService extends BaseHuobiRestService {
 				return orderDetail;
 			}
 		}
-		return orderDetail;
+		throw new UnknownOrderException(orderId, "No valid order detail returned. ref=" + orderDetail);
 	}
 
 	public OrderDetail queryOrderDetail(String orderId) {

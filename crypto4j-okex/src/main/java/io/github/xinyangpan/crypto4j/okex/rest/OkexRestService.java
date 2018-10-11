@@ -11,6 +11,7 @@ import org.springframework.http.HttpMethod;
 import com.google.common.base.Preconditions;
 
 import io.github.xinyangpan.crypto4j.core.RestProperties;
+import io.github.xinyangpan.crypto4j.core.UnknownOrderException;
 import io.github.xinyangpan.crypto4j.okex.dto.account.UserInfo;
 import io.github.xinyangpan.crypto4j.okex.dto.common.ErrorCode;
 import io.github.xinyangpan.crypto4j.okex.dto.enums.OrderStatus;
@@ -102,7 +103,7 @@ public class OkexRestService extends BaseOkexRestService {
 				return orderResult;
 			}
 		}
-		throw new IllegalStateException("No valid order result returned. ref=" + orderResult);
+		throw new UnknownOrderException(String.valueOf(orderId), "No valid order result returned. ref=" + orderResult);
 	}
 
 	private OrderResult getOrderResult(QueryOrderResponse queryOrderResponse) {
