@@ -66,8 +66,9 @@ public class OkexRestExample {
 	
 	public static void main(String[] args) throws InterruptedException {
 //		tryPartialFill();
-		placeOrder();
+//		placeOrder();
 //		System.out.println(okexRestService.queryOrder(BTCUSDT, 953875412L));
+		System.out.println(okexRestService.userinfo());
 	}
 
 }

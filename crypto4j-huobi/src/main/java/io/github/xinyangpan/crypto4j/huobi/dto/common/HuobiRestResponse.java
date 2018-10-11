@@ -8,8 +8,6 @@ import lombok.Data;
 
 /**
  * the real data either in data field or in tick field
- *
- * @param <T>
  */
 @Data
 public class HuobiRestResponse<T> {

@@ -1,7 +1,9 @@
 package io.github.xinyangpan.crypto4j.okex.dto.common;
 
 import io.github.xinyangpan.crypto4j.core.ResultErrorException;
+import lombok.Data;
 
+@Data
 public class OkexRestResponse {
 	private boolean result;
 
