@@ -16,6 +16,7 @@ import com.google.common.base.Preconditions;
 import io.github.xinyangpan.crypto4j.core.RestProperties;
 import io.github.xinyangpan.crypto4j.core.UnknownOrderException;
 import io.github.xinyangpan.crypto4j.huobi.dto.account.AccountInfo;
+import io.github.xinyangpan.crypto4j.huobi.dto.account.BalanceInfo;
 import io.github.xinyangpan.crypto4j.huobi.dto.common.HuobiRestChannelResponse;
 import io.github.xinyangpan.crypto4j.huobi.dto.common.HuobiRestResponse;
 import io.github.xinyangpan.crypto4j.huobi.dto.enums.OrderState;
@@ -33,6 +34,7 @@ import lombok.SneakyThrows;
 public class HuobiRestService extends BaseHuobiRestService {
 	private static final Logger log = LoggerFactory.getLogger(HuobiRestService.class);
 	private static ParameterizedTypeReference<HuobiRestResponse<List<AccountInfo>>> ACCOUNT_INFO = new ParameterizedTypeReference<HuobiRestResponse<List<AccountInfo>>>() {};
+	private static ParameterizedTypeReference<HuobiRestResponse<BalanceInfo>> BALANCE_INFO = new ParameterizedTypeReference<HuobiRestResponse<BalanceInfo>>() {};
 	private static ParameterizedTypeReference<HuobiRestResponse<String>> ORDER_RESPONSE = new ParameterizedTypeReference<HuobiRestResponse<String>>() {};
 	private static ParameterizedTypeReference<HuobiRestResponse<OrderResult>> ORDER_RESULT = new ParameterizedTypeReference<HuobiRestResponse<OrderResult>>() {};
 	private static ParameterizedTypeReference<HuobiRestResponse<List<Execution>>> EXECUTION_RESULT = new ParameterizedTypeReference<HuobiRestResponse<List<Execution>>>() {};
@@ -40,7 +42,7 @@ public class HuobiRestService extends BaseHuobiRestService {
 	private static ParameterizedTypeReference<HuobiRestResponse<List<Ticker>>> TICKER_RESULT = new ParameterizedTypeReference<HuobiRestResponse<List<Ticker>>>() {};
 	private static TypeReference<HuobiRestChannelResponse<Depth>> DEPTH_RESULT = new TypeReference<HuobiRestChannelResponse<Depth>>() {};
 	private static TypeReference<HuobiRestChannelResponse<List<Kline>>> KLINE_RESULT = new TypeReference<HuobiRestChannelResponse<List<Kline>>>() {};
-
+	
 	public HuobiRestService(RestProperties restProperties) {
 		super(restProperties);
 	}
@@ -80,6 +82,14 @@ public class HuobiRestService extends BaseHuobiRestService {
 		URI uri = this.getUrlWithSignature("/v1/account/accounts", RequestType.GET, null);
 		HttpEntity<String> requestEntity = this.requestEntityWithUserAgent();
 		HuobiRestResponse<List<AccountInfo>> response = restTemplate.exchange(uri, HttpMethod.GET, requestEntity, ACCOUNT_INFO).getBody();
+		log.debug("{}", response);
+		return response;
+	}
+
+	public HuobiRestResponse<BalanceInfo> balanceInfo(String accountId) {
+		URI uri = this.getUrlWithSignature(String.format("/v1/account/accounts/%s/balance", accountId), RequestType.GET, null);
+		HttpEntity<String> requestEntity = this.requestEntityWithUserAgent();
+		HuobiRestResponse<BalanceInfo> response = restTemplate.exchange(uri, HttpMethod.GET, requestEntity, BALANCE_INFO).getBody();
 		log.debug("{}", response);
 		return response;
 	}

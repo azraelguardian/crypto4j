@@ -63,8 +63,10 @@ public class HuobiRestExample {
 		System.out.println(orderDetail);
 	}
 
-	public static void main(String[] args) throws InterruptedException {
-		System.out.println(huobiRestService.tickers());
+	public static void main(String[] args) throws Exception {
+//		System.out.println(huobiRestService.accounts());
+		// 4275858
+		System.out.println(huobiRestService.balanceInfo("4275858"));
 	}
 	
 }
