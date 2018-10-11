@@ -14,4 +14,8 @@ public class BalanceInfo {
 	private AccountState state;
 	private List<Balance> list;
 
+	public boolean isSpotAndWorking() {
+		return AccountType.spot.equals(this.getType()) && AccountState.working.equals(this.getState());
+	}
+
 }

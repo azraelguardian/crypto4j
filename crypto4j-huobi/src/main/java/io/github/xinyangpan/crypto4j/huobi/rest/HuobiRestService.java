@@ -86,7 +86,7 @@ public class HuobiRestService extends BaseHuobiRestService {
 		return response;
 	}
 
-	public HuobiRestResponse<BalanceInfo> balanceInfo(String accountId) {
+	public HuobiRestResponse<BalanceInfo> balanceInfo(Long accountId) {
 		URI uri = this.getUrlWithSignature(String.format("/v1/account/accounts/%s/balance", accountId), RequestType.GET, null);
 		HttpEntity<String> requestEntity = this.requestEntityWithUserAgent();
 		HuobiRestResponse<BalanceInfo> response = restTemplate.exchange(uri, HttpMethod.GET, requestEntity, BALANCE_INFO).getBody();

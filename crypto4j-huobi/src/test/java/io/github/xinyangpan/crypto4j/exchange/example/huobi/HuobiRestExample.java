@@ -66,7 +66,7 @@ public class HuobiRestExample {
 	public static void main(String[] args) throws Exception {
 //		System.out.println(huobiRestService.accounts());
 		// 4275858
-		System.out.println(huobiRestService.balanceInfo("4275858"));
+		System.out.println(huobiRestService.balanceInfo(4275858L));
 	}
 	
 }
