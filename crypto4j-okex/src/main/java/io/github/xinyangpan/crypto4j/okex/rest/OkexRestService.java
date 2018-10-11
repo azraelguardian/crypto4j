@@ -88,6 +88,9 @@ public class OkexRestService extends BaseOkexRestService {
 			Thread.sleep(100 * (i + 1));
 			orderResult = this.queryOrder(symbol, orderId);
 			log.debug("orderDetail[{}]: {}", i, orderResult);
+			if (orderResult == null) {
+				continue;
+			}
 			OrderStatus orderStatus = orderResult.getStatus();
 			if (orderStatus == OrderStatus.NEW || orderStatus == OrderStatus.PENDING_CANCEL) {
 				continue;
@@ -99,7 +102,7 @@ public class OkexRestService extends BaseOkexRestService {
 				return orderResult;
 			}
 		}
-		return orderResult;
+		throw new IllegalStateException("No valid order result returned. ref=" + orderResult);
 	}
 
 	private OrderResult getOrderResult(QueryOrderResponse queryOrderResponse) {
