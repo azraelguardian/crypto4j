@@ -91,7 +91,9 @@ public class OkexRestService extends BaseOkexRestService {
 			OrderStatus orderStatus = orderResult.getStatus();
 			if (orderStatus == OrderStatus.NEW || orderStatus == OrderStatus.PENDING_CANCEL) {
 				continue;
-			} else if ((orderStatus == OrderStatus.FILLED || orderStatus == OrderStatus.PARTIALLY_FILLED) && orderResult.getDealAmount().compareTo(BigDecimal.ZERO) <= 0) {
+			} else if (orderStatus == OrderStatus.FILLED && orderResult.getDealAmount().compareTo(orderResult.getAmount()) != 0) {
+				continue;
+			} else if (orderStatus == OrderStatus.PARTIALLY_FILLED && orderResult.getDealAmount().compareTo(BigDecimal.ZERO) <= 0) {
 				continue;
 			} else {
 				return orderResult;
