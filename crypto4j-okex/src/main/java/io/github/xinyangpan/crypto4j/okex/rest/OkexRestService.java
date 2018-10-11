@@ -1,5 +1,6 @@
 package io.github.xinyangpan.crypto4j.okex.rest;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -89,6 +90,8 @@ public class OkexRestService extends BaseOkexRestService {
 			log.debug("orderDetail[{}]: {}", i, orderResult);
 			OrderStatus orderStatus = orderResult.getStatus();
 			if (orderStatus == OrderStatus.NEW || orderStatus == OrderStatus.PENDING_CANCEL) {
+				continue;
+			} else if ((orderStatus == OrderStatus.FILLED || orderStatus == OrderStatus.PARTIALLY_FILLED) && orderResult.getDealAmount().compareTo(BigDecimal.ZERO) <= 0) {
 				continue;
 			} else {
 				return orderResult;
