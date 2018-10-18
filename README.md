@@ -13,7 +13,7 @@
 #54.92.26.88 stream.binance.com
 47.90.109.236 real.okex.com
 104.16.230.188 api.huobi.pro
-52.85.2.55 api.binance.com
+52.84.48.244 api.binance.com
 104.25.20.25 www.okex.com
 ```
 
