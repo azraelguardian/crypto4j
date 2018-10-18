@@ -7,7 +7,8 @@ import io.github.xinyangpan.crypto4j.okex.websocket.impl.OkexHeartbeat;
 import io.github.xinyangpan.crypto4j.okex.websocket.impl.OkexSubscriber;
 
 public class OkexManager extends WebSocketManager<OkexSubscriber> {
-	private static String DEFAULT_URL = "wss://real.okex.com:10441/websocket";
+	// ?compress=true
+	private static String DEFAULT_URL = "wss://real.okex.com:10441/websocket?compress=true";
 
 	public OkexManager() {
 		this.setUrl(DEFAULT_URL);

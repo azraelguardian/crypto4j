@@ -2,13 +2,19 @@ package io.github.xinyangpan.crypto4j.okex.websocket.impl;
 
 import static io.github.xinyangpan.crypto4j.core.util.Crypto4jUtils.objectMapper;
 
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
 import java.util.function.Consumer;
 
-import org.springframework.web.socket.TextMessage;
+import org.apache.commons.compress.compressors.deflate64.Deflate64CompressorInputStream;
+import org.apache.commons.io.IOUtils;
+import org.springframework.web.socket.BinaryMessage;
 import org.springframework.web.socket.WebSocketSession;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.util.ByteBufferBackedInputStream;
 import com.google.common.base.Preconditions;
 
 import io.github.xinyangpan.crypto4j.core.util.Crypto4jUtils;
@@ -34,8 +40,8 @@ public class OkexSubscriber extends Subscriber {
 	private Consumer<OkexWsResponse<TickerData>> tickerListener = Crypto4jUtils.logConsumer();
 
 	@Override
-	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-		String jsonMessage = message.getPayload();
+	protected void handleBinaryMessage(WebSocketSession session, BinaryMessage message) throws Exception {
+		String jsonMessage = getTextMessage(message.getPayload());
 		log.debug(MSG_TRACK, "{}: Handling message: {}", this.getName(), jsonMessage);
 		JsonNode root = objectMapper().readTree(jsonMessage);
 		// pong
@@ -67,6 +73,12 @@ public class OkexSubscriber extends Subscriber {
 		}
 		// 
 		this.unhandledMessage(jsonMessage);
+	}
+	
+	private String getTextMessage(ByteBuffer payload) throws IOException {
+		Deflate64CompressorInputStream gzipInputStream = new Deflate64CompressorInputStream(new ByteBufferBackedInputStream(payload));
+		String json = IOUtils.toString(gzipInputStream, Charset.forName("utf-8"));
+		return json;
 	}
 
 	private void onResultData(OkexWsResponse<ResultData> response) {
