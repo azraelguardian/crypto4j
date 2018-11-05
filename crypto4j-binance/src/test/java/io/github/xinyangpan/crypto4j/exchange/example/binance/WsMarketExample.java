@@ -8,8 +8,8 @@ public class WsMarketExample {
 
 	public static BinanceSubscriber binanceSubscriber() {
 		BinanceSubscriber binanceSubscriber = new BinanceSubscriber();
-//		binanceSubscriber.depthAndTicker(5, "btcusdt");
-		binanceSubscriber.kline("btcusdt", "1m");
+		binanceSubscriber.depthAndTicker(5, "btcusdt");
+//		binanceSubscriber.kline("btcusdt", "1m");
 		binanceSubscriber.setDepthListener(Crypto4jUtils.noOp());
 		binanceSubscriber.setTickerListener(Crypto4jUtils.noOp());
 		binanceSubscriber.setAccountInfoListener(Crypto4jUtils.noOp());
