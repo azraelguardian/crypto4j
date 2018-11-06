@@ -9,4 +9,8 @@ public class ChainupResponse<T> {
 	private String msg;
 	private T data;
 
+	public boolean isSuccessful() {
+		return code != null && code == 0;
+	}
+
 }
