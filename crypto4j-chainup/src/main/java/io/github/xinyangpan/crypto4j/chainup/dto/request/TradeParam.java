@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 public class TradeParam {
 
 	private String symbol;
+	private String startDate;
+	private String endDate;
 	private Integer pageSize;
 	private Integer page;
 	private TradeSort Sort;

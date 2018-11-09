@@ -47,6 +47,7 @@ public class ChainupRestExample {
 		tradeParam.setPage(1);
 		tradeParam.setPageSize(1);
 		tradeParam.setSort(TradeSort.ASC);
+		tradeParam.setStartDate("2018-11-09 11:57:00");
 		System.out.println(chainupRestService.getAllTrades(tradeParam));
 	}
 
