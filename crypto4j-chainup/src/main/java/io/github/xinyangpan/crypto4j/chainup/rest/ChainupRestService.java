@@ -8,6 +8,7 @@ import org.springframework.http.HttpMethod;
 
 import io.github.xinyangpan.crypto4j.chainup.dto.ChainupResponse;
 import io.github.xinyangpan.crypto4j.chainup.dto.data.AccountInfo;
+import io.github.xinyangpan.crypto4j.chainup.dto.data.MassReplaceResult;
 import io.github.xinyangpan.crypto4j.chainup.dto.data.OrderId;
 import io.github.xinyangpan.crypto4j.chainup.dto.data.OrderQuery;
 import io.github.xinyangpan.crypto4j.chainup.dto.data.Symbol;
@@ -16,6 +17,7 @@ import io.github.xinyangpan.crypto4j.chainup.dto.data.TradeResponse;
 import io.github.xinyangpan.crypto4j.chainup.dto.request.Order;
 import io.github.xinyangpan.crypto4j.chainup.dto.request.OrderIdAndSymbol;
 import io.github.xinyangpan.crypto4j.chainup.dto.request.TradeParam;
+import io.github.xinyangpan.crypto4j.chainup.dto.request.replace.MassReplace;
 import io.github.xinyangpan.crypto4j.core.RestProperties;
 import lombok.NonNull;
 
@@ -27,6 +29,7 @@ public class ChainupRestService extends BaseChainupRestService {
 	private static ParameterizedTypeReference<ChainupResponse<Void>> CANCEL_ORDER_RESULT = new ParameterizedTypeReference<ChainupResponse<Void>>() {};
 	private static ParameterizedTypeReference<ChainupResponse<OrderQuery>> ORDER_INFO_RESULT = new ParameterizedTypeReference<ChainupResponse<OrderQuery>>() {};
 	private static ParameterizedTypeReference<ChainupResponse<TradeResponse>> TRADE_RESPONSE_REULST = new ParameterizedTypeReference<ChainupResponse<TradeResponse>>() {};
+	private static ParameterizedTypeReference<ChainupResponse<MassReplaceResult>> MASS_REPLACE_RESULT = new ParameterizedTypeReference<ChainupResponse<MassReplaceResult>>() {};
 
 	public ChainupRestService(RestProperties restProperties) {
 		super(restProperties);
@@ -48,6 +51,12 @@ public class ChainupRestService extends BaseChainupRestService {
 		String url = this.getUrl("/exchange-open-api/open/api/user/account?%s", toSignedRequestParam(null));
 		HttpEntity<String> requestEntity = this.requestEntityWithUserAgent();
 		return restTemplate.exchange(url, HttpMethod.GET, requestEntity, ACCOUNT_INFO_RESULT).getBody();
+	}
+
+	public ChainupResponse<MassReplaceResult> massReplace(@NonNull MassReplace massReplace) {
+		String url = this.getUrl("/exchange-open-api/open/api/mass_replace");
+		HttpEntity<String> requestEntity = this.buildSignedRequestEntity(massReplace);
+		return restTemplate.exchange(url, HttpMethod.POST, requestEntity, MASS_REPLACE_RESULT).getBody();
 	}
 
 	public ChainupResponse<OrderId> createOrder(@NonNull Order order) {
