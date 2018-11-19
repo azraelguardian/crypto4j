@@ -14,20 +14,19 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.github.xinyangpan.crypto4j.core.RestProperties;
-import io.github.xinyangpan.crypto4j.core.util.Crypto4jUtils;
 import lombok.Getter;
 
 public class BaseRestService {
 	// 
-	protected final RestTemplate restTemplate = Crypto4jUtils.restTemplate();
-	protected final ObjectMapper objectMapper = Crypto4jUtils.objectMapper();
+	protected final RestTemplate restTemplate = new RestTemplate();
+	protected final ObjectMapper objectMapper = new ObjectMapper();
 	@Getter
 	protected final RestProperties restProperties;
 
 	public BaseRestService(RestProperties restProperties) {
 		this.restProperties = restProperties;
 	}
-	
+
 	public <T> String urlEncode(String text) {
 		try {
 			return URLEncoder.encode(text, "utf-8");
@@ -61,7 +60,7 @@ public class BaseRestService {
 		} else if (object instanceof Map) {
 			value = new HashMap<>((Map<String, Object>) object);
 		} else {
-			value = (Map<String, Object>) Crypto4jUtils.objectMapper().convertValue(object, Map.class);
+			value = (Map<String, Object>) objectMapper.convertValue(object, Map.class);
 		}
 		// 
 		String param = value.entrySet().stream()//

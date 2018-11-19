@@ -10,13 +10,13 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 
+import com.fasterxml.jackson.core.JsonGenerator.Feature;
 import com.google.common.collect.Lists;
 import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
 
 import io.github.xinyangpan.crypto4j.core.RestProperties;
 import io.github.xinyangpan.crypto4j.core.rest.BaseRestService;
-import io.github.xinyangpan.crypto4j.core.util.Crypto4jUtils;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -28,6 +28,7 @@ public class BaseChainupRestService extends BaseRestService {
 	public BaseChainupRestService(RestProperties restProperties) {
 		super(restProperties);
 		HASHING = Hashing.md5();
+		objectMapper.configure(Feature.WRITE_NUMBERS_AS_STRINGS, true);
 	}
 
 	@Override
@@ -37,7 +38,7 @@ public class BaseChainupRestService extends BaseRestService {
 		if (object == null) {
 			value = new HashMap<>();
 		} else {
-			value = (Map<String, Object>) Crypto4jUtils.objectMapper().convertValue(object, Map.class);
+			value = (Map<String, Object>) objectMapper.convertValue(object, Map.class);
 		}
 		// 
 		String param = value.entrySet().stream()//
@@ -54,7 +55,7 @@ public class BaseChainupRestService extends BaseRestService {
 		if (object == null) {
 			requestParamMap = new HashMap<>();
 		} else {
-			requestParamMap = (Map<String, Object>) Crypto4jUtils.objectMapper().convertValue(object, Map.class);
+			requestParamMap = (Map<String, Object>) objectMapper.convertValue(object, Map.class);
 		}
 		requestParamMap.put("api_key", restProperties.getRestKey());
 		requestParamMap.put("time", System.currentTimeMillis());
@@ -77,7 +78,7 @@ public class BaseChainupRestService extends BaseRestService {
 		log.debug("toSignString: {}", toSignString);
 		String sign = HASHING.hashBytes(toSignString.getBytes()).toString();
 		requestParamMap.put("sign", sign);
-		return toRequestParam(requestParamMap).replace('"', '\'');
+		return toRequestParam(requestParamMap);
 	}
 
 	protected String getUrl(String path, Object... objects) {

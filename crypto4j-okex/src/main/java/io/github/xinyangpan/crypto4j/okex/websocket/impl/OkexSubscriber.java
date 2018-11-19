@@ -1,7 +1,5 @@
 package io.github.xinyangpan.crypto4j.okex.websocket.impl;
 
-import static io.github.xinyangpan.crypto4j.core.util.Crypto4jUtils.objectMapper;
-
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
@@ -35,7 +33,7 @@ public class OkexSubscriber extends Subscriber {
 	private final static TypeReference<OkexWsResponse<TickerData>[]> TICK = new TypeReference<OkexWsResponse<TickerData>[]>() {};
 	private final static TypeReference<OkexWsResponse<Depth>[]> DEPTH = new TypeReference<OkexWsResponse<Depth>[]>() {};
 	private final static TypeReference<OkexWsResponse<ResultData>[]> RESULT = new TypeReference<OkexWsResponse<ResultData>[]>() {};
-	
+
 	private Consumer<OkexWsResponse<Depth>> depthListener = Crypto4jUtils.logConsumer();
 	private Consumer<OkexWsResponse<TickerData>> tickerListener = Crypto4jUtils.logConsumer();
 
@@ -43,7 +41,7 @@ public class OkexSubscriber extends Subscriber {
 	protected void handleBinaryMessage(WebSocketSession session, BinaryMessage message) throws Exception {
 		String jsonMessage = getTextMessage(message.getPayload());
 		log.debug(MSG_TRACK, "{}: Handling message: {}", this.getName(), jsonMessage);
-		JsonNode root = objectMapper().readTree(jsonMessage);
+		JsonNode root = objectMapper.readTree(jsonMessage);
 		// pong
 		JsonNode eventNode = root.findValue("event");
 		if (eventNode != null && "pong".equals(eventNode.asText())) {
@@ -53,19 +51,19 @@ public class OkexSubscriber extends Subscriber {
 		// channel message
 		String channel = root.findValue("channel").asText();
 		if (channel.contains("ticker")) {
-			OkexWsResponse<TickerData>[] responses = objectMapper().readValue(jsonMessage, TICK);
+			OkexWsResponse<TickerData>[] responses = objectMapper.readValue(jsonMessage, TICK);
 			for (OkexWsResponse<TickerData> response : responses) {
 				tickerListener.accept(response);
 			}
 			return;
 		} else if (channel.contains("depth")) {
-			OkexWsResponse<Depth>[] responses = objectMapper().readValue(jsonMessage, DEPTH);
+			OkexWsResponse<Depth>[] responses = objectMapper.readValue(jsonMessage, DEPTH);
 			for (OkexWsResponse<Depth> response : responses) {
 				depthListener.accept(response);
 			}
 			return;
 		} else if (channel.contains("addChannel")) {
-			OkexWsResponse<ResultData>[] responses = objectMapper().readValue(jsonMessage, RESULT);
+			OkexWsResponse<ResultData>[] responses = objectMapper.readValue(jsonMessage, RESULT);
 			for (OkexWsResponse<ResultData> response : responses) {
 				onResultData(response);
 			}
@@ -74,7 +72,7 @@ public class OkexSubscriber extends Subscriber {
 		// 
 		this.unhandledMessage(jsonMessage);
 	}
-	
+
 	private String getTextMessage(ByteBuffer payload) throws IOException {
 		Deflate64CompressorInputStream gzipInputStream = new Deflate64CompressorInputStream(new ByteBufferBackedInputStream(payload));
 		String json = IOUtils.toString(gzipInputStream, Charset.forName("utf-8"));

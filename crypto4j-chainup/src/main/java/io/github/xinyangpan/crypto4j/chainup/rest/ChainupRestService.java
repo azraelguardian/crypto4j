@@ -1,10 +1,13 @@
 package io.github.xinyangpan.crypto4j.chainup.rest;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
+
+import com.google.common.collect.Maps;
 
 import io.github.xinyangpan.crypto4j.chainup.dto.ChainupResponse;
 import io.github.xinyangpan.crypto4j.chainup.dto.data.AccountInfo;
@@ -55,13 +58,23 @@ public class ChainupRestService extends BaseChainupRestService {
 
 	public ChainupResponse<MassReplaceResult> massReplace(@NonNull MassReplace massReplace) {
 		String url = this.getUrl("/exchange-open-api/open/api/mass_replace");
-		HttpEntity<String> requestEntity = this.buildSignedRequestEntity(massReplace);
+		HashMap<String, String> map = Maps.newHashMap();
+		map.put("symbol", massReplace.getSymbol());
+		if (massReplace.getMassPlace() != null) {
+			map.put("mass_place", toJson(massReplace.getMassPlace()));
+		}
+		if (massReplace.getMassCancel() != null) {
+			map.put("mass_cancel", toJson(massReplace.getMassCancel()));
+		}
+		HttpEntity<String> requestEntity = this.buildSignedRequestEntity(map);
+		System.out.println(requestEntity.getBody());
 		return restTemplate.exchange(url, HttpMethod.POST, requestEntity, MASS_REPLACE_RESULT).getBody();
 	}
 
 	public ChainupResponse<OrderId> createOrder(@NonNull Order order) {
 		String url = this.getUrl("/exchange-open-api/open/api/create_order");
 		HttpEntity<String> requestEntity = this.buildSignedRequestEntity(order);
+		System.out.println(requestEntity.getBody());
 		return restTemplate.exchange(url, HttpMethod.POST, requestEntity, ORDER_ID_RESULT).getBody();
 	}
 

@@ -1,7 +1,5 @@
 package io.github.xinyangpan.crypto4j.binance.websocket.impl;
 
-import static io.github.xinyangpan.crypto4j.core.util.Crypto4jUtils.objectMapper;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +40,7 @@ public class BinanceSubscriber extends Subscriber {
 	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
 		String jsonMessage = message.getPayload();
 		log.debug(MSG_TRACK, "{}: handling message: {}", this.getName(), jsonMessage);
-		JsonNode rootNode = objectMapper().readTree(jsonMessage);
+		JsonNode rootNode = objectMapper.readTree(jsonMessage);
 		JsonNode eventTypeNode = rootNode.at("/e");
 		if (!eventTypeNode.isMissingNode()) {
 			userStream(jsonMessage, eventTypeNode);
@@ -60,10 +58,10 @@ public class BinanceSubscriber extends Subscriber {
 		String eventType = eventTypeNode.asText();
 		switch (eventType) {
 		case "outboundAccountInfo":
-			accountInfoListener.accept(objectMapper().readValue(jsonMessage, AccountInfo.class));
+			accountInfoListener.accept(objectMapper.readValue(jsonMessage, AccountInfo.class));
 			return;
 		case "executionReport":
-			executionReportListener.accept(objectMapper().readValue(jsonMessage, ExecutionReport.class));
+			executionReportListener.accept(objectMapper.readValue(jsonMessage, ExecutionReport.class));
 			return;
 		default:
 			this.unhandledMessage(jsonMessage);
@@ -78,13 +76,13 @@ public class BinanceSubscriber extends Subscriber {
 			this.unhandledMessage(jsonMessage);
 			return;
 		}
-		JavaType javaType = dataType.getJavaType(objectMapper());
+		JavaType javaType = dataType.getJavaType(objectMapper);
 		switch (dataType) {
 		case TICKER:
-			tickerListener.accept(objectMapper().readValue(jsonMessage, javaType));
+			tickerListener.accept(objectMapper.readValue(jsonMessage, javaType));
 			return;
 		case DEPTH:
-			depthListener.accept(objectMapper().readValue(jsonMessage, javaType));
+			depthListener.accept(objectMapper.readValue(jsonMessage, javaType));
 			return;
 		default:
 			this.unhandledMessage(jsonMessage);

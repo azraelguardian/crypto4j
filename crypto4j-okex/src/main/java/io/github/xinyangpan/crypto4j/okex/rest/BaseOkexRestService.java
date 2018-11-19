@@ -16,7 +16,6 @@ import com.google.common.hash.Hashing;
 
 import io.github.xinyangpan.crypto4j.core.RestProperties;
 import io.github.xinyangpan.crypto4j.core.rest.BaseRestService;
-import io.github.xinyangpan.crypto4j.core.util.Crypto4jUtils;
 
 public class BaseOkexRestService extends BaseRestService {
 	// 
@@ -35,7 +34,7 @@ public class BaseOkexRestService extends BaseRestService {
 		if (object == null) {
 			value = new HashMap<>();
 		} else {
-			value = (Map<String, Object>) Crypto4jUtils.objectMapper().convertValue(object, Map.class);
+			value = (Map<String, Object>) objectMapper.convertValue(object, Map.class);
 		}
 		value.put("api_key", restProperties.getRestKey());
 		// 

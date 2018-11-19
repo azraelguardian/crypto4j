@@ -15,7 +15,6 @@ public class OrderPiece {
 	private OrderType type;
 	private BigDecimal volume;
 	private BigDecimal price;
-	private String symbol;
 	@JsonIgnore
 	private boolean useExchangeCoin;
 

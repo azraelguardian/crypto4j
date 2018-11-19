@@ -1,7 +1,5 @@
 package io.github.xinyangpan.crypto4j.huobi.websocket.impl;
 
-import static io.github.xinyangpan.crypto4j.core.util.Crypto4jUtils.objectMapper;
-
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
@@ -58,22 +56,22 @@ public class HuobiSubscriber extends Subscriber {
 	protected void handleBinaryMessage(WebSocketSession session, BinaryMessage message) throws Exception {
 		String jsonMessage = getTextMessage(message.getPayload());
 		log.debug(MSG_TRACK, "{}: handling message: {}", this.getName(), jsonMessage);
-		JsonNode rootNode = objectMapper().readTree(jsonMessage);
+		JsonNode rootNode = objectMapper.readTree(jsonMessage);
 		// sub message
 		JsonNode evalNode = rootNode.at("/ch");
 		if (!evalNode.isMissingNode()) {
 			String ch = evalNode.asText();
 			if (ch.contains("depth")) {
 				// market depth message
-				depthListener.accept(objectMapper().readValue(jsonMessage, DEPTH));
+				depthListener.accept(objectMapper.readValue(jsonMessage, DEPTH));
 				return;
 			} else if (ch.contains("kline")) {
 				// kline message
-				klineListener.accept(objectMapper().readValue(jsonMessage, KLINE));
+				klineListener.accept(objectMapper.readValue(jsonMessage, KLINE));
 				return;
 			} else if (ch.contains("detail")) {
 				// tick message
-				tickerListener.accept(objectMapper().readValue(jsonMessage, TICK));
+				tickerListener.accept(objectMapper.readValue(jsonMessage, TICK));
 				return;
 			}
 		}
@@ -92,7 +90,7 @@ public class HuobiSubscriber extends Subscriber {
 		// sub ack message
 		evalNode = rootNode.at("/subbed");
 		if (!evalNode.isMissingNode()) {
-			onAcknowledge(objectMapper().readValue(jsonMessage, HuobiWsSubAck.class));
+			onAcknowledge(objectMapper.readValue(jsonMessage, HuobiWsSubAck.class));
 			return;
 		}
 		// reponse
@@ -100,7 +98,7 @@ public class HuobiSubscriber extends Subscriber {
 		if (!evalNode.isMissingNode()) {
 			String rep = evalNode.asText();
 			if (rep.contains("kline")) {
-				HuobiWsResponse<Kline> huobiWsResponse = objectMapper().readValue(jsonMessage, KLINE_RESP);
+				HuobiWsResponse<Kline> huobiWsResponse = objectMapper.readValue(jsonMessage, KLINE_RESP);
 				if (huobiSync != null) {
 					huobiSync.accept(huobiWsResponse);
 				}

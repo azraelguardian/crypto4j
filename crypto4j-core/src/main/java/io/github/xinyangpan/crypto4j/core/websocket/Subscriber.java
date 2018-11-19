@@ -1,7 +1,5 @@
 package io.github.xinyangpan.crypto4j.core.websocket;
 
-import static io.github.xinyangpan.crypto4j.core.util.Crypto4jUtils.objectMapper;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +17,7 @@ import org.springframework.web.socket.WebSocketMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.AbstractWebSocketHandler;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Preconditions;
 
 import io.github.xinyangpan.crypto4j.core.util.Crypto4jUtils;
@@ -32,6 +31,7 @@ public class Subscriber extends AbstractWebSocketHandler {
 	// 
 	protected @Setter(AccessLevel.PACKAGE) WebSocketManager<?> webSocketManager;
 	protected @Getter WebSocketSession session;
+	protected final ObjectMapper objectMapper = new ObjectMapper();
 	private List<WebSocketMessage<?>> messages = new ArrayList<>();
 	// 
 	protected @Getter @Setter Consumer<WebSocketSession> connectedListener = Crypto4jUtils.noOp();
@@ -48,7 +48,7 @@ public class Subscriber extends AbstractWebSocketHandler {
 
 	public void send(Object message) {
 		try {
-			String json = objectMapper().writeValueAsString(message);
+			String json = objectMapper.writeValueAsString(message);
 			log.debug("Sending json: {}", json);
 			this.sendMessage(new TextMessage(json));
 		} catch (Exception e) {
