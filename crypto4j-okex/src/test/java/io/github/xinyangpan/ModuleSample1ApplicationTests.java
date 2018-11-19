@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import org.junit.Test;
 
 import io.github.xinyangpan.crypto4j.core.RestProperties;
-import io.github.xinyangpan.crypto4j.exchange.example.Crypto4jUtils;
+import io.github.xinyangpan.crypto4j.core.util.Crypto4jUtils;
 import io.github.xinyangpan.crypto4j.okex.rest.OkexRestService;
 
 public class ModuleSample1ApplicationTests {
