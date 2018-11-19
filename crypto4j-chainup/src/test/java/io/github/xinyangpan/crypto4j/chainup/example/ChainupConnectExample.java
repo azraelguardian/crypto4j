@@ -17,7 +17,7 @@ public class ChainupConnectExample {
 //		chainupSubscriber.depth("btcusdt", 5);
 		// 
 		ChainupManager connector = new ChainupManager();
-		connector.setUrl("ws://ws.xfnh.com/kline-api/ws");
+		connector.setUrl("ws://ws.hiex.pro/kline-api/ws");
 		connector.setSubscriber(chainupSubscriber);
 		connector.connect();
 		// 
