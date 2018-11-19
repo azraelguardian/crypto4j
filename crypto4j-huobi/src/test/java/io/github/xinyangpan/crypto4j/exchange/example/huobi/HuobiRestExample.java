@@ -3,7 +3,7 @@ package io.github.xinyangpan.crypto4j.exchange.example.huobi;
 import java.math.BigDecimal;
 
 import io.github.xinyangpan.crypto4j.core.RestProperties;
-import io.github.xinyangpan.crypto4j.exchange.example.Crypto4jUtils;
+import io.github.xinyangpan.crypto4j.core.util.Crypto4jUtils;
 import io.github.xinyangpan.crypto4j.huobi.dto.enums.OrderType;
 import io.github.xinyangpan.crypto4j.huobi.dto.market.depth.Depth;
 import io.github.xinyangpan.crypto4j.huobi.dto.market.depth.HuobiDepthEntry;

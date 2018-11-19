@@ -6,10 +6,10 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import org.assertj.core.util.Lists;
+import com.google.common.collect.Lists;
 
 import io.github.xinyangpan.crypto4j.core.RestProperties;
-import io.github.xinyangpan.crypto4j.exchange.example.Crypto4jUtils;
+import io.github.xinyangpan.crypto4j.core.util.Crypto4jUtils;
 import io.github.xinyangpan.crypto4j.huobi.rest.HuobiRestService;
 
 public class HuobiRestRate {
