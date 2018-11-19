@@ -15,10 +15,11 @@ public class ChainupRestExample {
 
 	private static final ChainupRestService chainupRestService;
 	protected static final String BTCUSDT = "btcusdt";
+	protected static final String HIEXXFNH = "hiexxfnh";
 
 	static {
 		RestProperties restProperties = new RestProperties();
-		restProperties.setRestBaseUrl("https://dev5openapi.chaindown.com");
+		restProperties.setRestBaseUrl("http://openapi.xfnh.com/");
 		restProperties.setRestKey(Crypto4jUtils.getSecret("chainup.key"));
 		restProperties.setRestSecret(Crypto4jUtils.getSecret("chainup.secret"));
 		// 
@@ -34,6 +35,17 @@ public class ChainupRestExample {
 		order.setPrice(new BigDecimal("6400"));
 		return order;
 	}
+
+	private static TradeParam tradeParam() {
+		TradeParam tradeParam = new TradeParam();
+		tradeParam.setSymbol(HIEXXFNH);
+		tradeParam.setPage(1);
+		tradeParam.setPageSize(2);
+		tradeParam.setSort(TradeSort.ASC);
+		tradeParam.setStartDate("2018-11-09 11:57:00");
+		tradeParam.setEndDate("2018-11-09 11:58:00");
+		return tradeParam;
+	}
 	
 	public static void main(String[] args) throws Exception {
 //		System.out.println(chainupRestService.getAllSymbols());
@@ -42,13 +54,7 @@ public class ChainupRestExample {
 //		System.out.println(chainupRestService.createOrder(createOrder()));
 //		System.out.println(chainupRestService.cancelOrder(8198, BTCUSDT));
 //		System.out.println(chainupRestService.getOrderInfo(8196, BTCUSDT));
-		TradeParam tradeParam = new TradeParam();
-		tradeParam.setSymbol(BTCUSDT);
-		tradeParam.setPage(1);
-		tradeParam.setPageSize(1);
-		tradeParam.setSort(TradeSort.ASC);
-		tradeParam.setStartDate("2018-11-09 11:57:00");
-		System.out.println(chainupRestService.getAllTrades(tradeParam));
+		System.out.println(chainupRestService.getAllTrades(tradeParam()));
 	}
 
 }

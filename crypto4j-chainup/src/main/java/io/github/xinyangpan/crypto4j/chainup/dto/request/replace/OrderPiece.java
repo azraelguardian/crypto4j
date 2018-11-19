@@ -22,9 +22,9 @@ public class OrderPiece {
 	@JsonProperty("fee_is_user_exchange_coin")
 	public int getFeeIsUserExchangeCoin() {
 		if (useExchangeCoin) {
-			return 0;
-		} else {
 			return 1;
+		} else {
+			return 0;
 		}
 	}
 
