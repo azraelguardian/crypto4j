@@ -13,7 +13,7 @@ public class Tick {
 	private BigDecimal low;
 	private BigDecimal buy;
 	private BigDecimal sell;
-	private Integer rose;
+	private BigDecimal rose;
 	private Long time;
 
 }

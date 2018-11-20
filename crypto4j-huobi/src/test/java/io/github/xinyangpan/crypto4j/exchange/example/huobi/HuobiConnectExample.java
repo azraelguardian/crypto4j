@@ -26,7 +26,7 @@ public class HuobiConnectExample {
 		huobiSubscriber.setTickerListener(Crypto4jUtils.noOp());
 		huobiSubscriber.setKlineResponse(System.out::println);
 		huobiSubscriber.setHuobiSync(new HuobiSync());
-		huobiSubscriber.depth("etceth", "step0");
+		huobiSubscriber.depth("btcusdt", "step0");
 
 		// 
 		HuobiManager connector = new HuobiManager();
