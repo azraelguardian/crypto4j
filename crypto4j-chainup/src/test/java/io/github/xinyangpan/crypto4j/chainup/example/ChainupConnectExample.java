@@ -8,7 +8,6 @@ import io.github.xinyangpan.crypto4j.core.util.Crypto4jUtils;
 
 public class ChainupConnectExample {
 
-
 	public static void main(String[] args) throws InterruptedException, ExecutionException {
 		ChainupSubscriber chainupSubscriber = new ChainupSubscriber();
 		chainupSubscriber.setDepthListener(Crypto4jUtils.noOp());
@@ -17,12 +16,11 @@ public class ChainupConnectExample {
 //		chainupSubscriber.depth("btcusdt", 5);
 		// 
 		ChainupManager connector = new ChainupManager();
-		connector.setUrl("ws://ws.hiex.pro/kline-api/ws");
+		connector.setUrl("wss://ws.hiex.pro:443/kline-api/ws");
 		connector.setSubscriber(chainupSubscriber);
 		connector.connect();
 		// 
 		Thread.sleep(Long.MAX_VALUE);
 	}
-
 
 }
