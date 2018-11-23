@@ -21,14 +21,17 @@ public abstract class AbstractHeartbeat {
 	// 
 	private final LinkedBlockingQueue<Long> queue = new LinkedBlockingQueue<>();
 
-	public void start() {
+	public synchronized void start() {
 		// 
 		thread = new Thread(this::run);
 		thread.setDaemon(true);
 		thread.start();
 	}
 
-	public void stop() {
+	public synchronized void stop() {
+		if (this.thread == null) {
+			return;
+		}
 		this.thread.interrupt();
 		this.thread = null;
 	}
