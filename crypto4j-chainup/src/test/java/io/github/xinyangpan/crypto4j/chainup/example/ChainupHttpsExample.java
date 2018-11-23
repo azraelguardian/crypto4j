@@ -1,11 +1,8 @@
 package io.github.xinyangpan.crypto4j.chainup.example;
 
-import java.io.DataOutputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
 

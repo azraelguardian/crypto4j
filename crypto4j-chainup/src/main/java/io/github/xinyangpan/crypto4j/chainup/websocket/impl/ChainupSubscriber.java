@@ -41,25 +41,26 @@ public class ChainupSubscriber extends Subscriber {
 	protected void handleBinaryMessage(WebSocketSession session, BinaryMessage message) throws Exception {
 		String jsonMessage = this.getTextMessage(message.getPayload());
 		log.debug(MSG_TRACK, "{}: Handling message: {}", this.getName(), jsonMessage);
-//		JsonNode root = objectMapper.readTree(jsonMessage);
-//		// event sub ack
-//		JsonNode eventNode = root.findValue("event_rep");
-//		if (eventNode != null) {
-//			onResultData(jsonMessage);
-//		}
-//		// channel message
-//		String channel = root.findValue("channel").asText();
-//		if (channel.contains("trade_ticker")) {
-//			Event<TradeTick> event = objectMapper.readValue(jsonMessage, TRADE);
-//			tradeListener.accept(event);
-//			return;
-//		} else if (channel.contains("depth_step")) {
-//			Event<DepthTick> event = objectMapper.readValue(jsonMessage, DEPTH);
-//			depthListener.accept(event);
-//			return;
-//		}
-//		// 
-//		this.unhandledMessage(jsonMessage);
+		JsonNode root = objectMapper.readTree(jsonMessage);
+		// ping
+		JsonNode eventNode = root.findValue("ping");
+		if (eventNode != null) {
+			onPing(jsonMessage);
+			return;
+		}
+		// channel message
+		String channel = root.findValue("channel").asText();
+		if (channel.contains("trade_ticker")) {
+			Event<TradeTick> event = objectMapper.readValue(jsonMessage, TRADE);
+			tradeListener.accept(event);
+			return;
+		} else if (channel.contains("depth_step")) {
+			Event<DepthTick> event = objectMapper.readValue(jsonMessage, DEPTH);
+			depthListener.accept(event);
+			return;
+		}
+		// 
+		this.unhandledMessage(jsonMessage);
 	}
 
 	private String getTextMessage(ByteBuffer payload) throws IOException {
@@ -68,8 +69,8 @@ public class ChainupSubscriber extends Subscriber {
 		return json;
 	}
 	
-	private void onResultData(String jsonMessage) {
-		log.info("{}: Ack - {}", this.getName(), jsonMessage);
+	private void onPing(String jsonMessage) {
+		log.debug("{}: Ping - {}", this.getName(), jsonMessage);
 	}
 
 	public void depth(String symbol, int step, int askDepth, int bidDepth) {

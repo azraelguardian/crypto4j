@@ -4,14 +4,13 @@ import java.util.concurrent.ExecutionException;
 
 import io.github.xinyangpan.crypto4j.chainup.websocket.ChainupManager;
 import io.github.xinyangpan.crypto4j.chainup.websocket.impl.ChainupSubscriber;
-import io.github.xinyangpan.crypto4j.core.util.Crypto4jUtils;
 
 public class ChainupConnectExample {
-
+	
 	public static void main(String[] args) throws InterruptedException, ExecutionException {
 		ChainupSubscriber chainupSubscriber = new ChainupSubscriber();
-		chainupSubscriber.setDepthListener(Crypto4jUtils.noOp());
-		chainupSubscriber.setTradeListener(Crypto4jUtils.noOp());
+		chainupSubscriber.setDepthListener(System.out::println);
+		chainupSubscriber.setTradeListener(System.out::println);
 		chainupSubscriber.trade("btcusdt");
 //		chainupSubscriber.depth("btcusdt", 5);
 		// 
