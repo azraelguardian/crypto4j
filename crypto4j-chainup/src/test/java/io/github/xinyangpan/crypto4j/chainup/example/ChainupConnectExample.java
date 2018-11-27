@@ -11,7 +11,9 @@ public class ChainupConnectExample {
 		ChainupSubscriber chainupSubscriber = new ChainupSubscriber();
 		chainupSubscriber.setDepthListener(System.out::println);
 		chainupSubscriber.setTradeListener(System.out::println);
-		chainupSubscriber.trade("btcusdt");
+		chainupSubscriber.setTickListener(System.out::println);
+		chainupSubscriber.ticker("btcusdt");
+//		chainupSubscriber.trade("btcusdt");
 //		chainupSubscriber.depth("btcusdt", 5);
 		// 
 		ChainupManager connector = new ChainupManager();

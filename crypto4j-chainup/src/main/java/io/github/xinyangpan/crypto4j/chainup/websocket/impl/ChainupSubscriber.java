@@ -17,6 +17,7 @@ import com.google.common.base.Preconditions;
 
 import io.github.xinyangpan.crypto4j.chainup.dto.ws.event.Event;
 import io.github.xinyangpan.crypto4j.chainup.dto.ws.event.tick.DepthTick;
+import io.github.xinyangpan.crypto4j.chainup.dto.ws.event.tick.Tick;
 import io.github.xinyangpan.crypto4j.chainup.dto.ws.event.tick.TradeTick;
 import io.github.xinyangpan.crypto4j.chainup.dto.ws.sub.EventSub;
 import io.github.xinyangpan.crypto4j.chainup.dto.ws.sub.params.DepthParam;
@@ -33,9 +34,11 @@ import lombok.extern.slf4j.Slf4j;
 public class ChainupSubscriber extends Subscriber {
 	private final static TypeReference<Event<TradeTick>> TRADE = new TypeReference<Event<TradeTick>>() {};
 	private final static TypeReference<Event<DepthTick>> DEPTH = new TypeReference<Event<DepthTick>>() {};
+	private final static TypeReference<Event<Tick>> TICK = new TypeReference<Event<Tick>>() {};
 
 	private Consumer<Event<TradeTick>> tradeListener = Crypto4jUtils.logConsumer();
 	private Consumer<Event<DepthTick>> depthListener = Crypto4jUtils.logConsumer();
+	private Consumer<Event<Tick>> tickListener = Crypto4jUtils.logConsumer();
 
 	@Override
 	protected void handleBinaryMessage(WebSocketSession session, BinaryMessage message) throws Exception {
@@ -50,11 +53,15 @@ public class ChainupSubscriber extends Subscriber {
 		}
 		// channel message
 		String channel = root.findValue("channel").asText();
-		if (channel.contains("trade_ticker")) {
+		if (channel.endsWith("_trade_ticker")) {
 			Event<TradeTick> event = objectMapper.readValue(jsonMessage, TRADE);
 			tradeListener.accept(event);
 			return;
-		} else if (channel.contains("depth_step")) {
+		} else if (channel.endsWith("_ticker")) {
+			Event<Tick> event = objectMapper.readValue(jsonMessage, TICK);
+			tickListener.accept(event);
+			return;
+		} else if (channel.endsWith("_depth_step")) {
 			Event<DepthTick> event = objectMapper.readValue(jsonMessage, DEPTH);
 			depthListener.accept(event);
 			return;
@@ -68,7 +75,7 @@ public class ChainupSubscriber extends Subscriber {
 		String json = IOUtils.toString(gzipInputStream, Charset.forName("utf-8"));
 		return json;
 	}
-	
+
 	private void onPing(String jsonMessage) {
 		log.debug("{}: Ping - {}", this.getName(), jsonMessage);
 	}
@@ -103,8 +110,20 @@ public class ChainupSubscriber extends Subscriber {
 		// 
 		Preconditions.checkNotNull(symbol);
 		// 
-		log.info("Subscribing ticker. symbol={}.", symbol);
+		log.info("Subscribing trade. symbol={}.", symbol);
 		String channel = String.format("market_%s_trade_ticker", symbol);
+		EventSub<Param> eventSub = new EventSub<>();
+		eventSub.setEvent("sub");
+		eventSub.setParams(new Param(channel, channel));
+		this.send(eventSub);
+	}
+
+	public void ticker(String symbol) {
+		// 
+		Preconditions.checkNotNull(symbol);
+		// 
+		log.info("Subscribing ticker. symbol={}.", symbol);
+		String channel = String.format("market_%s_ticker", symbol);
 		EventSub<Param> eventSub = new EventSub<>();
 		eventSub.setEvent("sub");
 		eventSub.setParams(new Param(channel, channel));
