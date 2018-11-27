@@ -61,7 +61,7 @@ public class ChainupSubscriber extends Subscriber {
 			Event<Tick> event = objectMapper.readValue(jsonMessage, TICK);
 			tickListener.accept(event);
 			return;
-		} else if (channel.endsWith("_depth_step")) {
+		} else if (channel.contains("_depth_step")) {
 			Event<DepthTick> event = objectMapper.readValue(jsonMessage, DEPTH);
 			depthListener.accept(event);
 			return;
