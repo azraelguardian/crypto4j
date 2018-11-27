@@ -118,7 +118,7 @@ public class ChainupSubscriber extends Subscriber {
 		this.send(eventSub);
 	}
 
-	public void ticker(String symbol) {
+	public void tick(String symbol) {
 		// 
 		Preconditions.checkNotNull(symbol);
 		// 

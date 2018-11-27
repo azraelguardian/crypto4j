@@ -13,7 +13,7 @@ public class ChainupConnectExample {
 		chainupSubscriber.setTradeListener(System.out::println);
 		chainupSubscriber.setTickListener(System.out::println);
 		chainupSubscriber.setDepthListener(depth -> {System.out.println(String.format("ask size=%s, bid size=%s", depth.getTick().getAsks().size(), depth.getTick().getBids().size()));});
-//		chainupSubscriber.ticker("btcusdt");
+//		chainupSubscriber.tick("btcusdt");
 //		chainupSubscriber.trade("btcusdt");
 		chainupSubscriber.depth("btcusdt", 5);
 		// 
