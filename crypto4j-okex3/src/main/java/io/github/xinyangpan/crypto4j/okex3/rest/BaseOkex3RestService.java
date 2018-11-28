@@ -14,17 +14,24 @@ import com.google.common.collect.Lists;
 import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
 
-import io.github.xinyangpan.crypto4j.core.RestProperties;
 import io.github.xinyangpan.crypto4j.core.rest.BaseRestService;
 
 public class BaseOkex3RestService extends BaseRestService {
 	// 
-	private final HashFunction HASHING;
+	private final HashFunction hashFunction;
 
-	@SuppressWarnings("deprecation")
-	public BaseOkex3RestService(RestProperties restProperties) {
-		super(restProperties);
-		HASHING = Hashing.md5();
+	public BaseOkex3RestService(Okex3RestProperties okex3RestProperties) {
+		super(okex3RestProperties);
+		String restSecret = restProperties.getRestSecret();
+		if (restSecret != null) {
+			hashFunction = Hashing.hmacSha256(restSecret.getBytes());
+		} else {
+			hashFunction = null;
+		}
+	}
+	
+	public String getPassphrase() {
+		return ((Okex3RestProperties)this.getRestProperties()).getPassphrase();
 	}
 
 	@Override
@@ -50,7 +57,7 @@ public class BaseOkex3RestService extends BaseRestService {
 		// 
 		String param = toRequestParam(object);
 		String toSignParam = String.format("%s&secret_key=%s", param, restProperties.getRestSecret());
-		String sign = HASHING.hashBytes(toSignParam.getBytes()).toString().toUpperCase();
+		String sign = hashFunction.hashBytes(toSignParam.getBytes()).toString().toUpperCase();
 		return String.format("%s&sign=%s", param, sign);
 	}
 

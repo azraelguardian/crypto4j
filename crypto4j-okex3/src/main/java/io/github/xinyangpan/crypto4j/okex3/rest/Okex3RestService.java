@@ -10,7 +10,6 @@ import org.springframework.http.HttpMethod;
 
 import com.google.common.base.Preconditions;
 
-import io.github.xinyangpan.crypto4j.core.RestProperties;
 import io.github.xinyangpan.crypto4j.core.UnknownOrderException;
 import io.github.xinyangpan.crypto4j.okex3.dto.account.UserInfo;
 import io.github.xinyangpan.crypto4j.okex3.dto.common.ErrorCode;
@@ -29,8 +28,8 @@ import lombok.SneakyThrows;
 public class Okex3RestService extends BaseOkex3RestService {
 	private static final Logger log = LoggerFactory.getLogger(Okex3RestService.class);
 
-	public Okex3RestService(RestProperties restProperties) {
-		super(restProperties);
+	public Okex3RestService(Okex3RestProperties okex3RestProperties) {
+		super(okex3RestProperties);
 	}
 	
 	public String ticker() {
