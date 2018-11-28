@@ -5,7 +5,7 @@
 		<artifactId>crypto4j-parent</artifactId>
 		<version>0.1.2-SNAPSHOT</version>
 	</parent>
-	<artifactId>crypto4j-okex</artifactId>
+	<artifactId>crypto4j-okex3</artifactId>
 
 	<dependencies>
 		<dependency>
