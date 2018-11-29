@@ -79,7 +79,7 @@ public class BaseOkex3RestService extends BaseRestService {
 		return String.format("%s%s", restProperties.getRestBaseUrl(), path);
 	}
 
-	protected HttpEntity<String> buildSignedRequestEntity(String requestPath, HttpMethod method, Object paramObj, Object bodyObj) {
+	protected HttpEntity<String> buildSignedRequestEntity(String requestPath, HttpMethod method, Object bodyObj) {
 		String body = bodyObj == null ? "" : toJson(bodyObj);
 		String ts = getTimestampString();
 		String toSignString = ts + method.name() + requestPath + body;

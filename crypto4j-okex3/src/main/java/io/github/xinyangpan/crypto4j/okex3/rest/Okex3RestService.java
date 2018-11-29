@@ -7,8 +7,11 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 
 import io.github.xinyangpan.crypto4j.okex3.dto.account.BalanceInfo;
+import io.github.xinyangpan.crypto4j.okex3.dto.trade.CancelOrder;
+import io.github.xinyangpan.crypto4j.okex3.dto.trade.Order;
+import io.github.xinyangpan.crypto4j.okex3.dto.trade.OrderResult;
 import io.github.xinyangpan.crypto4j.okex3.dto.trade.PlaceOrder;
-import io.github.xinyangpan.crypto4j.okex3.dto.trade.PlaceOrderResult;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -31,18 +34,41 @@ public class Okex3RestService extends BaseOkex3RestService {
 		HttpMethod method = HttpMethod.GET;
 		// 
 		String url = this.getUrl(requestPath);
-		HttpEntity<String> requestEntity = this.buildSignedRequestEntity(requestPath, method, null, null);
+		HttpEntity<String> requestEntity = this.buildSignedRequestEntity(requestPath, method, null);
 		return restTemplate.exchange(url, method, requestEntity, BALANCE_INFO_LIST).getBody();
 	}
 
-	public PlaceOrderResult placeOrder(PlaceOrder placeOrder) {
+	public OrderResult placeOrder(PlaceOrder placeOrder) {
 		String requestPath = "/api/spot/v3/orders";
 		HttpMethod method = HttpMethod.POST;
 		// 
 		String url = this.getUrl(requestPath);
-		HttpEntity<String> requestEntity = this.buildSignedRequestEntity(requestPath, method, null, placeOrder);
-		return restTemplate.exchange(url, method, requestEntity, PlaceOrderResult.class).getBody();
+		HttpEntity<String> requestEntity = this.buildSignedRequestEntity(requestPath, method, placeOrder);
+		return restTemplate.exchange(url, method, requestEntity, OrderResult.class).getBody();
 	}
+
+	public OrderResult cancelOrder(long orderId, @NonNull String instrumentId, String clientOid) {
+		String requestPath = String.format("/api/spot/v3/cancel_orders/%s", orderId);
+		HttpMethod method = HttpMethod.POST;
+		// 
+		String url = this.getUrl(requestPath);
+		HttpEntity<String> requestEntity = this.buildSignedRequestEntity(requestPath, method, new CancelOrder(clientOid, instrumentId));
+		OrderResult orderResult = restTemplate.exchange(url, method, requestEntity, OrderResult.class).getBody();
+		log.debug("{}", orderResult);
+		return orderResult;
+	}
+
+	public Order queryOrder(String instrumentId, long orderId) {
+		String requestPath = String.format("/api/spot/v3/orders/%s?instrument_id=%s", orderId, instrumentId);
+		HttpMethod method = HttpMethod.GET;
+		// 
+		String url = this.getUrl(requestPath);
+		HttpEntity<String> requestEntity = this.buildSignedRequestEntity(requestPath, method, null);
+		Order order = restTemplate.exchange(url, method, requestEntity, Order.class).getBody();
+		log.debug("{}", order);
+		return order;
+	}
+	
 //
 //	public OrderResponse placeOrder(Order order) {
 //		log.debug("{}", order);
