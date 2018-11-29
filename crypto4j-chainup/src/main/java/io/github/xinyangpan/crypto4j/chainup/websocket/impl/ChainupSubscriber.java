@@ -14,6 +14,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.util.ByteBufferBackedInputStream;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableMap;
 
 import io.github.xinyangpan.crypto4j.chainup.dto.ws.event.Event;
 import io.github.xinyangpan.crypto4j.chainup.dto.ws.event.tick.DepthTick;
@@ -51,7 +52,7 @@ public class ChainupSubscriber extends Subscriber {
 		// ping
 		JsonNode eventNode = root.findValue("ping");
 		if (eventNode != null) {
-			onPing(jsonMessage);
+			onPing(eventNode.asLong());
 			return;
 		}
 		// ack
@@ -78,19 +79,20 @@ public class ChainupSubscriber extends Subscriber {
 		// 
 		this.unhandledMessage(jsonMessage);
 	}
-	
+
 	private String getTextMessage(ByteBuffer payload) throws IOException {
 		GZIPInputStream gzipInputStream = new GZIPInputStream(new ByteBufferBackedInputStream(payload));
 		String json = IOUtils.toString(gzipInputStream, Charset.forName("utf-8"));
 		return json;
 	}
-	
+
 	private void onAck(EventAck eventAck) {
 		log.info("Ack<{}>: {}", this.getName(), eventAck);
 	}
 
-	private void onPing(String jsonMessage) {
-		log.debug("{}: Ping - {}", this.getName(), jsonMessage);
+	private void onPing(long pingTs) {
+		log.debug("responding ping message: {}, {}", pingTs, System.currentTimeMillis() - pingTs);
+		this.send(ImmutableMap.of("pong", pingTs));
 	}
 
 	public void depth(String symbol, int step, int askDepth, int bidDepth) {

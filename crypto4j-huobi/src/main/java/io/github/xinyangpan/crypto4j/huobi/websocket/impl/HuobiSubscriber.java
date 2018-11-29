@@ -119,9 +119,6 @@ public class HuobiSubscriber extends Subscriber {
 
 	private void onPingMessage(long pingTs) throws Exception {
 		log.debug("responding ping message: {}, {}", pingTs, System.currentTimeMillis() - pingTs);
-//		if (session != null && session.isOpen()) {
-//			session.sendMessage(new TextMessage(String.format("{'pong': %s}", pingTs)));
-//		}
 		this.send(ImmutableMap.of("pong", pingTs));
 	}
 
