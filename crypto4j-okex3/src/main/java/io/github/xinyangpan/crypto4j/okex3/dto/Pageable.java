@@ -1,4 +1,4 @@
-package io.github.xinyangpan.crypto4j.okex3;
+package io.github.xinyangpan.crypto4j.okex3.dto;
 
 import lombok.Data;
 

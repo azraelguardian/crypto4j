@@ -1,22 +1,34 @@
 package io.github.xinyangpan.crypto4j.okex3.rest;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
+import org.springframework.web.client.HttpClientErrorException;
 
+import com.google.common.collect.Lists;
+
+import io.github.xinyangpan.crypto4j.core.UnknownOrderException;
+import io.github.xinyangpan.crypto4j.okex3.dto.ErrorResult;
 import io.github.xinyangpan.crypto4j.okex3.dto.account.BalanceInfo;
+import io.github.xinyangpan.crypto4j.okex3.dto.enums.OrderStatus;
 import io.github.xinyangpan.crypto4j.okex3.dto.trade.CancelOrder;
+import io.github.xinyangpan.crypto4j.okex3.dto.trade.Execution;
+import io.github.xinyangpan.crypto4j.okex3.dto.trade.ExecutionQuery;
 import io.github.xinyangpan.crypto4j.okex3.dto.trade.Order;
+import io.github.xinyangpan.crypto4j.okex3.dto.trade.OrderDetail;
 import io.github.xinyangpan.crypto4j.okex3.dto.trade.OrderResult;
 import io.github.xinyangpan.crypto4j.okex3.dto.trade.PlaceOrder;
 import lombok.NonNull;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class Okex3RestService extends BaseOkex3RestService {
 	private static final ParameterizedTypeReference<List<BalanceInfo>> BALANCE_INFO_LIST = new ParameterizedTypeReference<List<BalanceInfo>>() {};
+	private static final ParameterizedTypeReference<List<Execution>> EXECUTION_LIST = new ParameterizedTypeReference<List<Execution>>() {};
 
 	public Okex3RestService(Okex3RestProperties okex3RestProperties) {
 		super(okex3RestProperties);
@@ -44,7 +56,9 @@ public class Okex3RestService extends BaseOkex3RestService {
 		// 
 		String url = this.getUrl(requestPath);
 		HttpEntity<String> requestEntity = this.buildSignedRequestEntity(requestPath, method, placeOrder);
-		return restTemplate.exchange(url, method, requestEntity, OrderResult.class).getBody();
+		OrderResult orderResult = restTemplate.exchange(url, method, requestEntity, OrderResult.class).getBody();
+		log.debug("{}", orderResult);
+		return orderResult;
 	}
 
 	public OrderResult cancelOrder(long orderId, @NonNull String instrumentId, String clientOid) {
@@ -68,99 +82,91 @@ public class Okex3RestService extends BaseOkex3RestService {
 		log.debug("{}", order);
 		return order;
 	}
+
+	public Order queryOrderForFinalStatus(String instrumentId, long orderId) {
+		return this.queryOrderForFinalStatus(instrumentId, orderId, 3);
+	}
 	
-//
-//	public OrderResponse placeOrder(Order order) {
-//		log.debug("{}", order);
-//		String url = this.getUrl("/api/v1/trade.do");
-//		HttpEntity<String> requestEntity = this.buildSignedRequestEntity(order);
-//		OrderResponse response = restTemplate.postForObject(url, requestEntity, OrderResponse.class);
-//		log.debug("{}", response);
-//		return response;
-//	}
-//
-//	public CancelOrderResponse cancelOrder(CancelOrder cancelOrder) {
-//		log.debug("{}", cancelOrder);
-//		String url = this.getUrl("/api/v1/cancel_order.do");
-//		HttpEntity<String> requestEntity = this.buildSignedRequestEntity(cancelOrder);
-//		CancelOrderResponse response = restTemplate.postForObject(url, requestEntity, CancelOrderResponse.class);
-//		log.debug("{}", response);
-//		return response;
-//	}
-//
-//	public OrderResult queryOrder(String symbol, long orderId) {
-//		QueryOrder queryOrder = new QueryOrder(symbol, orderId);
-//		log.debug("{}", queryOrder);
-//		String url = this.getUrl("/api/v1/order_info.do");
-//		HttpEntity<String> requestEntity = this.buildSignedRequestEntity(queryOrder);
-//		QueryOrderResponse response = restTemplate.postForObject(url, requestEntity, QueryOrderResponse.class);
-//		log.debug("{}", response);
-//		return this.getOrderResult(response);
-//	}
-//
-//	@SneakyThrows
-//	public OrderResult queryOrderForFinalStatus(String symbol, long orderId, int attempt) {
-//		OrderResult orderResult = null;
-//		for (int i = 0; i < attempt; i++) {
-//			Thread.sleep(100 * (i + 1));
-//			orderResult = this.queryOrder(symbol, orderId);
-//			log.debug("orderDetail[{}]: {}", i, orderResult);
-//			if (orderResult == null) {
-//				continue;
-//			}
-//			OrderStatus orderStatus = orderResult.getStatus();
-//			if (orderStatus == OrderStatus.NEW || orderStatus == OrderStatus.PENDING_CANCEL) {
-//				continue;
-//			} else if (orderStatus == OrderStatus.FILLED && orderResult.getDealAmount().compareTo(orderResult.getAmount()) != 0) {
-//				continue;
-//			} else if (orderStatus == OrderStatus.PARTIALLY_FILLED && orderResult.getDealAmount().compareTo(BigDecimal.ZERO) <= 0) {
-//				continue;
-//			} else {
-//				return orderResult;
-//			}
-//		}
-//		throw new UnknownOrderException(String.valueOf(orderId), "No valid order result returned. ref=" + orderResult);
-//	}
-//
-//	private OrderResult getOrderResult(QueryOrderResponse queryOrderResponse) {
-//		queryOrderResponse.throwExceptionWhenError();
-//		List<OrderResult> orders = queryOrderResponse.getOrders();
-//		if (orders == null || orders.isEmpty()) {
-//			return null;
-//		}
-//		log.debug("OrderResults: {}", orders);
-//		Preconditions.checkState(orders != null && orders.size() == 1);
-//		OrderResult orderResult = orders.get(0);
-//		return orderResult;
-//	}
-//
-//	public OrderResult placeAndQueryOrder(Order order) {
-//		OrderResponse orderResponse = this.placeOrder(order).throwExceptionWhenError();
-//		OrderType orderType = order.getType();
-//		if (orderType == OrderType.buy_market || orderType == OrderType.sell_market) {
-//			return this.queryOrderForFinalStatus(order.getSymbol(), orderResponse.getOrderId(), 3);
-//		} else {
-//			return this.queryOrder(order.getSymbol(), orderResponse.getOrderId());
-//		}
-//	}
-//
-//	public OrderResult simulateIocAndQueryOrder(Order order) {
-//		// Place Order
-//		OrderResponse orderResponse = this.placeOrder(order).throwExceptionWhenError();
-//		// Cancel Order
-//		CancelOrderResponse cancelOrderResponse = this.cancelOrder(new CancelOrder(order.getSymbol(), orderResponse.getOrderId()));
-//		log.debug("{}", cancelOrderResponse);
-//		// 1009 没有订单, filled, throw Exception if not 1009
-//		// 1051	订单已完成交易
-//		// 1019	撤销订单失败
-//		ErrorCode errorCode = cancelOrderResponse.getErrorCode();
-//		if (errorCode != null) {
-//			Integer code = errorCode.getCode();
-//			if (code != null && code != 1009 && code != 1019 && code != 1051) {
-//				cancelOrderResponse.throwExceptionWhenError();
-//			}
-//		}
-//		return this.queryOrderForFinalStatus(order.getSymbol(), orderResponse.getOrderId(), 3);
-//	}
+	@SneakyThrows
+	public Order queryOrderForFinalStatus(String instrumentId, long orderId, int attempt) {
+		Order order = null;
+		for (int i = 0; i < attempt; i++) {
+			Thread.sleep(100 * (i + 1));
+			order = this.queryOrder(instrumentId, orderId);
+			log.debug("orderDetail[{}]: {}", i, order);
+			if (order == null) {
+				continue;
+			}
+			OrderStatus orderStatus = order.getStatus();
+			if (orderStatus == OrderStatus.open ||orderStatus == OrderStatus.ordering || orderStatus == OrderStatus.canceling) {
+				continue;
+			} else if (orderStatus == OrderStatus.filled && order.getFilledSize().compareTo(order.getSize()) != 0) {
+				continue;
+			} else if (orderStatus == OrderStatus.part_filled && order.getFilledSize().compareTo(BigDecimal.ZERO) <= 0) {
+				continue;
+			} else {
+				return order;
+			}
+		}
+		throw new UnknownOrderException(String.valueOf(orderId), "No valid order result returned. ref=" + order);
+	}
+	
+	public List<Execution> queryExecution(ExecutionQuery executionQuery) {
+		try {
+			String requestPath = String.format("/api/spot/v3/fills?%s", this.toRequestParam(executionQuery));
+			HttpMethod method = HttpMethod.GET;
+			// 
+			String url = this.getUrl(requestPath);
+			HttpEntity<String> requestEntity = this.buildSignedRequestEntity(requestPath, method, null);
+			List<Execution> executions = restTemplate.exchange(url, method, requestEntity, EXECUTION_LIST).getBody();
+			log.debug("{}", executions);
+			return executions;
+		} catch (HttpClientErrorException e) {
+			String responseBody = e.getResponseBodyAsString();
+			log.debug("{}", responseBody);
+			ErrorResult errorResult;
+			try {
+				errorResult = objectMapper.readValue(e.getResponseBodyAsString(), ErrorResult.class);
+			} catch (Exception e1) {
+				throw new RuntimeException(e1);
+			}
+			Integer code = errorResult.getCode();
+			if (code != null && code == 30036) {
+				return Lists.newArrayList();
+			} else {
+				throw e;
+			}
+		}
+	}
+
+	public OrderDetail placeAndQuery(PlaceOrder placeOrder) {
+		OrderResult orderResult = this.placeOrder(placeOrder);
+		orderResult.throwExceptionWhenError(String.format("ref=%s", placeOrder));
+		String instrumentId = placeOrder.getInstrumentId();
+		Long orderId = orderResult.getOrderId();
+		Order order = this.queryOrderForFinalStatus(instrumentId, orderId);
+		ExecutionQuery executionQuery = new ExecutionQuery();
+		executionQuery.setInstrumentId(instrumentId);
+		executionQuery.setOrderId(orderId);
+		List<Execution> executions = null;
+		executions = this.queryExecution(executionQuery);
+		return new OrderDetail(order, executions);
+	}
+
+	public OrderDetail iocAndQuery(PlaceOrder placeOrder) {
+		OrderResult orderResult = this.placeOrder(placeOrder);
+		orderResult.throwExceptionWhenError(String.format("ref=%s", placeOrder));
+		String instrumentId = placeOrder.getInstrumentId();
+		Long orderId = orderResult.getOrderId();
+		orderResult = this.cancelOrder(orderId, instrumentId, null);
+		orderResult.throwExceptionWhenError(String.format("ref=%s", placeOrder));
+		Order order = this.queryOrderForFinalStatus(instrumentId, orderId);
+		ExecutionQuery executionQuery = new ExecutionQuery();
+		executionQuery.setInstrumentId(instrumentId);
+		executionQuery.setOrderId(orderId);
+		List<Execution> executions = null;
+		executions = this.queryExecution(executionQuery);
+		return new OrderDetail(order, executions);
+	}
 
 }

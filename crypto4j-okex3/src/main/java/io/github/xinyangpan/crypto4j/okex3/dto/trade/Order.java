@@ -13,6 +13,7 @@ import lombok.Data;
 @Data
 public class Order {
 
+	@JsonProperty("order_id")
 	private Long orderId;
 	private BigDecimal notional;
 	private BigDecimal price;

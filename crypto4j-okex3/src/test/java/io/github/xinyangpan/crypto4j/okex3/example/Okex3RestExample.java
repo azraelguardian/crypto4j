@@ -35,10 +35,34 @@ public class Okex3RestExample {
 		System.out.println(okex3RestService.placeOrder(placeOrder));
 	}
 
+	public static void placeAndQuery() {
+		PlaceOrder placeOrder = new PlaceOrder();
+		placeOrder.setInstrumentId(BTCUSDT);
+		placeOrder.setMarginTrading(MarginTrading.C2C);
+		placeOrder.setSide(Side.sell);
+		placeOrder.setType(OrderType.limit);
+		placeOrder.setPrice(new BigDecimal("4700"));
+		placeOrder.setSize(new BigDecimal("0.001"));
+		System.out.println(okex3RestService.placeAndQuery(placeOrder));
+	}
+
+	public static void iocAndQuery() {
+		PlaceOrder placeOrder = new PlaceOrder();
+		placeOrder.setInstrumentId(BTCUSDT);
+		placeOrder.setMarginTrading(MarginTrading.C2C);
+		placeOrder.setSide(Side.sell);
+		placeOrder.setType(OrderType.limit);
+		placeOrder.setPrice(new BigDecimal("3700"));
+		placeOrder.setSize(new BigDecimal("0.001"));
+		System.out.println(okex3RestService.iocAndQuery(placeOrder));
+	}
+
 	public static void main(String[] args) {
 		try {
-			System.out.println(okex3RestService.account());
-//			placeOrder();
+//			System.out.println(okex3RestService.account());
+			iocAndQuery();
+			// 1884764826503168
+//			System.out.println(okex3RestService.queryOrder("BTC-USDT", 1884872990861312L));
 		} catch (org.springframework.web.client.HttpClientErrorException e) {
 			System.out.println(e.getResponseBodyAsString());
 		}

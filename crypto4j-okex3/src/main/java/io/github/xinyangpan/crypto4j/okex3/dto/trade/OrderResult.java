@@ -2,10 +2,11 @@ package io.github.xinyangpan.crypto4j.okex3.dto.trade;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import io.github.xinyangpan.crypto4j.core.dto.ThrowExceptionWhenError;
 import lombok.Data;
 
 @Data
-public class OrderResult {
+public class OrderResult implements ThrowExceptionWhenError {
 
 	@JsonProperty("order_id")
 	private Long orderId;
@@ -13,5 +14,10 @@ public class OrderResult {
 	private String clientOid;
 	@JsonProperty("result")
 	private Boolean result;
+
+	@Override
+	public boolean isSuccessful() {
+		return result;
+	}
 
 }
