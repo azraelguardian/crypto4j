@@ -1,6 +1,12 @@
 package io.github.xinyangpan.crypto4j.okex3.example;
 
+import java.math.BigDecimal;
+
 import io.github.xinyangpan.crypto4j.core.util.Crypto4jUtils;
+import io.github.xinyangpan.crypto4j.okex3.dto.enums.MarginTrading;
+import io.github.xinyangpan.crypto4j.okex3.dto.enums.OrderType;
+import io.github.xinyangpan.crypto4j.okex3.dto.enums.Side;
+import io.github.xinyangpan.crypto4j.okex3.dto.trade.PlaceOrder;
 import io.github.xinyangpan.crypto4j.okex3.rest.Okex3RestProperties;
 import io.github.xinyangpan.crypto4j.okex3.rest.Okex3RestService;
 
@@ -18,8 +24,24 @@ public class Okex3RestExample {
 		okex3RestService = new Okex3RestService(restProperties);
 	}
 
-	public static void main(String[] args) throws InterruptedException {
-		System.out.println(okex3RestService.ticker());
+	public static void placeOrder() {
+		PlaceOrder placeOrder = new PlaceOrder();
+		placeOrder.setInstrumentId(BTCUSDT);
+		placeOrder.setMarginTrading(MarginTrading.C2C);
+		placeOrder.setSide(Side.buy);
+		placeOrder.setType(OrderType.limit);
+		placeOrder.setPrice(new BigDecimal("3500"));
+		placeOrder.setSize(new BigDecimal("0.01"));
+		System.out.println(okex3RestService.placeOrder(placeOrder));
+	}
+
+	public static void main(String[] args) {
+		try {
+			System.out.println(okex3RestService.account());
+//			placeOrder();
+		} catch (org.springframework.web.client.HttpClientErrorException e) {
+			System.out.println(e.getResponseBodyAsString());
+		}
 	}
 
 }
