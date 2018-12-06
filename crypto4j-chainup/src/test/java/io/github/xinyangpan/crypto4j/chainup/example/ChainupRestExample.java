@@ -72,8 +72,8 @@ public class ChainupRestExample {
 	public static void main(String[] args) throws Exception {
 		//		System.out.println(chainupRestService.getAllSymbols());
 		//		System.out.println(chainupRestService.getTick(HIEXXFNH));
-//		System.out.println(chainupRestService.getAccountInfo());
-		System.out.println(chainupRestService.getAllOrder(BTCUSDT));
+		System.out.println(chainupRestService.getAccountInfo());
+//		System.out.println(chainupRestService.getAllOrder(BTCUSDT));
 //				System.out.println(chainupRestService.createOrder(createOrder()));
 		//		System.out.println(chainupRestService.cancelOrder(8198, BTCUSDT));
 //				System.out.println(chainupRestService.getOrderInfo(25765, HIEXXFNH));
