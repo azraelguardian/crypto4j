@@ -79,9 +79,24 @@ public class BaseRestService {
 
 	@SneakyThrows
 	protected <T> T exchange(String url, HttpMethod method, @NonNull HttpEntity<?> requestEntity, TypeReference<T> typeReference) throws RestClientException {
+		String bodyText = this.getBodyText(url, method, requestEntity);
+		return objectMapper.readValue(bodyText, typeReference);
+	}
+
+	@SneakyThrows
+	@SuppressWarnings("unchecked")
+	protected <T> T exchange(String url, HttpMethod method, @NonNull HttpEntity<?> requestEntity, Class<T> clazz) throws RestClientException {
+		String bodyText = this.getBodyText(url, method, requestEntity);
+		if (String.class.equals(clazz)) {
+			return (T) bodyText;
+		}
+		return objectMapper.readValue(bodyText, clazz);
+	}
+
+	private String getBodyText(String url, HttpMethod method, HttpEntity<?> requestEntity) {
 		String bodyText = restTemplate.exchange(url, method, requestEntity, String.class).getBody();
 		log.debug("Body: {}", bodyText);
-		return objectMapper.readValue(bodyText, typeReference);
+		return bodyText;
 	}
 
 }

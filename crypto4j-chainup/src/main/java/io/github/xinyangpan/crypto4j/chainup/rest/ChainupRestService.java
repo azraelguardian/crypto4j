@@ -88,6 +88,13 @@ public class ChainupRestService extends BaseChainupRestService {
 		HttpEntity<String> requestEntity = this.requestEntityWithUserAgent();
 		return exchange(url, HttpMethod.GET, requestEntity, ORDER_INFO_RESULT);
 	}
+	
+	@Deprecated // NOT FINISHED
+	public String getAllOrder(@NonNull String symbol) {
+		String url = this.getUrl("/exchange-open-api/open/api/v2/all_order?%s", toSignedRequestParam(new OrderIdAndSymbol(null, symbol)));
+		HttpEntity<String> requestEntity = this.requestEntityWithUserAgent();
+		return exchange(url, HttpMethod.GET, requestEntity, String.class);
+	}
 
 	public ChainupResponse<TradeResponse> getAllTrades(@NonNull String symbol) {
 		TradeParam tradeParam = new TradeParam();
