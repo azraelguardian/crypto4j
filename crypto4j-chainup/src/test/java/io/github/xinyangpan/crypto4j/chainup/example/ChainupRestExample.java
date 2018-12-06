@@ -60,7 +60,7 @@ public class ChainupRestExample {
 		return tradeParam;
 	}
 
-	private static MassReplace massReplace() {
+	public static MassReplace massReplace() {
 		MassReplace massReplace = new MassReplace();
 		massReplace.setSymbol(HIEXXFNH);
 		massReplace.setMassCancel(Lists.newArrayList("26579"));
@@ -71,12 +71,12 @@ public class ChainupRestExample {
 	public static void main(String[] args) throws Exception {
 		//		System.out.println(chainupRestService.getAllSymbols());
 		//		System.out.println(chainupRestService.getTick(HIEXXFNH));
-		//		System.out.println(chainupRestService.getAccountInfo());
+				System.out.println(chainupRestService.getAccountInfo());
 //				System.out.println(chainupRestService.createOrder(createOrder()));
 		//		System.out.println(chainupRestService.cancelOrder(8198, BTCUSDT));
 //				System.out.println(chainupRestService.getOrderInfo(25765, HIEXXFNH));
 		//		System.out.println(chainupRestService.getAllTrades(tradeParam()));
-		System.out.println(chainupRestService.massReplace(massReplace()));
+//		System.out.println(chainupRestService.massReplace(massReplace()));
 	}
 
 }

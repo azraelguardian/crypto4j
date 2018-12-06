@@ -8,14 +8,21 @@ import java.util.stream.Collectors;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.github.xinyangpan.crypto4j.core.RestProperties;
 import lombok.Getter;
+import lombok.NonNull;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class BaseRestService {
 	// 
 	protected final RestTemplate restTemplate = new RestTemplate();
@@ -69,4 +76,12 @@ public class BaseRestService {
 			.collect(Collectors.joining("&"));// joining by &
 		return param;
 	}
+
+	@SneakyThrows
+	protected <T> T exchange(String url, HttpMethod method, @NonNull HttpEntity<?> requestEntity, TypeReference<T> typeReference) throws RestClientException {
+		String bodyText = restTemplate.exchange(url, method, requestEntity, String.class).getBody();
+		log.debug("Body: {}", bodyText);
+		return objectMapper.readValue(bodyText, typeReference);
+	}
+
 }
