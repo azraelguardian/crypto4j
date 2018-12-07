@@ -1,6 +1,7 @@
 package io.github.xinyangpan.crypto4j.core.rest;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URI;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
@@ -75,6 +76,13 @@ public class BaseRestService {
 			.map(e -> String.format("%s=%s", e.getKey(), e.getValue()))// entry to string ${key}=${value}
 			.collect(Collectors.joining("&"));// joining by &
 		return param;
+	}
+
+	@SneakyThrows
+	protected <T> T exchange(URI uri, HttpMethod method, @NonNull HttpEntity<?> requestEntity, TypeReference<T> typeReference) throws RestClientException {
+		String bodyText = restTemplate.exchange(uri, method, requestEntity, String.class).getBody();
+		log.debug("Body: {}", bodyText);
+		return objectMapper.readValue(bodyText, typeReference);
 	}
 
 	@SneakyThrows

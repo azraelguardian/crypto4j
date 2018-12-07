@@ -49,27 +49,21 @@ public class OkexRestService extends BaseOkexRestService {
 		log.debug("userinfo");
 		String url = this.getUrl("/api/v1/userinfo.do");
 		HttpEntity<String> requestEntity = this.buildSignedRequestEntity(null);
-		UserInfo response = restTemplate.postForObject(url, requestEntity, UserInfo.class);
-		log.debug("{}", response);
-		return response;
+		return exchange(url, HttpMethod.POST, requestEntity, UserInfo.class);
 	}
 
 	public OrderResponse placeOrder(Order order) {
 		log.debug("{}", order);
 		String url = this.getUrl("/api/v1/trade.do");
 		HttpEntity<String> requestEntity = this.buildSignedRequestEntity(order);
-		OrderResponse response = restTemplate.postForObject(url, requestEntity, OrderResponse.class);
-		log.debug("{}", response);
-		return response;
+		return exchange(url, HttpMethod.POST, requestEntity, OrderResponse.class);
 	}
 
 	public CancelOrderResponse cancelOrder(CancelOrder cancelOrder) {
 		log.debug("{}", cancelOrder);
 		String url = this.getUrl("/api/v1/cancel_order.do");
 		HttpEntity<String> requestEntity = this.buildSignedRequestEntity(cancelOrder);
-		CancelOrderResponse response = restTemplate.postForObject(url, requestEntity, CancelOrderResponse.class);
-		log.debug("{}", response);
-		return response;
+		return exchange(url, HttpMethod.POST, requestEntity, CancelOrderResponse.class);
 	}
 
 	public OrderResult queryOrder(String symbol, long orderId) {
@@ -77,7 +71,7 @@ public class OkexRestService extends BaseOkexRestService {
 		log.debug("{}", queryOrder);
 		String url = this.getUrl("/api/v1/order_info.do");
 		HttpEntity<String> requestEntity = this.buildSignedRequestEntity(queryOrder);
-		QueryOrderResponse response = restTemplate.postForObject(url, requestEntity, QueryOrderResponse.class);
+		QueryOrderResponse response = exchange(url, HttpMethod.POST, requestEntity, QueryOrderResponse.class);
 		log.debug("{}", response);
 		return this.getOrderResult(response);
 	}

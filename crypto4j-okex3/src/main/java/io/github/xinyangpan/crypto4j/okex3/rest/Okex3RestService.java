@@ -3,11 +3,11 @@ package io.github.xinyangpan.crypto4j.okex3.rest;
 import java.math.BigDecimal;
 import java.util.List;
 
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.client.HttpClientErrorException;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.collect.Lists;
 
 import io.github.xinyangpan.crypto4j.core.UnknownOrderException;
@@ -27,8 +27,8 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class Okex3RestService extends BaseOkex3RestService {
-	private static final ParameterizedTypeReference<List<BalanceInfo>> BALANCE_INFO_LIST = new ParameterizedTypeReference<List<BalanceInfo>>() {};
-	private static final ParameterizedTypeReference<List<Execution>> EXECUTION_LIST = new ParameterizedTypeReference<List<Execution>>() {};
+	private static final TypeReference<List<BalanceInfo>> BALANCE_INFO_LIST = new TypeReference<List<BalanceInfo>>() {};
+	private static final TypeReference<List<Execution>> EXECUTION_LIST = new TypeReference<List<Execution>>() {};
 
 	public Okex3RestService(Okex3RestProperties okex3RestProperties) {
 		super(okex3RestProperties);
@@ -47,7 +47,7 @@ public class Okex3RestService extends BaseOkex3RestService {
 		// 
 		String url = this.getUrl(requestPath);
 		HttpEntity<String> requestEntity = this.buildSignedRequestEntity(requestPath, method, null);
-		return restTemplate.exchange(url, method, requestEntity, BALANCE_INFO_LIST).getBody();
+		return exchange(url, method, requestEntity, BALANCE_INFO_LIST);
 	}
 
 	public OrderResult placeOrder(PlaceOrder placeOrder) {
@@ -56,9 +56,7 @@ public class Okex3RestService extends BaseOkex3RestService {
 		// 
 		String url = this.getUrl(requestPath);
 		HttpEntity<String> requestEntity = this.buildSignedRequestEntity(requestPath, method, placeOrder);
-		OrderResult orderResult = restTemplate.exchange(url, method, requestEntity, OrderResult.class).getBody();
-		log.debug("{}", orderResult);
-		return orderResult;
+		return exchange(url, method, requestEntity, OrderResult.class);
 	}
 
 	public OrderResult cancelOrder(long orderId, @NonNull String instrumentId, String clientOid) {
@@ -67,9 +65,7 @@ public class Okex3RestService extends BaseOkex3RestService {
 		// 
 		String url = this.getUrl(requestPath);
 		HttpEntity<String> requestEntity = this.buildSignedRequestEntity(requestPath, method, new CancelOrder(clientOid, instrumentId));
-		OrderResult orderResult = restTemplate.exchange(url, method, requestEntity, OrderResult.class).getBody();
-		log.debug("{}", orderResult);
-		return orderResult;
+		return exchange(url, method, requestEntity, OrderResult.class);
 	}
 
 	public Order queryOrder(String instrumentId, long orderId) {
@@ -78,9 +74,7 @@ public class Okex3RestService extends BaseOkex3RestService {
 		// 
 		String url = this.getUrl(requestPath);
 		HttpEntity<String> requestEntity = this.buildSignedRequestEntity(requestPath, method, null);
-		Order order = restTemplate.exchange(url, method, requestEntity, Order.class).getBody();
-		log.debug("{}", order);
-		return order;
+		return exchange(url, method, requestEntity, Order.class);
 	}
 
 	public Order queryOrderForFinalStatus(String instrumentId, long orderId) {
@@ -118,9 +112,7 @@ public class Okex3RestService extends BaseOkex3RestService {
 			// 
 			String url = this.getUrl(requestPath);
 			HttpEntity<String> requestEntity = this.buildSignedRequestEntity(requestPath, method, null);
-			List<Execution> executions = restTemplate.exchange(url, method, requestEntity, EXECUTION_LIST).getBody();
-			log.debug("{}", executions);
-			return executions;
+			return exchange(url, method, requestEntity, EXECUTION_LIST);
 		} catch (HttpClientErrorException e) {
 			String responseBody = e.getResponseBodyAsString();
 			log.debug("{}", responseBody);

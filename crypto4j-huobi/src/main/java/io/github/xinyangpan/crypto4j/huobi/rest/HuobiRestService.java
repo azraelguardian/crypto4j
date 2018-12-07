@@ -4,9 +4,6 @@ import java.math.BigDecimal;
 import java.net.URI;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 
@@ -30,19 +27,20 @@ import io.github.xinyangpan.crypto4j.huobi.dto.trade.Order;
 import io.github.xinyangpan.crypto4j.huobi.dto.trade.OrderDetail;
 import io.github.xinyangpan.crypto4j.huobi.dto.trade.OrderResult;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class HuobiRestService extends BaseHuobiRestService {
-	private static final Logger log = LoggerFactory.getLogger(HuobiRestService.class);
-	private static ParameterizedTypeReference<HuobiRestResponse<List<AccountInfo>>> ACCOUNT_INFO = new ParameterizedTypeReference<HuobiRestResponse<List<AccountInfo>>>() {};
-	private static ParameterizedTypeReference<HuobiRestResponse<BalanceInfo>> BALANCE_INFO = new ParameterizedTypeReference<HuobiRestResponse<BalanceInfo>>() {};
-	private static ParameterizedTypeReference<HuobiRestResponse<String>> ORDER_RESPONSE = new ParameterizedTypeReference<HuobiRestResponse<String>>() {};
-	private static ParameterizedTypeReference<HuobiRestResponse<OrderResult>> ORDER_RESULT = new ParameterizedTypeReference<HuobiRestResponse<OrderResult>>() {};
-	private static ParameterizedTypeReference<HuobiRestResponse<List<Execution>>> EXECUTION_RESULT = new ParameterizedTypeReference<HuobiRestResponse<List<Execution>>>() {};
-	private static ParameterizedTypeReference<HuobiRestResponse<List<Symbol>>> SYMBOL_RESULT = new ParameterizedTypeReference<HuobiRestResponse<List<Symbol>>>() {};
-	private static ParameterizedTypeReference<HuobiRestResponse<List<Ticker>>> TICKER_RESULT = new ParameterizedTypeReference<HuobiRestResponse<List<Ticker>>>() {};
+	private static TypeReference<HuobiRestResponse<List<AccountInfo>>> ACCOUNT_INFO = new TypeReference<HuobiRestResponse<List<AccountInfo>>>() {};
+	private static TypeReference<HuobiRestResponse<BalanceInfo>> BALANCE_INFO = new TypeReference<HuobiRestResponse<BalanceInfo>>() {};
+	private static TypeReference<HuobiRestResponse<String>> ORDER_RESPONSE = new TypeReference<HuobiRestResponse<String>>() {};
+	private static TypeReference<HuobiRestResponse<OrderResult>> ORDER_RESULT = new TypeReference<HuobiRestResponse<OrderResult>>() {};
+	private static TypeReference<HuobiRestResponse<List<Execution>>> EXECUTION_RESULT = new TypeReference<HuobiRestResponse<List<Execution>>>() {};
+	private static TypeReference<HuobiRestResponse<List<Symbol>>> SYMBOL_RESULT = new TypeReference<HuobiRestResponse<List<Symbol>>>() {};
+	private static TypeReference<HuobiRestResponse<List<Ticker>>> TICKER_RESULT = new TypeReference<HuobiRestResponse<List<Ticker>>>() {};
 	private static TypeReference<HuobiRestChannelResponse<Depth>> DEPTH_RESULT = new TypeReference<HuobiRestChannelResponse<Depth>>() {};
 	private static TypeReference<HuobiRestChannelResponse<List<Kline>>> KLINE_RESULT = new TypeReference<HuobiRestChannelResponse<List<Kline>>>() {};
-	
+
 	public HuobiRestService(RestProperties restProperties) {
 		super(restProperties);
 	}
@@ -54,72 +52,59 @@ public class HuobiRestService extends BaseHuobiRestService {
 	public HuobiRestChannelResponse<Depth> depth(String symbol, String type) {
 		String url = this.getUrl("/market/depth?symbol=%s&type=%s", symbol, type);
 		HttpEntity<String> requestEntity = this.requestEntityWithUserAgent();
-		String body = restTemplate.exchange(url, HttpMethod.GET, requestEntity, String.class).getBody();
-		return this.readValue(body, DEPTH_RESULT);
+		return exchange(url, HttpMethod.GET, requestEntity, DEPTH_RESULT);
 	}
 
 	public HuobiRestChannelResponse<List<Kline>> kline(KlineParam klineParam) {
 		String url = this.getUrl("/market/history/kline?%s", this.toRequestParam(klineParam));
 		HttpEntity<String> requestEntity = this.requestEntityWithUserAgent();
-		String body = restTemplate.exchange(url, HttpMethod.GET, requestEntity, String.class).getBody();
-		log.debug("{}", body);
-		return this.readValue(body, KLINE_RESULT);
+		return exchange(url, HttpMethod.GET, requestEntity, KLINE_RESULT);
 	}
 
 	public HuobiRestResponse<List<Symbol>> symbols() {
 		String url = this.getUrl("/v1/common/symbols");
 		HttpEntity<String> requestEntity = this.requestEntityWithUserAgent();
-		return restTemplate.exchange(url, HttpMethod.GET, requestEntity, SYMBOL_RESULT).getBody();
+		return exchange(url, HttpMethod.GET, requestEntity, SYMBOL_RESULT);
 	}
 
 	public HuobiRestResponse<List<Ticker>> tickers() {
 		String url = this.getUrl("/market/tickers");
 		HttpEntity<String> requestEntity = this.requestEntityWithUserAgent();
-		return restTemplate.exchange(url, HttpMethod.GET, requestEntity, TICKER_RESULT).getBody();
+		return exchange(url, HttpMethod.GET, requestEntity, TICKER_RESULT);
 	}
 
 	public HuobiRestResponse<List<AccountInfo>> accounts() {
 		URI uri = this.getUrlWithSignature("/v1/account/accounts", RequestType.GET, null);
 		HttpEntity<String> requestEntity = this.requestEntityWithUserAgent();
 		log.debug("requesting uri: {}", uri);
-		HuobiRestResponse<List<AccountInfo>> response = restTemplate.exchange(uri, HttpMethod.GET, requestEntity, ACCOUNT_INFO).getBody();
-		log.debug("{}", response);
-		return response;
+		return exchange(uri, HttpMethod.GET, requestEntity, ACCOUNT_INFO);
 	}
 
 	public HuobiRestResponse<BalanceInfo> balanceInfo(Long accountId) {
 		URI uri = this.getUrlWithSignature(String.format("/v1/account/accounts/%s/balance", accountId), RequestType.GET, null);
 		HttpEntity<String> requestEntity = this.requestEntityWithUserAgent();
-		HuobiRestResponse<BalanceInfo> response = restTemplate.exchange(uri, HttpMethod.GET, requestEntity, BALANCE_INFO).getBody();
-		log.debug("{}", response);
-		return response;
+		return exchange(uri, HttpMethod.GET, requestEntity, BALANCE_INFO);
 	}
 
 	public HuobiRestResponse<String> placeOrder(Order order) {
 		log.debug("{}", order);
 		URI url = this.getUrlWithSignature("/v1/order/orders/place", RequestType.POST, null);
 		HttpEntity<String> requestEntity = this.buildPostRequestEntity(order);
-		HuobiRestResponse<String> response = restTemplate.exchange(url, HttpMethod.POST, requestEntity, ORDER_RESPONSE).getBody();
-		log.debug("{}", response);
-		return response;
+		return exchange(url, HttpMethod.POST, requestEntity, ORDER_RESPONSE);
 	}
 
 	public HuobiRestResponse<OrderResult> queryOrder(String orderId) {
 		log.debug("{}", orderId);
 		URI url = this.getUrlWithSignature("/v1/order/orders/" + orderId, RequestType.GET, null);
 		HttpEntity<String> requestEntity = this.requestEntityWithUserAgent();
-		HuobiRestResponse<OrderResult> response = restTemplate.exchange(url, HttpMethod.GET, requestEntity, ORDER_RESULT).getBody();
-		log.debug("{}", response);
-		return response;
+		return exchange(url, HttpMethod.GET, requestEntity, ORDER_RESULT);
 	}
 
 	public HuobiRestResponse<List<Execution>> queryExecution(String orderId) {
 		log.debug("{}", orderId);
 		URI url = this.getUrlWithSignature(String.format("/v1/order/orders/%s/matchresults", orderId), RequestType.GET, null);
 		HttpEntity<String> requestEntity = this.requestEntityWithUserAgent();
-		HuobiRestResponse<List<Execution>> response = restTemplate.exchange(url, HttpMethod.GET, requestEntity, EXECUTION_RESULT).getBody();
-		log.debug("{}", response);
-		return response;
+		return exchange(url, HttpMethod.GET, requestEntity, EXECUTION_RESULT);
 	}
 
 	public HuobiRestResponse<List<Execution>> queryExecution(String orderId, int attempt) {

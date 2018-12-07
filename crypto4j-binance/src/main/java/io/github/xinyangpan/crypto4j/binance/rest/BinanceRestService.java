@@ -55,29 +55,23 @@ public class BinanceRestService extends BaseBinanceRestService {
 	public Account account() {
 		log.debug("account");
 		String url = this.getUrl("/api/v3/account?%s", this.toSignedRequestParam(new BaseRequest()));
-		HttpEntity<String> requestEntity = this.buildRequestEntity(null, false);
 		log.debug("requesting url: {}", url);
-		Account response = restTemplate.exchange(url, HttpMethod.GET, requestEntity, Account.class).getBody();
-		log.debug("{}", response);
-		return response;
+		HttpEntity<String> requestEntity = this.buildRequestEntity(null, false);
+		return exchange(url, HttpMethod.GET, requestEntity, Account.class);
 	}
 
 	public PlaceOrderResponse placeOrder(PlaceOrderRequest placeOrderRequest) {
 		log.debug("{}", placeOrderRequest);
 		String url = this.getUrl("/api/v3/order");
 		HttpEntity<String> requestEntity = this.buildSignedRequestEntity(placeOrderRequest);
-		PlaceOrderResponse response = restTemplate.postForObject(url, requestEntity, PlaceOrderResponse.class);
-		log.debug("{}", response);
-		return response;
+		return exchange(url, HttpMethod.POST, requestEntity, PlaceOrderResponse.class);
 	}
 
 	public QueryOrderResponse queryOrder(QueryOrderRequest queryOrderRequest) {
 		log.debug("{}", queryOrderRequest);
 		String url = this.getUrl("/api/v3/order?%s", this.toSignedRequestParam(queryOrderRequest));
 		HttpEntity<String> requestEntity = this.buildRequestEntity(null, false);
-		QueryOrderResponse response = restTemplate.exchange(url, HttpMethod.GET, requestEntity, QueryOrderResponse.class).getBody();
-		log.debug("{}", response);
-		return response;
+		return exchange(url, HttpMethod.GET, requestEntity, QueryOrderResponse.class);
 	}
 
 	public QueryOrderResponse queryOrder(String symbol, long orderId) {
@@ -91,9 +85,7 @@ public class BinanceRestService extends BaseBinanceRestService {
 		log.debug("{}", queryTradeRequest);
 		String url = this.getUrl("/api/v3/myTrades?%s", this.toSignedRequestParam(queryTradeRequest));
 		HttpEntity<String> requestEntity = this.buildRequestEntity(null, false);
-		String response = restTemplate.exchange(url, HttpMethod.GET, requestEntity, String.class).getBody();
-		log.debug("{}", response);
-		return response;
+		return exchange(url, HttpMethod.GET, requestEntity, String.class);
 	}
 
 }
