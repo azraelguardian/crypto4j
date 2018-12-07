@@ -19,6 +19,7 @@ public class PlaceOrderResponse {
 	private BigDecimal price;
 	private BigDecimal origQty;
 	private BigDecimal executedQty;
+	private BigDecimal cummulativeQuoteQty;
 	private OrderStatus status;
 	private TimeInForce timeInForce;
 	private OrderType type;
