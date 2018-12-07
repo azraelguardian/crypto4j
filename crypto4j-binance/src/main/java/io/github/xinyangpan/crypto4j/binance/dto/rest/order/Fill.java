@@ -11,5 +11,6 @@ public class Fill {
 	private BigDecimal qty;
 	private BigDecimal commission;
 	private String commissionAsset;
+	private Long tradeId;
 
 }
