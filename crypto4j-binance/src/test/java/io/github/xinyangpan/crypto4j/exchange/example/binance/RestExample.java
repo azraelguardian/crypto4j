@@ -20,6 +20,7 @@ import io.github.xinyangpan.crypto4j.exchange.example.binance.util.BinanceTestUt
 public class RestExample {
 
 	private static final String BTCUSDT = "BTCUSDT";
+	private static final String EOSUSDT = "EOSUSDT";
 	private static final BinanceRestService binanceRestService = BinanceTestUtils.binanceService().restService();
 
 	static QueryTradeRequest queryTradeRequest() {
@@ -38,12 +39,12 @@ public class RestExample {
 	}
 
 	static PlaceOrderRequest placeOrderRequest(BigDecimal price, BigDecimal qty) {
-		price = MoreObjects.firstNonNull(price, new BigDecimal("6300"));
-		qty = MoreObjects.firstNonNull(qty, new BigDecimal("0.01"));
+		price = MoreObjects.firstNonNull(price, new BigDecimal("2.0"));
+		qty = MoreObjects.firstNonNull(qty, new BigDecimal("10"));
 		//
 		PlaceOrderRequest placeOrderRequest = new PlaceOrderRequest();
-		placeOrderRequest.setSymbol(BTCUSDT);
-		placeOrderRequest.setSide(Side.SELL);
+		placeOrderRequest.setSymbol(EOSUSDT);
+		placeOrderRequest.setSide(Side.BUY);
 		placeOrderRequest.setType(OrderType.LIMIT);
 		placeOrderRequest.setTimeInForce(TimeInForce.IOC);
 		placeOrderRequest.setPrice(price);
@@ -76,6 +77,8 @@ public class RestExample {
 		try {
 //			System.out.println(binanceRestService.placeOrder(placeOrderRequest(null, null)));
 			System.out.println(binanceRestService.account());
+//			System.out.println(binanceRestService.queryOrder(EOSUSDT, 51755827L));
+			
 		} catch (HttpClientErrorException e) {
 			// TODO Auto-generated catch block
 			System.out.println(e.getResponseBodyAsString());
