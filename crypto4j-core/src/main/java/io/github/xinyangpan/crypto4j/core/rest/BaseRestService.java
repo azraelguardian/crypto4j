@@ -15,6 +15,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.github.xinyangpan.crypto4j.core.RestProperties;
@@ -33,6 +34,7 @@ public class BaseRestService {
 
 	public BaseRestService(RestProperties restProperties) {
 		this.restProperties = restProperties;
+		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 	}
 
 	public <T> String urlEncode(String text) {

@@ -76,8 +76,8 @@ public class RestExample {
 		//		klineParam.setInterval("1m");
 		try {
 //			System.out.println(binanceRestService.placeOrder(placeOrderRequest(null, null)));
-			System.out.println(binanceRestService.account());
-//			System.out.println(binanceRestService.queryOrder(EOSUSDT, 51755827L));
+//			System.out.println(binanceRestService.account());
+			System.out.println(binanceRestService.queryOrder(EOSUSDT, 51755827L));
 			
 		} catch (HttpClientErrorException e) {
 			// TODO Auto-generated catch block
