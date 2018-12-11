@@ -23,7 +23,7 @@ public class Okex3RestExample {
 		// 
 		okex3RestService = new Okex3RestService(restProperties);
 	}
-
+ 
 	public static void placeOrder() {
 		PlaceOrder placeOrder = new PlaceOrder();
 		placeOrder.setInstrumentId(BTCUSDT);
