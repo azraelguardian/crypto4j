@@ -10,6 +10,8 @@ import java.util.stream.Collectors;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.client.ClientHttpRequestFactory;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
@@ -31,6 +33,7 @@ public class BaseRestService {
 	protected final ObjectMapper objectMapper = new ObjectMapper();
 	@Getter
 	protected final RestProperties restProperties;
+	protected int httpReadTimeout = 10;
 
 	public BaseRestService(RestProperties restProperties) {
 		this.restProperties = restProperties;
@@ -104,6 +107,13 @@ public class BaseRestService {
 	}
 
 	private String getBodyText(String url, HttpMethod method, HttpEntity<?> requestEntity) {
+		ClientHttpRequestFactory requestFactory = restTemplate.getRequestFactory();
+		if (requestFactory instanceof SimpleClientHttpRequestFactory) {
+			SimpleClientHttpRequestFactory simpleClientHttpRequestFactory = (SimpleClientHttpRequestFactory) requestFactory;
+			simpleClientHttpRequestFactory.setReadTimeout(httpReadTimeout * 1000);
+		} else {
+			log.error("Unable to set timeout for {}", requestFactory.getClass());
+		}
 		String bodyText = restTemplate.exchange(url, method, requestEntity, String.class).getBody();
 		log.debug("Body: {}", bodyText);
 		return bodyText;
