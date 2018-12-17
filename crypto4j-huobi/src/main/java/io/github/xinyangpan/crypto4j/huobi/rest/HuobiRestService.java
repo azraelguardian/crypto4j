@@ -16,7 +16,6 @@ import io.github.xinyangpan.crypto4j.huobi.dto.account.AccountInfo;
 import io.github.xinyangpan.crypto4j.huobi.dto.account.BalanceInfo;
 import io.github.xinyangpan.crypto4j.huobi.dto.common.HuobiRestChannelResponse;
 import io.github.xinyangpan.crypto4j.huobi.dto.common.HuobiRestResponse;
-import io.github.xinyangpan.crypto4j.huobi.dto.enums.OrderState;
 import io.github.xinyangpan.crypto4j.huobi.dto.market.depth.Depth;
 import io.github.xinyangpan.crypto4j.huobi.dto.market.kline.Kline;
 import io.github.xinyangpan.crypto4j.huobi.dto.market.kline.KlineParam;
@@ -144,11 +143,10 @@ public class HuobiRestService extends BaseHuobiRestService {
 			Thread.sleep(100 * (i + 1));
 			orderDetail = this.queryOrderDetail(orderId);
 			log.debug("orderDetail[{}]: {}", i, orderDetail);
-			OrderState orderState = orderDetail.getOrderResult().getState();
-			if (orderState == OrderState.SUBMITTING || orderState == OrderState.SUBMITTED) {
-				continue;
-			} else {
+			if (orderDetail.isInFinalState()) {
 				return orderDetail;
+			} else {
+				continue;
 			}
 		}
 		throw new UnknownOrderException(orderId, "No valid order detail returned. ref=" + orderDetail);
