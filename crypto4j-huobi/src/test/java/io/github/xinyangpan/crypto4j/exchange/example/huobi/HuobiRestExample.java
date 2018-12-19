@@ -67,7 +67,10 @@ public class HuobiRestExample {
 //		System.out.println(huobiRestService.accounts());
 		// 4275858
 //		System.out.println(huobiRestService.balanceInfo(4275858L));
-		System.out.println(huobiRestService.queryOrderDetail("19509745191"));
+		while (true) {
+			System.out.println(huobiRestService.queryOrderDetail("19509745191"));
+			Thread.sleep(1*1000);
+		}
 	}
 	
 }

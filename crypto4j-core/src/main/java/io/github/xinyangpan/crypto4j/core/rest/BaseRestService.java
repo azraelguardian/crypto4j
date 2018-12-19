@@ -34,7 +34,7 @@ public class BaseRestService {
 	protected final ObjectMapper objectMapper = new ObjectMapper();
 	@Getter
 	protected final RestProperties restProperties;
-	protected int httpReadTimeout = 20;
+	protected int httpReadTimeout = 20 * 1000;
 
 	public BaseRestService(RestProperties restProperties) {
 		this.restProperties = restProperties;
