@@ -92,7 +92,7 @@ public class ChainupSubscriber extends Subscriber {
 
 	private void onPing(long pingTs) {
 		log.debug("responding ping message: {}, {}", pingTs, System.currentTimeMillis() - pingTs);
-		this.send(ImmutableMap.of("pong", pingTs));
+		this.send(ImmutableMap.of("pong", pingTs), true);
 	}
 
 	public void depth(String symbol, int step, int askDepth, int bidDepth) {

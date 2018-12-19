@@ -47,10 +47,14 @@ public class Subscriber extends AbstractWebSocketHandler {
 	// -----------------------------
 
 	public void send(Object message) {
+		this.send(message, false);
+	}
+
+	public void send(Object message, boolean direct) {
 		try {
 			String json = objectMapper.writeValueAsString(message);
 			log.debug("Sending json: {}", json);
-			this.sendMessage(new TextMessage(json));
+			this.sendMessage(new TextMessage(json), direct);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

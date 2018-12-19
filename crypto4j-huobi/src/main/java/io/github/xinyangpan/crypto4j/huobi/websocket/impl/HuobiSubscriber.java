@@ -119,7 +119,7 @@ public class HuobiSubscriber extends Subscriber {
 
 	private void onPingMessage(long pingTs) throws Exception {
 		log.debug("responding ping message: {}, {}", pingTs, System.currentTimeMillis() - pingTs);
-		this.send(ImmutableMap.of("pong", pingTs));
+		this.send(ImmutableMap.of("pong", pingTs), true);
 	}
 
 	private void onAcknowledge(HuobiWsSubAck huobiWsSubAck) {
