@@ -65,7 +65,7 @@ public class Subscriber extends AbstractWebSocketHandler {
 	}
 
 	public synchronized void sendMessage(WebSocketMessage<?> message, boolean direct) throws IOException {
-		log.info("Sending message. direct: {}, message: {}", direct, message);
+		log.info("Sending message[{}]. direct: {}, message: {}", this.getName(), direct, message);
 		if (direct) {
 			Preconditions.checkNotNull(session, "Session is null.");
 			Preconditions.checkArgument(session.isOpen(), "Session is closed.");
