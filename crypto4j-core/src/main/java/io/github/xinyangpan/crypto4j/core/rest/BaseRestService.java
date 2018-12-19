@@ -7,11 +7,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.client.ClientHttpRequestFactory;
-import org.springframework.http.client.SimpleClientHttpRequestFactory;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
@@ -29,7 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class BaseRestService {
 	// 
-	protected final RestTemplate restTemplate = new RestTemplate();
+	protected final RestTemplate restTemplate;
 	protected final ObjectMapper objectMapper = new ObjectMapper();
 	@Getter
 	protected final RestProperties restProperties;
@@ -38,6 +39,8 @@ public class BaseRestService {
 	public BaseRestService(RestProperties restProperties) {
 		this.restProperties = restProperties;
 		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		// 
+		restTemplate = new RestTemplate(this.createRequestFactory());
 	}
 
 	public <T> String urlEncode(String text) {
@@ -46,6 +49,17 @@ public class BaseRestService {
 		} catch (UnsupportedEncodingException e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	protected HttpComponentsClientHttpRequestFactory createRequestFactory() {
+		CloseableHttpClient httpClient = HttpClients.custom()//
+			.setMaxConnTotal(6)//
+			.setMaxConnPerRoute(6)//
+			.build();
+		// 
+		HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
+		requestFactory.setReadTimeout(httpReadTimeout);
+		return requestFactory;
 	}
 
 	protected HttpEntity<String> requestEntityWithUserAgent() {
@@ -107,13 +121,6 @@ public class BaseRestService {
 	}
 
 	private String getBodyText(String url, HttpMethod method, HttpEntity<?> requestEntity) {
-		ClientHttpRequestFactory requestFactory = restTemplate.getRequestFactory();
-		if (requestFactory instanceof SimpleClientHttpRequestFactory) {
-			SimpleClientHttpRequestFactory simpleClientHttpRequestFactory = (SimpleClientHttpRequestFactory) requestFactory;
-			simpleClientHttpRequestFactory.setReadTimeout(httpReadTimeout * 1000);
-		} else {
-			log.error("Unable to set timeout for {}", requestFactory.getClass());
-		}
 		String bodyText = restTemplate.exchange(url, method, requestEntity, String.class).getBody();
 		log.debug("Body: {}", bodyText);
 		return bodyText;
