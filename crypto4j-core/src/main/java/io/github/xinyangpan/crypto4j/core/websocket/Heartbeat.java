@@ -45,7 +45,7 @@ public class Heartbeat extends AbstractHeartbeat {
 	// Standard Ping, can be override for none standard. refer to okex
 	protected void sendPing() throws IOException {
 		log.debug("Sending Stardard ping message.");
-		subscriber.sendMessage(new PingMessage());
+		subscriber.sendMessage(new PingMessage(), true);
 	}
 
 }

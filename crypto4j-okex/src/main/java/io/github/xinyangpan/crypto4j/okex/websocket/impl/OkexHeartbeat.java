@@ -13,7 +13,7 @@ public class OkexHeartbeat extends Heartbeat {
 
 	@Override
 	protected void sendPing() throws IOException {
-		subscriber.sendMessage(new TextMessage("{'event':'ping'}"));
+		subscriber.sendMessage(new TextMessage("{'event':'ping'}"), true);
 	}
 
 }

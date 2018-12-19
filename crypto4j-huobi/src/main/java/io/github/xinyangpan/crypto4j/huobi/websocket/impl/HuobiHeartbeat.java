@@ -18,7 +18,7 @@ public class HuobiHeartbeat extends Heartbeat {
 	protected void sendPing() throws IOException {
 		String pingMsg = String.format("{\"ping\": %s}", System.currentTimeMillis());
 		if (subscriber != null) {
-			subscriber.sendMessage(new TextMessage(pingMsg));
+			subscriber.sendMessage(new TextMessage(pingMsg), true);
 		} else {
 			log.info("subscriber is null, will not send heartbeat this time.");
 		}
