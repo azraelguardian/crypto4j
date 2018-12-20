@@ -5,6 +5,7 @@ import java.net.URI;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -55,6 +56,8 @@ public class BaseRestService {
 		CloseableHttpClient httpClient = HttpClients.custom()//
 			.setMaxConnTotal(6)//
 			.setMaxConnPerRoute(6)//
+			.evictExpiredConnections()//
+			.evictIdleConnections(30, TimeUnit.SECONDS)//
 			.build();
 		// 
 		HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
