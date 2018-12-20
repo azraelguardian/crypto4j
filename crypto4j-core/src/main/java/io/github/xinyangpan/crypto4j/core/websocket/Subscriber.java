@@ -39,6 +39,9 @@ public class Subscriber extends AbstractWebSocketHandler {
 	protected @Getter @Setter Consumer<CloseStatus> abnormalConnectionClosedListener = Crypto4jUtils.noOp();
 
 	protected String getName() {
+		if (this.webSocketManager == null) {
+			return "NotSet";
+		}
 		return this.webSocketManager.getName();
 	}
 
