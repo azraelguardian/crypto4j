@@ -11,8 +11,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -26,9 +24,10 @@ import com.google.common.hash.Hashing;
 
 import io.github.xinyangpan.crypto4j.core.RestProperties;
 import io.github.xinyangpan.crypto4j.core.rest.BaseRestService;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class BaseHuobiRestService extends BaseRestService {
-	private static final Logger log = LoggerFactory.getLogger(BaseHuobiRestService.class);
 	// 
 	private final HashFunction HASHING;
 	private final DefaultUriBuilderFactory builderFactory;
@@ -39,6 +38,7 @@ public class BaseHuobiRestService extends BaseRestService {
 		if (restSecret != null) {
 			HASHING = Hashing.hmacSha256(restSecret.getBytes());
 		} else {
+			log.warn("secret is null. ref=", restProperties);
 			HASHING = null;
 		}
 		builderFactory = new DefaultUriBuilderFactory();
