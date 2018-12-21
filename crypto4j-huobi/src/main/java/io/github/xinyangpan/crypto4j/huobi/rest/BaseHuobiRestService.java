@@ -38,7 +38,7 @@ public class BaseHuobiRestService extends BaseRestService {
 		if (restSecret != null) {
 			HASHING = Hashing.hmacSha256(restSecret.getBytes());
 		} else {
-			log.warn("secret is null. ref=", restProperties);
+			log.warn("secret is null. ref={}", restProperties);
 			HASHING = null;
 		}
 		builderFactory = new DefaultUriBuilderFactory();
