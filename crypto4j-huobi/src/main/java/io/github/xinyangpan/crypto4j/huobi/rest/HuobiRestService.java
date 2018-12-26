@@ -130,7 +130,7 @@ public class HuobiRestService extends BaseHuobiRestService {
 		case SELL_IOC:
 		case BUY_MARKET:
 		case SELL_MARKET:
-			return queryOrderDetailForFinalState(orderId, 3);
+			return queryOrderDetailForFinalState(orderId, 10);
 		default:
 			return this.queryOrderDetail(orderId);
 		}
