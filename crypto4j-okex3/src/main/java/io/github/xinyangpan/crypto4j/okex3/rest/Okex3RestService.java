@@ -2,6 +2,7 @@ package io.github.xinyangpan.crypto4j.okex3.rest;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -163,7 +164,7 @@ public class Okex3RestService extends BaseOkex3RestService {
 		executionQuery.setOrderId(orderId);
 		List<Execution> executions = null;
 		executions = this.queryExecution(executionQuery);
-		return new OrderDetail(order, executions);
+		return new OrderDetail(order, executions.stream().filter(i->i.getSide() == order.getSide()).collect(Collectors.toList()));
 	}
 
 	public OrderDetail iocAndQuery(PlaceOrder placeOrder) {
@@ -179,7 +180,7 @@ public class Okex3RestService extends BaseOkex3RestService {
 		executionQuery.setOrderId(orderId);
 		List<Execution> executions = null;
 		executions = this.queryExecution(executionQuery);
-		return new OrderDetail(order, executions);
+		return new OrderDetail(order, executions.stream().filter(i->i.getSide() == order.getSide()).collect(Collectors.toList()));
 	}
 	
 	public OrderDetail queryOrderDetail(String instrumentId,Long orderId) {
@@ -191,7 +192,7 @@ public class Okex3RestService extends BaseOkex3RestService {
 			executionQuery.setInstrumentId(instrumentId);
 			executionQuery.setOrderId(orderId);
 			List<Execution> executions = this.queryExecution(executionQuery, 5);
-			orderDetail.setExecutions(executions);
+			orderDetail.setExecutions(executions.stream().filter(i->i.getSide() == orderResult.getSide()).collect(Collectors.toList()));
 		}
 		
 		return orderDetail;

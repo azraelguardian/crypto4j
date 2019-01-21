@@ -1,7 +1,7 @@
 package io.github.xinyangpan.crypto4j.okex3.dto.trade;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -22,7 +22,7 @@ public class Order {
 	private String instrumentId;
 	private Side side;
 	private OrderType type;
-	private LocalDateTime timestamp;
+	private Date timestamp;
 	@JsonProperty("filled_size")
 	private BigDecimal filledSize;
 	@JsonProperty("filled_notional")

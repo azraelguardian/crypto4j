@@ -1,7 +1,7 @@
 package io.github.xinyangpan.crypto4j.okex3.dto.trade;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -24,6 +24,6 @@ public class Execution {
 	private BigDecimal price;
 	private Side side;
 	private BigDecimal size;
-	private LocalDateTime timestamp;
+	private Date timestamp;
 
 }
