@@ -5,9 +5,11 @@ import java.util.List;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.client.HttpClientErrorException;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 
 import io.github.xinyangpan.crypto4j.core.UnknownOrderException;
@@ -130,6 +132,25 @@ public class Okex3RestService extends BaseOkex3RestService {
 			}
 		}
 	}
+	
+	public List<Execution> queryExecution(ExecutionQuery executionQuery,int attempt){
+		List<Execution> response = null;
+		try {
+			for (int i = 0; i < attempt; i++) {
+				response = this.queryExecution(executionQuery);
+				
+				if(!CollectionUtils.isEmpty(response)) {
+					return response;
+				}
+				log.debug("retry ... RestResponse[{}]: {}", i, response);
+				Thread.sleep(1000);
+			}
+		} catch (InterruptedException e) {
+			//NOP
+		}
+		Preconditions.checkNotNull(response);
+		return response;
+	}
 
 	public OrderDetail placeAndQuery(PlaceOrder placeOrder) {
 		OrderResult orderResult = this.placeOrder(placeOrder);
@@ -159,6 +180,21 @@ public class Okex3RestService extends BaseOkex3RestService {
 		List<Execution> executions = null;
 		executions = this.queryExecution(executionQuery);
 		return new OrderDetail(order, executions);
+	}
+	
+	public OrderDetail queryOrderDetail(String instrumentId,Long orderId) {
+		OrderDetail orderDetail = new OrderDetail();
+		Order orderResult = this.queryOrder(instrumentId,orderId);
+		orderDetail.setOrder(orderResult);
+		if (orderResult != null && orderResult.getFilledSize().compareTo(BigDecimal.ZERO) > 0) {
+			ExecutionQuery executionQuery = new ExecutionQuery();
+			executionQuery.setInstrumentId(instrumentId);
+			executionQuery.setOrderId(orderId);
+			List<Execution> executions = this.queryExecution(executionQuery, 5);
+			orderDetail.setExecutions(executions);
+		}
+		
+		return orderDetail;
 	}
 
 }
