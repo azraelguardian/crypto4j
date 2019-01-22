@@ -20,8 +20,8 @@ public class HuobiRestExample {
 	static {
 		RestProperties restProperties = new RestProperties();
 		restProperties.setRestBaseUrl("https://api.huobi.pro");
-		restProperties.setRestKey(Crypto4jUtils.getSecret("huobi.key"));
-		restProperties.setRestSecret(Crypto4jUtils.getSecret("huobi.secret"));
+		restProperties.setRestKey(Crypto4jUtils.getSecret("huobi-dev.key"));
+		restProperties.setRestSecret(Crypto4jUtils.getSecret("huobi-dev.secret"));
 		// 
 		huobiRestService = new HuobiRestService(restProperties);
 	}
@@ -54,8 +54,8 @@ public class HuobiRestExample {
 	static void placeOrder() throws InterruptedException {
 		Order order = new Order();
 		order.setAccountId(4275858L);
-		order.setAmount(new BigDecimal("0.1"));
-		order.setAmount(new BigDecimal("700"));
+//		order.setAmount(new BigDecimal("0.1"));
+		order.setAmount(new BigDecimal("60"));
 		//		order.setPrice(new BigDecimal("7800"));
 		order.setSymbol(BTCUSDT);
 		order.setType(OrderType.BUY_MARKET);
@@ -66,12 +66,8 @@ public class HuobiRestExample {
 	public static void main(String[] args) throws Exception {
 //		System.out.println(huobiRestService.accounts());
 		// 4275858
-//		System.out.println(huobiRestService.balanceInfo(4275858L));
-		while (true) {
-			System.out.println(huobiRestService.accounts());
-//			System.out.println(huobiRestService.queryOrderDetail("19509745191"));
-			Thread.sleep(1*1000);
-		}
+		System.out.println(huobiRestService.balanceInfo(4275858L));
+		placeOrder();
 	}
 	
 }

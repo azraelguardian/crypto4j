@@ -173,7 +173,7 @@ public class Subscriber extends AbstractWebSocketHandler {
 	}
 
 	protected void unhandledMessage(Object obj) {
-		log.warn("Unhandled Message: {}", obj, new RuntimeException());
+		log.warn("Unhandled Message: {}", obj, new RuntimeException("Unhandled Message"));
 	}
 
 }
