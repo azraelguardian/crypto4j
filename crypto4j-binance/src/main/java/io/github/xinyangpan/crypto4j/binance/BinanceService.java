@@ -8,12 +8,17 @@ import lombok.Data;
 
 @Data
 public class BinanceService {
-	private final BinanceSubscriber binanceSubscriber;
-	private final BinanceProperties binanceProperties;
-	private final BinanceRestService binanceRestService;
-	private final BinanceUserManager binanceUserManager;
-	private final BinanceMarketManager binanceMarketManager;
+	private BinanceSubscriber binanceSubscriber;
+	private BinanceProperties binanceProperties;
+	private BinanceRestService binanceRestService;
+	private BinanceUserManager binanceUserManager;
+	private BinanceMarketManager binanceMarketManager;
 
+	public BinanceService(BinanceProperties binanceProperties) {
+		this.binanceProperties = binanceProperties;
+		this.binanceRestService = new BinanceRestService(binanceProperties.getRestProperties());
+	}
+	
 	public BinanceService(BinanceSubscriber binanceSubscriber, BinanceProperties binanceProperties) {
 		this(binanceSubscriber, binanceProperties, true);
 	}
