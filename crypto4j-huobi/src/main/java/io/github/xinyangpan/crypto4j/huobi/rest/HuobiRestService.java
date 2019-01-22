@@ -25,6 +25,7 @@ import io.github.xinyangpan.crypto4j.huobi.dto.trade.Execution;
 import io.github.xinyangpan.crypto4j.huobi.dto.trade.Order;
 import io.github.xinyangpan.crypto4j.huobi.dto.trade.OrderDetail;
 import io.github.xinyangpan.crypto4j.huobi.dto.trade.OrderResult;
+import io.github.xinyangpan.crypto4j.huobi.dto.trade.QueryAllOrdersRequest;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
@@ -39,6 +40,7 @@ public class HuobiRestService extends BaseHuobiRestService {
 	private static TypeReference<HuobiRestResponse<List<Ticker>>> TICKER_RESULT = new TypeReference<HuobiRestResponse<List<Ticker>>>() {};
 	private static TypeReference<HuobiRestChannelResponse<Depth>> DEPTH_RESULT = new TypeReference<HuobiRestChannelResponse<Depth>>() {};
 	private static TypeReference<HuobiRestChannelResponse<List<Kline>>> KLINE_RESULT = new TypeReference<HuobiRestChannelResponse<List<Kline>>>() {};
+	private static TypeReference<HuobiRestResponse<List<OrderResult>>> ALL_ORDERS_RESULT = new TypeReference<HuobiRestResponse<List<OrderResult>>>() {};
 
 	public HuobiRestService(RestProperties restProperties) {
 		super(restProperties);
@@ -97,6 +99,12 @@ public class HuobiRestService extends BaseHuobiRestService {
 		URI url = this.getUrlWithSignature("/v1/order/orders/" + orderId, RequestType.GET, null);
 		HttpEntity<String> requestEntity = this.requestEntityWithUserAgent();
 		return exchange(url, HttpMethod.GET, requestEntity, ORDER_RESULT);
+	}
+	
+	public HuobiRestResponse<List<OrderResult>> queryAllOrders(QueryAllOrdersRequest queryRequest) {
+		URI url = this.getUrlWithSignature("/v1/order/orders",RequestType.GET, queryRequest);
+		HttpEntity<String> requestEntity = this.requestEntityWithUserAgent();
+		return exchange(url, HttpMethod.GET, requestEntity, ALL_ORDERS_RESULT);
 	}
 
 	public HuobiRestResponse<List<Execution>> queryExecution(String orderId) {
