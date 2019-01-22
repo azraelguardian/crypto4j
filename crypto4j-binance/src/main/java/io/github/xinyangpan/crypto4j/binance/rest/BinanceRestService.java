@@ -6,6 +6,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.base.MoreObjects;
 
 import io.github.xinyangpan.crypto4j.binance.dto.depth.Depth;
@@ -20,12 +21,16 @@ import io.github.xinyangpan.crypto4j.binance.dto.rest.order.PlaceOrderRequest;
 import io.github.xinyangpan.crypto4j.binance.dto.rest.order.PlaceOrderResponse;
 import io.github.xinyangpan.crypto4j.binance.dto.rest.order.QueryOrderRequest;
 import io.github.xinyangpan.crypto4j.binance.dto.rest.order.QueryOrderResponse;
+import io.github.xinyangpan.crypto4j.binance.dto.rest.order.QueryAllOrdersRequset;
+import io.github.xinyangpan.crypto4j.binance.dto.rest.order.QueryAllOrdersResponse;
 import io.github.xinyangpan.crypto4j.core.RestProperties;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class BinanceRestService extends BaseBinanceRestService {
 	private ParameterizedTypeReference<List<Kline>> KLINES = new ParameterizedTypeReference<List<Kline>>() {};
+	private TypeReference<List<QueryAllOrdersResponse>> ORDER_RESPOSNE_LISE = new TypeReference<List<QueryAllOrdersResponse>>() {};
+	
 
 	public BinanceRestService(RestProperties restProperties) {
 		super(restProperties);
@@ -86,6 +91,13 @@ public class BinanceRestService extends BaseBinanceRestService {
 		String url = this.getUrl("/api/v3/myTrades?%s", this.toSignedRequestParam(queryTradeRequest));
 		HttpEntity<String> requestEntity = this.buildRequestEntity(null, false);
 		return exchange(url, HttpMethod.GET, requestEntity, String.class);
+	}
+	
+	public List<QueryAllOrdersResponse> queryAllOrders(QueryAllOrdersRequset queryRequest) {
+		log.debug("{}", queryRequest);
+		String url = this.getUrl("/api/v3/allOrders?%s", this.toSignedRequestParam(queryRequest));
+		HttpEntity<String> requestEntity = this.buildRequestEntity(null, false);
+		return exchange(url, HttpMethod.GET, requestEntity, ORDER_RESPOSNE_LISE);
 	}
 
 }
