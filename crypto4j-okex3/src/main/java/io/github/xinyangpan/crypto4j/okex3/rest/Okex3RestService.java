@@ -24,6 +24,7 @@ import io.github.xinyangpan.crypto4j.okex3.dto.trade.Order;
 import io.github.xinyangpan.crypto4j.okex3.dto.trade.OrderDetail;
 import io.github.xinyangpan.crypto4j.okex3.dto.trade.OrderResult;
 import io.github.xinyangpan.crypto4j.okex3.dto.trade.PlaceOrder;
+import io.github.xinyangpan.crypto4j.okex3.dto.trade.QueryAllOrderRequest;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 public class Okex3RestService extends BaseOkex3RestService {
 	private static final TypeReference<List<BalanceInfo>> BALANCE_INFO_LIST = new TypeReference<List<BalanceInfo>>() {};
 	private static final TypeReference<List<Execution>> EXECUTION_LIST = new TypeReference<List<Execution>>() {};
+	private static final TypeReference<List<Order>> ORDER_LIST = new TypeReference<List<Order>>() {};
 
 	public Okex3RestService(Okex3RestProperties okex3RestProperties) {
 		super(okex3RestProperties);
@@ -78,6 +80,15 @@ public class Okex3RestService extends BaseOkex3RestService {
 		String url = this.getUrl(requestPath);
 		HttpEntity<String> requestEntity = this.buildSignedRequestEntity(requestPath, method, null);
 		return exchange(url, method, requestEntity, Order.class);
+	}
+	
+	public List<Order> queryAllOrders(QueryAllOrderRequest queryRequest) {
+		String requestPath = String.format("/api/spot/v3/orders/?%s", this.toRequestParam(queryRequest));
+		HttpMethod method = HttpMethod.GET;
+		// 
+		String url = this.getUrl(requestPath);
+		HttpEntity<String> requestEntity = this.buildSignedRequestEntity(requestPath, method, null);
+		return exchange(url, method, requestEntity, ORDER_LIST);
 	}
 
 	public Order queryOrderForFinalStatus(String instrumentId, long orderId) {
