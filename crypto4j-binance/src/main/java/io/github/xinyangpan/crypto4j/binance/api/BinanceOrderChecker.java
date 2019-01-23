@@ -61,6 +61,7 @@ public class BinanceOrderChecker {
 		    checkResult.setOrderId(item.getOrderId().toString());
 		    checkResult.setPrice(item.getPrice());
 		    checkResult.setVolume(item.getOrigQty());
+		    checkResult.setClientOrderId(item.getClientOrderId());
 		    
 		    retList.add(checkResult);
 		}
