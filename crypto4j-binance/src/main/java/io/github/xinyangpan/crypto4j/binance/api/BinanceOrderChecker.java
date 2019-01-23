@@ -43,7 +43,7 @@ public class BinanceOrderChecker {
 		ZoneId zone = ZoneId.systemDefault();
 		
 		QueryAllOrdersRequset queryRequest = new QueryAllOrdersRequset();
-		queryRequest.setSymbol(symbol);
+		queryRequest.setSymbol(symbol.toUpperCase());
 		queryRequest.setStartTime(StringUtils.isEmpty(fromDate) ? null : LocalDateTime.parse(fromDate, df).atZone(zone).toEpochSecond());
 		queryRequest.setEndTime(StringUtils.isEmpty(toDate) ? null : LocalDateTime.parse(toDate, df).atZone(zone).toEpochSecond());
 		List<QueryAllOrdersResponse> orderList = binanceService.getBinanceRestService().queryAllOrders(queryRequest);
