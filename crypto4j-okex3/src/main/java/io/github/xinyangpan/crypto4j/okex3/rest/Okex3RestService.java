@@ -170,12 +170,16 @@ public class Okex3RestService extends BaseOkex3RestService {
 		String instrumentId = placeOrder.getInstrumentId();
 		Long orderId = orderResult.getOrderId();
 		Order order = this.queryOrderForFinalStatus(instrumentId, orderId);
-		ExecutionQuery executionQuery = new ExecutionQuery();
-		executionQuery.setInstrumentId(instrumentId);
-		executionQuery.setOrderId(orderId);
+		
 		List<Execution> executions = null;
-		executions = this.queryExecution(executionQuery);
-		return new OrderDetail(order, executions.stream().filter(i->i.getSide() == order.getSide()).collect(Collectors.toList()));
+		if(order.getFilledSize().signum()>0) {
+			ExecutionQuery executionQuery = new ExecutionQuery();
+			executionQuery.setInstrumentId(instrumentId);
+			executionQuery.setOrderId(orderId);
+			executions = this.queryExecution(executionQuery,5);
+		}
+		return new OrderDetail(order, executions == null ? null
+				: executions.stream().filter(i -> i.getSide() == order.getSide()).collect(Collectors.toList()));
 	}
 
 	public OrderDetail iocAndQuery(PlaceOrder placeOrder) {
@@ -184,14 +188,19 @@ public class Okex3RestService extends BaseOkex3RestService {
 		String instrumentId = placeOrder.getInstrumentId();
 		Long orderId = orderResult.getOrderId();
 		orderResult = this.cancelOrder(orderId, instrumentId, null);
-		orderResult.throwExceptionWhenError(String.format("ref=%s", placeOrder));
+		//orderResult.throwExceptionWhenError(String.format("ref=%s", placeOrder));
 		Order order = this.queryOrderForFinalStatus(instrumentId, orderId);
-		ExecutionQuery executionQuery = new ExecutionQuery();
-		executionQuery.setInstrumentId(instrumentId);
-		executionQuery.setOrderId(orderId);
+		
 		List<Execution> executions = null;
-		executions = this.queryExecution(executionQuery);
-		return new OrderDetail(order, executions.stream().filter(i->i.getSide() == order.getSide()).collect(Collectors.toList()));
+		if(order.getFilledSize().signum()>0) {
+			ExecutionQuery executionQuery = new ExecutionQuery();
+			executionQuery.setInstrumentId(instrumentId);
+			executionQuery.setOrderId(orderId);
+			executions = this.queryExecution(executionQuery,5);
+		}
+		
+		return new OrderDetail(order, executions == null ? null
+				: executions.stream().filter(i -> i.getSide() == order.getSide()).collect(Collectors.toList()));
 	}
 	
 	public OrderDetail queryOrderDetail(String instrumentId,Long orderId) {
@@ -208,5 +217,4 @@ public class Okex3RestService extends BaseOkex3RestService {
 		
 		return orderDetail;
 	}
-
 }
