@@ -6,7 +6,8 @@ public enum OrderStatus {
 	part_filled, //部分成交 
 	canceling, //撤销中 
 	filled, //已成交 
-	cancelled, //已撤销 
+	cancelled,//取消 
 	ordering,//下单中
+	failer
 
 }

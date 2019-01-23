@@ -10,7 +10,6 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.client.HttpClientErrorException;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 
 import io.github.xinyangpan.crypto4j.core.UnknownOrderException;
@@ -160,7 +159,9 @@ public class Okex3RestService extends BaseOkex3RestService {
 		} catch (InterruptedException e) {
 			//NOP
 		}
-		Preconditions.checkNotNull(response);
+		if(CollectionUtils.isEmpty(response)) {
+			throw new UnknownOrderException(executionQuery.getOrderId().toString()," fectch executions failed");
+		}
 		return response;
 	}
 
@@ -178,8 +179,7 @@ public class Okex3RestService extends BaseOkex3RestService {
 			executionQuery.setOrderId(orderId);
 			executions = this.queryExecution(executionQuery,5);
 		}
-		return new OrderDetail(order, executions == null ? null
-				: executions.stream().filter(i -> i.getSide() == order.getSide()).collect(Collectors.toList()));
+		return new OrderDetail(order, executions.stream().filter(i -> i.getSide() == order.getSide()).collect(Collectors.toList()));
 	}
 
 	public OrderDetail iocAndQuery(PlaceOrder placeOrder) {
@@ -199,8 +199,7 @@ public class Okex3RestService extends BaseOkex3RestService {
 			executions = this.queryExecution(executionQuery,5);
 		}
 		
-		return new OrderDetail(order, executions == null ? null
-				: executions.stream().filter(i -> i.getSide() == order.getSide()).collect(Collectors.toList()));
+		return new OrderDetail(order, executions.stream().filter(i -> i.getSide() == order.getSide()).collect(Collectors.toList()));
 	}
 	
 	public OrderDetail queryOrderDetail(String instrumentId,Long orderId) {
@@ -211,7 +210,7 @@ public class Okex3RestService extends BaseOkex3RestService {
 			ExecutionQuery executionQuery = new ExecutionQuery();
 			executionQuery.setInstrumentId(instrumentId);
 			executionQuery.setOrderId(orderId);
-			List<Execution> executions = this.queryExecution(executionQuery, 5);
+			List<Execution> executions = this.queryExecution(executionQuery);
 			orderDetail.setExecutions(executions.stream().filter(i->i.getSide() == orderResult.getSide()).collect(Collectors.toList()));
 		}
 		
