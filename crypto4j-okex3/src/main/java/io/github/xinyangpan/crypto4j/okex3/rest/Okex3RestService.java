@@ -154,7 +154,9 @@ public class Okex3RestService extends BaseOkex3RestService {
 					return response;
 				}
 				log.debug("retry ... RestResponse[{}]: {}", i, response);
-				Thread.sleep(1000);
+				if(i < attempt - 1) { 
+					Thread.sleep(1000);
+				}
 			}
 		} catch (InterruptedException e) {
 			//NOP
