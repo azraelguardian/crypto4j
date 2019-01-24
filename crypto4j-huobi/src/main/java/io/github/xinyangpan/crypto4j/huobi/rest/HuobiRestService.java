@@ -133,14 +133,20 @@ public class HuobiRestService extends BaseHuobiRestService {
 
 	public OrderDetail placeAndQueryDetails(Order order) {
 		String orderId = this.placeOrder(order).fethData();
-		switch (order.getType()) {
-		case BUY_IOC:
-		case SELL_IOC:
-		case BUY_MARKET:
-		case SELL_MARKET:
-			return queryOrderDetailForFinalState(orderId, 10);
-		default:
-			return this.queryOrderDetail(orderId);
+		try {
+			switch (order.getType()) {
+			case BUY_IOC:
+			case SELL_IOC:
+			case BUY_MARKET:
+			case SELL_MARKET:
+				return queryOrderDetailForFinalState(orderId, 10);
+			default:
+				return this.queryOrderDetail(orderId);
+			}
+		} catch (UnknownOrderException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new UnknownOrderException(orderId, " fetch order detail failed ");
 		}
 	}
 
