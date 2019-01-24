@@ -163,7 +163,7 @@ public class HuobiRestService extends BaseHuobiRestService {
 		OrderDetail orderDetail = null;
 		for (int i = 0; i < attempt; i++) {
 			Thread.sleep(100 * (i + 1));
-			orderDetail = this.queryOrderDetail(orderId);
+			orderDetail = this.queryOrderDetailWithoutExecution(orderId);
 			log.debug("orderDetail[{}]: {}", i, orderDetail);
 			if (orderDetail.isInFinalState()) {
 				if(orderDetail.getOrderResult().getFieldAmount()!=null&&orderDetail.getOrderResult().getFieldAmount().compareTo(BigDecimal.ZERO) > 0) {
@@ -178,12 +178,30 @@ public class HuobiRestService extends BaseHuobiRestService {
 		throw new UnknownOrderException(orderId, "No valid order detail returned. ref=" + orderDetail);
 	}
 
+	public OrderDetail queryOrderDetailWithoutExecution(String orderId) {
+		OrderDetail orderDetail = new OrderDetail();
+		orderDetail.setOrderId(orderId);
+		OrderResult orderResult = this.queryOrder(orderId).fethData();
+		orderDetail.setOrderResult(orderResult);
+		 
+		return orderDetail;
+	}
+	
 	public OrderDetail queryOrderDetail(String orderId) {
 		OrderDetail orderDetail = new OrderDetail();
 		orderDetail.setOrderId(orderId);
 		OrderResult orderResult = this.queryOrder(orderId).fethData();
 		orderDetail.setOrderResult(orderResult);
-		// 
+		
+		try {
+			if(orderResult.getFieldAmount().compareTo(BigDecimal.ZERO) > 0) {
+				orderDetail.setExecutions(this.queryExecution(orderId, 1, orderResult.getFieldAmount()).fethData());//in case of order type(BUY_LIMIT,SELL_LIMIT)
+			}
+		}catch(Exception e) {
+			//NOP
+			log.info("order[{}] no executions found without retry ", orderId);
+		}
+		 
 		return orderDetail;
 	}
 
