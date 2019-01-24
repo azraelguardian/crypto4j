@@ -168,38 +168,21 @@ public class Okex3RestService extends BaseOkex3RestService {
 	public OrderDetail placeAndQuery(PlaceOrder placeOrder) {
 		OrderResult orderResult = this.placeOrder(placeOrder);
 		orderResult.throwExceptionWhenError(String.format("ref=%s", placeOrder));
-		String instrumentId = placeOrder.getInstrumentId();
-		Long orderId = orderResult.getOrderId();
-		Order order = this.queryOrderForFinalStatus(instrumentId, orderId);
-		
-		List<Execution> executions = null;
-		if(order.getFilledSize().signum()>0) {
-			ExecutionQuery executionQuery = new ExecutionQuery();
-			executionQuery.setInstrumentId(instrumentId);
-			executionQuery.setOrderId(orderId);
-			executions = this.queryExecution(executionQuery,5);
-		}
-		return new OrderDetail(order, executions.stream().filter(i -> i.getSide() == order.getSide()).collect(Collectors.toList()));
+
+		return this.queryOrderDetailAfterPlaced(orderResult.getOrderId(), placeOrder.getInstrumentId());
 	}
 
 	public OrderDetail iocAndQuery(PlaceOrder placeOrder) {
 		OrderResult orderResult = this.placeOrder(placeOrder);
 		orderResult.throwExceptionWhenError(String.format("ref=%s", placeOrder));
-		String instrumentId = placeOrder.getInstrumentId();
-		Long orderId = orderResult.getOrderId();
-		orderResult = this.cancelOrder(orderId, instrumentId, null);
-		//orderResult.throwExceptionWhenError(String.format("ref=%s", placeOrder));
-		Order order = this.queryOrderForFinalStatus(instrumentId, orderId);
 		
-		List<Execution> executions = null;
-		if(order.getFilledSize().signum()>0) {
-			ExecutionQuery executionQuery = new ExecutionQuery();
-			executionQuery.setInstrumentId(instrumentId);
-			executionQuery.setOrderId(orderId);
-			executions = this.queryExecution(executionQuery,5);
+		try {
+			orderResult = this.cancelOrder(orderResult.getOrderId(), placeOrder.getInstrumentId(), null);
+		}catch(Exception e) {
+			throw new UnknownOrderException(orderResult.getOrderId().toString(), " ioc cancel failed ");
 		}
 		
-		return new OrderDetail(order, executions.stream().filter(i -> i.getSide() == order.getSide()).collect(Collectors.toList()));
+		return this.queryOrderDetailAfterPlaced(orderResult.getOrderId(), placeOrder.getInstrumentId());
 	}
 	
 	public OrderDetail queryOrderDetail(String instrumentId,Long orderId) {
@@ -215,5 +198,25 @@ public class Okex3RestService extends BaseOkex3RestService {
 		}
 		
 		return orderDetail;
+	}
+	
+	private OrderDetail queryOrderDetailAfterPlaced(Long orderId, String instrumentId) {
+		try {
+			Order order = this.queryOrderForFinalStatus(instrumentId, orderId);
+			List<Execution> executions = null;
+			if (order.getFilledSize().signum() > 0) {
+				ExecutionQuery executionQuery = new ExecutionQuery();
+				executionQuery.setInstrumentId(instrumentId);
+				executionQuery.setOrderId(order.getOrderId());
+				executions = this.queryExecution(executionQuery, 5);
+			}
+	
+			return new OrderDetail(order,
+					executions.stream().filter(i -> i.getSide() == order.getSide()).collect(Collectors.toList()));
+		}catch (UnknownOrderException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new UnknownOrderException(orderId.toString(), " query order/executions failed ");
+		}
 	}
 }
