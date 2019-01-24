@@ -8,7 +8,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.google.common.base.Preconditions;
 
 import io.github.xinyangpan.crypto4j.core.RestProperties;
 import io.github.xinyangpan.crypto4j.core.UnknownOrderException;
@@ -114,21 +113,30 @@ public class HuobiRestService extends BaseHuobiRestService {
 		return exchange(url, HttpMethod.GET, requestEntity, EXECUTION_RESULT);
 	}
 
-	public HuobiRestResponse<List<Execution>> queryExecution(String orderId, int attempt) {
+	private BigDecimal getExecutionsFilledAmount(List<Execution> executions) {
+		BigDecimal execFilledAmount = BigDecimal.ZERO;
+		if (executions != null) {
+			for (Execution execution : executions) {
+				execFilledAmount = execFilledAmount.add(execution.getFilledAmount());
+			}
+		}
+		return execFilledAmount;
+	}
+	
+	public HuobiRestResponse<List<Execution>> queryExecution(String orderId, int attempt,BigDecimal executedVolume) {
 		HuobiRestResponse<List<Execution>> response = null;
 		try {
 			for (int i = 0; i < attempt; i++) {
 				response = this.queryExecution(orderId);
-				if (response.isSuccessful()) {
+				if (response.isSuccessful()&&getExecutionsFilledAmount(response.getData()).compareTo(executedVolume)>=0) {
 					return response;
 				}
 				log.debug("retry ... RestResponse[{}]: {}", i, response);
-				Thread.sleep(1000);
+				if(i<attempt-1)Thread.sleep(1000);
 			}
 		} catch (InterruptedException e) {}
-		Preconditions.checkNotNull(response);
-		response.throwExceptionWhenError();
-		return response;
+		
+		throw new UnknownOrderException(orderId, "No valid Execution detail returned. orderId=" + orderId);
 	}
 
 	public OrderDetail placeAndQueryDetails(Order order) {
@@ -158,6 +166,10 @@ public class HuobiRestService extends BaseHuobiRestService {
 			orderDetail = this.queryOrderDetail(orderId);
 			log.debug("orderDetail[{}]: {}", i, orderDetail);
 			if (orderDetail.isInFinalState()) {
+				if(orderDetail.getOrderResult().getFieldAmount()!=null&&orderDetail.getOrderResult().getFieldAmount().compareTo(BigDecimal.ZERO) > 0) {
+					List<Execution> executions = this.queryExecution(orderId, 5,orderDetail.getOrderResult().getFieldAmount()).fethData();
+					orderDetail.setExecutions(executions);
+				}
 				return orderDetail;
 			} else {
 				continue;
@@ -171,10 +183,6 @@ public class HuobiRestService extends BaseHuobiRestService {
 		orderDetail.setOrderId(orderId);
 		OrderResult orderResult = this.queryOrder(orderId).fethData();
 		orderDetail.setOrderResult(orderResult);
-		if (orderResult.getFieldAmount().compareTo(BigDecimal.ZERO) > 0) {
-			List<Execution> executions = this.queryExecution(orderId, 5).fethData();
-			orderDetail.setExecutions(executions);
-		}
 		// 
 		return orderDetail;
 	}
