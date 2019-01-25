@@ -188,10 +188,13 @@ public class Okex3RestService extends BaseOkex3RestService {
 	}
 	
 	public OrderDetail queryOrderDetail(String instrumentId,Long orderId) {
-		OrderDetail orderDetail = new OrderDetail();
+		OrderDetail orderDetail = null;
 		Order orderResult = this.queryOrder(instrumentId,orderId);
-		orderDetail.setOrder(orderResult);
+		
 		if (orderResult != null && orderResult.getFilledSize().compareTo(BigDecimal.ZERO) > 0) {
+			orderDetail = new OrderDetail();
+			orderDetail.setOrder(orderResult);
+			
 			ExecutionQuery executionQuery = new ExecutionQuery();
 			executionQuery.setInstrumentId(instrumentId);
 			executionQuery.setOrderId(orderId);
