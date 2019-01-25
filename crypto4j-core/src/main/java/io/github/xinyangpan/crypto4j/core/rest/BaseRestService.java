@@ -14,6 +14,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
@@ -117,6 +118,11 @@ public class BaseRestService {
 	@SuppressWarnings("unchecked")
 	protected <T> T exchange(String url, HttpMethod method, @NonNull HttpEntity<?> requestEntity, Class<T> clazz) throws RestClientException {
 		String bodyText = this.getBodyText(url, method, requestEntity);
+		
+		if(StringUtils.isEmpty(bodyText)) {
+			return null;
+		}
+		
 		if (String.class.equals(clazz)) {
 			return (T) bodyText;
 		}
