@@ -218,7 +218,7 @@ public class Okex3RestService extends BaseOkex3RestService {
 		}catch (UnknownOrderException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new UnknownOrderException(orderId.toString(), " query order/executions failed ");
+			throw new UnknownOrderException(orderId.toString(), String.format("query order/executions failed : %s",e)) ;
 		}
 	}
 }
