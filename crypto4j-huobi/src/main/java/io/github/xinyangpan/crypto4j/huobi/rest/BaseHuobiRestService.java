@@ -46,7 +46,7 @@ public class BaseHuobiRestService extends BaseRestService {
 	}
 
 	@SuppressWarnings("unchecked")
-	protected String toRequestParam(Object object, boolean encode) {
+	protected String toRequestParam(Object object, boolean encode,String timestamp) {
 		Map<String, Object> value = null;
 		if (object == null) {
 			value = new HashMap<>();
@@ -58,7 +58,7 @@ public class BaseHuobiRestService extends BaseRestService {
 		value.put("AccessKeyId", restProperties.getRestKey());
 		value.put("SignatureMethod", "HmacSHA256");
 		value.put("SignatureVersion", "2");
-		value.put("Timestamp", LocalDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
+		value.put("Timestamp", timestamp);
 		// 
 		String param = value.entrySet().stream()//
 			.filter(e -> e.getValue() != null)// filter out null field
@@ -77,8 +77,9 @@ public class BaseHuobiRestService extends BaseRestService {
 	}
 
 	protected String toSignedRequestParam(Object object, String path, RequestType requestType) {
+		String now = LocalDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"));
 		// 
-		String param = toRequestParam(object, true);
+		String param = toRequestParam(object, true, now);
 		StringBuilder sb = new StringBuilder();
 		sb.append(requestType.name()).append("\n");
 		sb.append("api.huobi.pro").append("\n");
@@ -86,7 +87,7 @@ public class BaseHuobiRestService extends BaseRestService {
 		sb.append(param);
 		log.debug("To sign string\n{}", sb);
 		// 
-		param = toRequestParam(object, false);
+		param = toRequestParam(object, false, now);
 		String signature = Base64.getEncoder().encodeToString(HASHING.hashBytes(sb.toString().getBytes()).asBytes());
 		return String.format("%s&Signature=%s", param, encodeSignature(signature));
 	}
