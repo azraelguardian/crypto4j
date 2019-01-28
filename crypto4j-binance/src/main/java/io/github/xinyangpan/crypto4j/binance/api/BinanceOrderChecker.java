@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.util.StringUtils;
@@ -48,7 +49,7 @@ public class BinanceOrderChecker {
 		queryRequest.setEndTime(StringUtils.isEmpty(toDate) ? null : LocalDateTime.parse(toDate, df).atZone(zone).toInstant().toEpochMilli());
 		List<QueryAllOrdersResponse> orderList = binanceService.getBinanceRestService().queryAllOrders(queryRequest);
 		
-
+		Collections.reverse(orderList);
 		
 		
 		List<OrderCheckResult> retList = Lists.newArrayList();
